@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:qr_code_scan/screens/result.dart';
+
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'components/bottom_navigation.dart';
 
-void main() {
-  runApp(const MyApp());
+// void main() {
+//   runApp(const MyApp());
+// }
+void main() async {
+  await init();
+  runApp(const ProviderScope(child: MyApp()));
+}
+
+Future<void> init() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await Hive.openBox('');
 }
 
 class MyApp extends StatelessWidget {
@@ -21,10 +35,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Qr Code Scanner',
           // You can use the library anywhere in the app even in theme
-          theme: ThemeData(
-            
-          ),
-          
+          theme: ThemeData(),
+
           initialRoute: child.toString(),
           routes: {
             '/': (context) => const MyNavigationBar(),

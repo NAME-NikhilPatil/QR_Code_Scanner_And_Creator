@@ -30,13 +30,16 @@ class _SaveWebsiteState extends State<SaveWebsite> {
         final pngBytes = byteData.buffer.asUint8List();
         final directory = (await getApplicationDocumentsDirectory()).path;
         final imgFile = File(
-          '$directory/${DateTime.now()}${ref.qrData!}.png',
+          '$directory/${DateTime.now()}${ref}.png',
         );
         imgFile.writeAsBytes(pngBytes);
-        GallerySaver.saveImage(imgFile.path).then((success) async {
-          await ref.createQr(ref.qrData!);
-        });
+        imgFile.writeAsBytes(pngBytes);
+        GallerySaver.saveImage(imgFile.path);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Saved to Gallery"))
+        );
       }
+     
     }
   }
 
@@ -52,15 +55,18 @@ class _SaveWebsiteState extends State<SaveWebsite> {
               child: Center(
                 child: RepaintBoundary(
                   key: globalKey,
-                  child: QrImage(
-                    data: widget.dataString!,
-                    // data:abid,  uid,  txnid,
-                    version: QrVersions.auto,
-                    size: 200,
-                    gapless: false,
-                    embeddedImage: const AssetImage('assets/img/logo.png'),
-                    embeddedImageStyle: QrEmbeddedImageStyle(
-                      size: const Size(70, 70),
+                  child: Container(
+                    color: Colors.white,
+                    child: QrImage(
+                      data: widget.dataString!,
+                      // data:abid,  uid,  txnid,
+                      version: QrVersions.auto,
+                      size: 200,
+                      gapless: false,
+                      embeddedImage: const AssetImage('assets/img/logo.png'),
+                      embeddedImageStyle: QrEmbeddedImageStyle(
+                        size: const Size(70, 70),
+                      ),
                     ),
                   ),
                 ),
@@ -68,7 +74,11 @@ class _SaveWebsiteState extends State<SaveWebsite> {
             ),
             OutlinedButton(
               child: const Text("Save"),
-              onPressed: () => takeScreenShot(widget.dataString),
+              onPressed: () => setState(
+                () {
+                  takeScreenShot(widget.dataString);
+                },
+              ),
             ),
           ],
         ),
