@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:qr_code_scan/qr_code_create_code.dart/website.dart';
+
+import 'package:qr_code_scan/Create_Qr_Code/Clipboard/clipboard.dart';
+import 'package:qr_code_scan/Create_Qr_Code/Text/text.dart';
+import 'package:qr_code_scan/Create_Qr_Code/sms/sms.dart';
+
+import '../Create_Qr_Code/website/website.dart';
+import '../components/create_box.dart';
 
 class CreateQrCode extends StatefulWidget {
   const CreateQrCode({Key? key}) : super(key: key);
@@ -42,18 +47,38 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                       children: [
-                        CreateBox(
-                          text: 'Clipboard',
-                          image: 'clipboard',
-                          // image: 'assets/clipboard.png',
+                        GestureDetector(
+                          onTap: (() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Clipboard(),
+                              ),
+                            );
+                          }),
+                          child: CreateBox(
+                            text: 'Clipboard',
+                            image: 'clipboard',
+                            // image: 'assets/clipboard.png',
+                          ),
                         ),
                         SizedBox(
                           width: 44.w,
                         ),
-                        CreateBox(
-                          text: 'Website',
-                          image: 'website',
-                          // image: 'assets/website.png',
+                        GestureDetector(
+                          onTap: (() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>const Website(),
+                              ),
+                            );
+                          }),
+                          child: CreateBox(
+                            text: 'Website',
+                            image: 'website',
+                            // image: 'assets/website.png',
+                          ),
                         ),
                         SizedBox(
                           width: 44.w,
@@ -98,10 +123,20 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CreateBox(
-                          text: 'Text',
-                          // image: 'assets/text.png',
-                          image: 'text',
+                        GestureDetector(
+                          onTap: (() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Textbox(),
+                              ),
+                            );
+                          }), 
+                          child: CreateBox(
+                            text: 'Text',
+                            // image: 'assets/text.png',
+                            image: 'text',
+                          ),
                         ),
                         SizedBox(
                           width: 44.w,
@@ -135,10 +170,20 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                         SizedBox(
                           width: 44.w,
                         ),
-                        CreateBox(
-                          text: 'SMS',
-                          // image: 'assets/sms.png',
-                          image: 'sms',
+                        GestureDetector(
+                          onTap: (() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Sms(),
+                              ),
+                            );
+                          }), 
+                          child: CreateBox(
+                            text: 'SMS',
+                            // image: 'assets/sms.png',
+                            image: 'sms',
+                          ),
                         ),
                         SizedBox(
                           width: 44.w,
@@ -156,66 +201,6 @@ class _CreateQrCodeState extends State<CreateQrCode> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CreateBox extends StatelessWidget {
-  CreateBox({
-    super.key,
-    required this.text,
-    required this.image,
-  });
-
-  String text;
-  String image;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            // builder: (context) => const BookingQRGenerate(
-            //   abid: "Hello NIkhil ",
-            //   txnid: "How are you?",
-            //   uid: "I am fine",
-            builder: (context) => const Website(),
-          ),
-        );
-      }),
-      child: Column(
-        children: [
-          Container(
-            height: 74.h,
-            width: 74.w,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(15.r)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/$image.svg",
-                  fit: BoxFit.cover,
-                  height: 40.h,
-                  width: 40.h,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 8.h,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              color: Colors.black,
-              // fontWeight: FontWeight.w300,
-            ),
-          ),
-        ],
       ),
     );
   }

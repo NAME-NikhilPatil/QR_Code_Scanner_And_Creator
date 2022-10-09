@@ -24,12 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void reassemble() async {
+  void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      await controller!.pauseCamera();
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
     }
-    controller!.resumeCamera();
   }
 
   done(BuildContext context) async {
@@ -185,5 +186,8 @@ class _HomeScreenState extends State<HomeScreen> {
         this.barcode = barcode;
       }),
     );
+        controller.pauseCamera();
+    controller.resumeCamera();
+
   }
 }
