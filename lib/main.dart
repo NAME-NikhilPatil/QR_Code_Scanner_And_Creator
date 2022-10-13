@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:qr_code_scan/screens/result.dart';
+
+
 import 'components/bottom_navigation.dart';
 
-void main() {
-  runApp(const MyApp());
+// void main() {
+//   runApp(const MyApp());
+// }
+void main()  {
+ 
+  runApp(const  MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -21,10 +28,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Qr Code Scanner',
           // You can use the library anywhere in the app even in theme
-          theme: ThemeData(
-            
-          ),
-          
+          theme: ThemeData(),
+
           initialRoute: child.toString(),
           routes: {
             '/': (context) => const MyNavigationBar(),

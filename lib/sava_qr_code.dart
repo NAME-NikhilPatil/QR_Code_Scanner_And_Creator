@@ -39,6 +39,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Saved to Gallery")));
       }
+     
     }
   }
 
