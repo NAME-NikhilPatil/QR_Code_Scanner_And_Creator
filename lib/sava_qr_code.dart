@@ -2,46 +2,70 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 
 class SaveQrCode extends StatefulWidget {
-  SaveQrCode({super.key, this.dataString});
+  SaveQrCode({super.key, this.dataString, this.formate});
 
   String? dataString;
+  String? formate;
   @override
   State<SaveQrCode> createState() => _SaveQrCodeState();
 }
 
 class _SaveQrCodeState extends State<SaveQrCode> {
   GlobalKey globalKey = GlobalKey();
+  ScreenshotController screenshotController = ScreenshotController();
+  // Future<Image>? image;
 
   takeScreenShot(ref) async {
     PermissionStatus res;
     res = await Permission.storage.request();
     if (res.isGranted) {
-      final boundary =
-          globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 5.0);
-      final byteData = await (image.toByteData(format: ui.ImageByteFormat.png));
-      if (byteData != null) {
-        final pngBytes = byteData.buffer.asUint8List();
-        final directory = (await getApplicationDocumentsDirectory()).path;
-        final imgFile = File(
-          '$directory/${DateTime.now()}${ref}.png',
-        );
-        imgFile.writeAsBytes(pngBytes);
-        imgFile.writeAsBytes(pngBytes);
-        GallerySaver.saveImage(imgFile.path);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Saved to Gallery")));
-      }
-     
+      RenderRepaintBoundary? boundary = globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary?;
+      ui.Image image = await boundary!.toImage(pixelRatio: 5.0);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      final tempDir = await getExternalStorageDirectory();
+      final file = await File('${tempDir!.path}/${DateTime.now().microsecond}${ref}.png')
+          .create(recursive: true);
+      await file.writeAsBytes(pngBytes);
+      GallerySaver.saveImage(file.path);
+
+      //   PermissionStatus res;
+      //   res = await Permission.storage.request();
+      //   if (res.isGranted) {
+      //     RenderRepaintBoundary? boundary =
+      //         globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
+      //     ui.Image image = await boundary.toImage(pixelRatio: 5.0);
+      //     ByteData? byteData = await (image.toByteData(format: ui.ImageByteFormat.png));
+      // //     if (byteData != null) {
+      //      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      //       final directory = await getExternalStorageDirectory();
+      //       final imgFile =await File(
+      //         '${directory!.path}/${DateTime.now()}qr.png',
+      //       ).create();
+      //      await imgFile.writeAsBytes(pngBytes);
+      // // //
+      //       GallerySaver.saveImage(imgFile.path);
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Saved to Gallery"),
+        behavior: SnackBarBehavior.floating,
+      ));
     }
   }
+
+  int originalSize = 2000;
 
   @override
   Widget build(BuildContext context) {
@@ -52,52 +76,169 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 100.h,
-            ),
-            Center(
-              child: RepaintBoundary(
-                key: globalKey,
-                child: Container(
-                  color: Colors.white,
-                  child: QrImage(
-                    data: widget.dataString!,
-                    // data:abid,  uid,  txnid,
-                    version: QrVersions.auto,
-                    size: 200,
-                    gapless: false,
-                    embeddedImage: const AssetImage('assets/img/logo.png'),
-                    embeddedImageStyle: QrEmbeddedImageStyle(
-                      size: const Size(70, 70),
-                    ),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 15.r,
+                      ),
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Text(
+                        widget.formate == null
+                            ? ""
+                            : widget.formate.toString().toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Text(
+                        widget.dataString!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          // decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      RepaintBoundary(
+                        key: globalKey,
+                        child: Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.h, vertical: 20.w),
+                          child: QrImage(
+                            data: widget.dataString!,
+
+                            // data:abid,  uid,  txnid,
+
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            version: QrVersions.auto,
+                            size: 200.h,
+                            gapless: false,
+                            embeddedImage:
+                                const AssetImage('assets/img/qr.png'),
+                            embeddedImageStyle: QrEmbeddedImageStyle(
+                              size: const Size(70, 70),
+                            ),
+                          ),
+                        ),
+                      ),
+                      //     ),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0.r),
+                                  ),
+                                ),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                // : MaterialStateProperty.all<Color>(Colors.grey),
+                                enableFeedback: true,
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                        horizontal: 50.w, vertical: 10.h))),
+                            onPressed: () {
+                              setState(() {
+                                takeScreenShot(widget.dataString);
+                              });
+                            },
+                            child: const Text('Save'),
+                          ),
+                          SizedBox(
+                            width: 30.w,
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0.r),
+                                  ),
+                                ),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                enableFeedback: true,
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                        horizontal: 50.w, vertical: 10.h))),
+                            onPressed: () async {
+                              // share(widget.dataString);
+                              // ShareFilesAndScreenshotWidgets()
+                              //     .takeScreenshot(globalKey, originalSize)
+                              //     .then(
+                              //   (Image? value) {
+                              //     setState(() {
+                              //       _image = value;
+                              //     });
+                              //   },
+                              // );
+                              ShareFilesAndScreenshotWidgets().shareScreenshot(
+                                  globalKey,
+                                  originalSize,
+                                  "Title",
+                                  "Name.png",
+                                  "image/png",
+                                  text:
+                                      "This qr code is generated by this app");
+                            },
+                            child: const Text('Share'),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50.h,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 30.h,),
-            ElevatedButton(
-              style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                  // : MaterialStateProperty.all<Color>(Colors.grey),
-                  enableFeedback: true,
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h))),
-              onPressed: () {
-                setState(
-                  () {
-                    takeScreenShot(widget.dataString);
-                  },
-                );
-              },
-              child: const Text('Save'),
-            ),
-          ],
+              ]),
         ),
       ),
     );

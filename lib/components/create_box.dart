@@ -17,19 +17,20 @@ class CreateBox extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 74.h,
-          width: 74.w,
+          height: 70.w,
+          width: 70.w,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(15.r)),
+              color: Colors.white, borderRadius: BorderRadius.circular(10.r)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
                 "assets/$image.svg",
                 fit: BoxFit.cover,
-                height: 40.h,
-                width: 40.h,
+                height: 35.h,
+                width: 35.h,
               ),
+              
             ],
           ),
         ),
@@ -38,9 +39,9 @@ class CreateBox extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
-            // fontWeight: FontWeight.w300,
+           fontWeight: FontWeight.w500,
           ),
         ),
       ],
