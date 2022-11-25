@@ -29,12 +29,11 @@ class ScanData with ChangeNotifier {
 
   List get createList => _createList;
   bool click = true;
-  bool clicked(){
-    return click=true;
-    notifyListeners();
-  }
-  
 
+
+  bool updateClick(bool click) {
+    return click = click;
+  }
 
   getItem() async {
     final box = await Hive.openBox<History>('history');
@@ -69,5 +68,4 @@ class ScanData with ChangeNotifier {
 
     notifyListeners();
   }
-  
 }

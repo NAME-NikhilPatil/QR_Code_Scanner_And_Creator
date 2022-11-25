@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
 
 class Settings extends StatefulWidget {
-   const Settings({super.key});
+  const Settings({super.key});
 
   @override
   State<Settings> createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
-    bool isSwitched = false;  
+  bool isSwitched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,22 +78,21 @@ class _SettingsState extends State<Settings> {
                         trailing: Switch(
                           onChanged: (value) {
                             if (value == true) {
-                              
                               Provider.of<ScanData>(context, listen: false)
                                   .click = true;
-                                  setState(() {
-                                    isSwitched=true;
-                                  });
+                              setState(() {
+                                isSwitched = true;
+                              });
                             } else {
                               Provider.of<ScanData>(context, listen: false)
                                   .click = false;
-                                  setState(() {
-                                    isSwitched=false;
-                                    
-                                  });
+                              setState(() {
+                                isSwitched = false;
+                              });
                             }
                           },
-                          value: isSwitched,
+                          value: Provider.of<ScanData>(context, listen: false)
+                              .click,
                         ),
                       ),
                       SizedBox(

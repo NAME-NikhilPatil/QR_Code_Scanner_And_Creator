@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_code_scan/Provider/scan_data.dart';
 
 import 'package:qr_code_scan/screens/exit.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,6 +23,9 @@ class _ScanResultState extends State<ScanResult> {
   @override
   void initState() {
     super.initState();
+    click = Provider.of<ScanData>(context, listen: false).click;
+
+    click == true ? updateButton() : null;
   }
 
   done() {
@@ -29,6 +34,32 @@ class _ScanResultState extends State<ScanResult> {
         click = false;
         t.cancel();
       });
+    });
+  }
+
+  updateButton() {
+    setState(() {
+      Clipboard.setData(
+        ClipboardData(
+          text: widget.barcode.toString(),
+        ),
+      );
+      click = true;
+      // Provider.of<ScanData>(context,listen: false).updateClick(true);
+      done();
+    });
+  }
+
+  updateButton1() {
+    setState(() {
+      Clipboard.setData(
+        ClipboardData(
+          text: widget.barcode.toString(),
+        ),
+      );
+      click = true;
+      done();
+      click=false;
     });
   }
 
@@ -124,6 +155,7 @@ class _ScanResultState extends State<ScanResult> {
                               ),
                             );
                             click = true;
+                            // Provider.of<ScanData>(context,listen: false).updateClick(true);
                             done();
                           });
                         },
