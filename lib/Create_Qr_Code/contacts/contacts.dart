@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+
 import 'package:provider/provider.dart';
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
@@ -45,7 +45,7 @@ class _ContactsState extends State<Contacts> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Boxy(text: "contacts", image: "contacts"),
+                const Boxy(text: "contacts", image: "contacts"),
                 SizedBox(
                   height: 30.h,
                 ),
@@ -77,7 +77,7 @@ class _ContactsState extends State<Contacts> {
                       autofocus: true,
                       decoration: InputDecoration(
                         hintText: "Please enter your name",
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: const TextStyle(color: Colors.grey),
 
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 15.w, vertical: 15.h),
@@ -122,7 +122,7 @@ class _ContactsState extends State<Contacts> {
                       autofocus: true,
                       decoration: InputDecoration(
                         hintText: "Please enter phone number",
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: const TextStyle(color: Colors.grey),
 
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 15.w, vertical: 15.h),

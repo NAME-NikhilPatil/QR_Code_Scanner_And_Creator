@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,7 +45,9 @@ class _QrScanScreenState extends State<QrScanScreen> {
 
   onDetect(String barcode, MobileScannerArguments? _, String formate) {
     isEnabled = false;
-    Vibration.vibrate(duration: 300);
+    Provider.of<ScanData>(context, listen: false).vibrate == true
+        ? Vibration.vibrate(duration: 300)
+        : null;
 
     setState(() {
       var historyDb = Provider.of<ScanData>(context, listen: false);

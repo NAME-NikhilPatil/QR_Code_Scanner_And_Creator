@@ -1,10 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
-
 import 'package:qr_code_scan/screens/exit.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -59,12 +59,13 @@ class _ScanResultState extends State<ScanResult> {
       );
       click = true;
       done();
-      click=false;
+      click = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    String search = Provider.of<ScanData>(context, listen: false).search;
     return WillPopScope(
       onWillPop: () => showExitPopup(context),
       child: Scaffold(
@@ -186,10 +187,28 @@ class _ScanResultState extends State<ScanResult> {
                                   onPressed: () {
                                     setState(() {
                                       if (widget.formate == "text") {
-                                        Utils.lauchURl(
-                                            "https://www.google.com/search?q=${widget.barcode}");
+                                        if (search == 'Google')
+                                          Utils.lauchURl(
+                                            "https://www.google.com/search?q=${widget.barcode}",
+                                          );
+                                        if (search == 'Bing')
+                                          Utils.lauchURl(
+                                            "https://www.bing.com/search?q=${widget.barcode}",
+                                          );
+                                        if (search == 'Yahoo')
+                                          Utils.lauchURl(
+                                            "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=${widget.barcode}&b=1",
+                                          );
+                                        if (search == 'DuckDuckGo')
+                                          Utils.lauchURl(
+                                            "https://duckduckgo.com/?q=${widget.barcode}&t=h_&ia=definition",
+                                          );
+                                        if (search == 'Yandex')
+                                          Utils.lauchURl(
+                                            "https://yandex.com/search/?text=${widget.barcode}&lr=10558",
+                                          );
                                       }
-                                      if (widget.formate == "contactinfo") {}
+
                                       if (widget.formate == "url") {
                                         // Utils.lauchURl(widget.barcode.toString());
                                         Utils.lauchURl(widget.barcode!);
@@ -200,15 +219,19 @@ class _ScanResultState extends State<ScanResult> {
                                       //     : "https://www.google.com/search?q=${widget.barcode}");
                                     });
                                   },
-                                  child: const Icon(
-                                    Icons.open_in_browser,
+                                  child: Icon(
+                                    widget.formate == "text"
+                                        ? Icons.search
+                                        : Icons.open_in_browser,
                                     color: Colors.black,
                                   )),
                               SizedBox(
                                 height: 5.h,
                               ),
                               Text(
-                                "Open browser",
+                                widget.formate == "text"
+                                    ? "Search"
+                                    : "Open browser",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15.sp,

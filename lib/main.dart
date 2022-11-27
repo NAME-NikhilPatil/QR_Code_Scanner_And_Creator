@@ -6,10 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/components/bottom_navigation.dart';
 import 'package:qr_code_scan/model/history.dart';
+import 'package:qr_code_scan/saved_setting.dart';
 import 'model/create.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SaveSetting.init();
   await ScreenUtil.ensureScreenSize();
   await Hive.initFlutter();
   Hive.registerAdapter(HistoryAdapter());

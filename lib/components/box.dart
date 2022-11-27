@@ -3,14 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Boxy extends StatelessWidget {
-  Boxy({
+  const Boxy({
     super.key,
     required this.text,
     required this.image,
   });
 
-  String text;
-  String image;
+  final String text;
+  final String image;
 
   @override
   Widget build(BuildContext context) {

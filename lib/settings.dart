@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
+import 'package:qr_code_scan/saved_setting.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -11,7 +12,23 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool isSwitched = false;
+  late bool isSwitched;
+  late bool isVibrate;
+  List<String> searchEngine = [
+    "Google",
+    "Bing",
+    "Yahoo",
+    "DuckDuckGo",
+    "Yandex"
+  ];
+  late String search;
+  @override
+  void initState() {
+    super.initState();
+    isSwitched = SaveSetting.getSwitch() ?? false;
+    isVibrate = SaveSetting.getVibrate() ?? true;
+    search = SaveSetting.getSearch() ?? "Google";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,17 +99,18 @@ class _SettingsState extends State<Settings> {
                                   .click = true;
                               setState(() {
                                 isSwitched = true;
+                                SaveSetting.setSwitch(true);
                               });
                             } else {
                               Provider.of<ScanData>(context, listen: false)
                                   .click = false;
                               setState(() {
                                 isSwitched = false;
+                                SaveSetting.setSwitch(false);
                               });
                             }
                           },
-                          value: Provider.of<ScanData>(context, listen: false)
-                              .click,
+                          value: isSwitched,
                         ),
                       ),
                       SizedBox(
@@ -108,7 +126,26 @@ class _SettingsState extends State<Settings> {
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(Icons.vibration)),
                         title: Text("Vibration"),
-                        trailing: Switch(value: true, onChanged: null),
+                        trailing: Switch(
+                          onChanged: (value) {
+                            if (value == true) {
+                              Provider.of<ScanData>(context, listen: false)
+                                  .vibrate = true;
+                              setState(() {
+                                isVibrate = true;
+                                SaveSetting.setVibrate(true);
+                              });
+                            } else {
+                              Provider.of<ScanData>(context, listen: false)
+                                  .vibrate = false;
+                              setState(() {
+                                isVibrate = false;
+                                SaveSetting.setVibrate(false);
+                              });
+                            }
+                          },
+                          value: isVibrate,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -123,7 +160,55 @@ class _SettingsState extends State<Settings> {
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(Icons.search)),
                         title: Text("Search engine"),
-                        trailing: Switch(value: true, onChanged: null),
+                        trailing: PopupMenuButton(
+                          onSelected: (value) {
+                            setState(() {
+                              Provider.of<ScanData>(context, listen: false)
+                                  .search = value as String;
+                              SaveSetting.setSearch(value);
+                              search=value;
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 8.w),
+                            child: Text(
+                              // Provider.of<ScanData>(context, listen: false)
+                              //     .search,
+                              search,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              PopupMenuItem(
+                                child: Text(searchEngine[0]),
+                                value: searchEngine[0],
+                           
+                              ),
+                              PopupMenuItem(
+                                child: Text(searchEngine[1]),
+                                value: searchEngine[1],
+                            
+                              ),
+                              PopupMenuItem(
+                                child: Text(searchEngine[2]),
+                                value: searchEngine[2],
+                              ),
+                              PopupMenuItem(
+                                child: Text(searchEngine[3]),
+                                value: searchEngine[3],
+                              ),
+                              PopupMenuItem(
+                                child: Text(searchEngine[4]),
+                                value: searchEngine[4],
+                              ),
+                            ];
+                          },
+                        ),
                       ),
                     ],
                   ),

@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +55,7 @@ class _ClipboarState extends State<Clipboar> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Boxy(text: "Clipboard", image: "clipboard"),
+                const Boxy(text: "Clipboard", image: "clipboard"),
                 SizedBox(
                   height: 30.h,
                 ),

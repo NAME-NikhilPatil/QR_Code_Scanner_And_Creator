@@ -8,7 +8,6 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 
 class SaveQrCode extends StatefulWidget {
@@ -22,7 +21,7 @@ class SaveQrCode extends StatefulWidget {
 
 class _SaveQrCodeState extends State<SaveQrCode> {
   GlobalKey globalKey = GlobalKey();
-  ScreenshotController screenshotController = ScreenshotController();
+
   // Future<Image>? image;
 
   takeScreenShot(ref) async {
