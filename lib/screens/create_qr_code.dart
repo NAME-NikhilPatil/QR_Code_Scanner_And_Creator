@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scan/Create_Qr_Code/Clipboard/clipboard.dart';
@@ -14,6 +15,7 @@ import 'package:qr_code_scan/Create_Qr_Code/twitter/twitter.dart';
 import 'package:qr_code_scan/Create_Qr_Code/whatsapp/whatsapp.dart';
 import 'package:qr_code_scan/Create_Qr_Code/wifi/wifi.dart';
 import 'package:qr_code_scan/Create_Qr_Code/youtube/youtube.dart';
+
 import '../Create_Qr_Code/website/website.dart';
 import '../components/create_box.dart';
 
@@ -54,8 +56,6 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                 ),
                 Column(
                   children: [
-                   
-                  
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -63,7 +63,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Facebook(),
                               ),
                             );
@@ -73,12 +73,11 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                             image: 'facebook',
                           ),
                         ),
-                   
                         GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Whatsapp(),
                               ),
                             );
@@ -93,7 +92,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Instagram(),
                               ),
                             );
@@ -104,18 +103,19 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                             // image: 'assets/mycard.png',
                           ),
                         ),
-
                       ],
                     ),
-                    SizedBox(height: 25.h,),
-                     Row(
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Twitter(),
                               ),
                             );
@@ -126,11 +126,11 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                             image: 'twitter',
                           ),
                         ),
-                             GestureDetector(
+                        GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Youtube(),
                               ),
                             );
@@ -140,12 +140,11 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                             image: 'youtube',
                           ),
                         ),
-                       
-                      GestureDetector(
+                        GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Website(),
                               ),
                             );
@@ -158,15 +157,17 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 25.h,),
-                     Row(
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         GestureDetector(
+                        GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Spotify(),
                               ),
                             );
@@ -177,11 +178,11 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                             image: 'spotify',
                           ),
                         ),
-                          GestureDetector(
+                        GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Clipboar(),
                               ),
                             );
@@ -192,12 +193,11 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                             // image: 'assets/clipboard.png',
                           ),
                         ),
-                        
                         GestureDetector(
                           onTap: (() {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Wifi(),
                               ),
                             );
@@ -319,7 +319,6 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                     SizedBox(
                       height: 25.h,
                     ),
-                   
                   ],
                 ),
               ],

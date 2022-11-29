@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +10,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/screens/result.dart';
 import 'package:vibration/vibration.dart';
+
 import '../Provider/scan_data.dart';
 import '../model/history.dart';
 
@@ -25,12 +26,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
   String? barcode;
   late List<History> historyi = [];
   late Box<History> historyBox;
-
   bool isStarted = true;
 
   @override
   void initState() {
     super.initState();
+
     historyBox = Hive.box('history');
 
     controller = MobileScannerController();
@@ -158,8 +159,11 @@ class _QrScanScreenState extends State<QrScanScreen> {
                             padding: EdgeInsets.zero,
                             onPressed: () async {
                               controller.toggleTorch();
-
-                              Vibration.vibrate(duration: 100);
+                              Provider.of<ScanData>(context, listen: false)
+                                          .vibrate ==
+                                      true
+                                  ? Vibration.vibrate(duration: 100)
+                                  : null;
                             }),
                       ],
                     ),
@@ -179,7 +183,11 @@ class _QrScanScreenState extends State<QrScanScreen> {
                           icon: const Icon(Icons.image),
                           iconSize: 25.0,
                           onPressed: () async {
-                            Vibration.vibrate(duration: 100);
+                            Provider.of<ScanData>(context, listen: false)
+                                        .vibrate ==
+                                    true
+                                ? Vibration.vibrate(duration: 100)
+                                : null;
 
                             final ImagePicker picker = ImagePicker();
                             // Pick an image

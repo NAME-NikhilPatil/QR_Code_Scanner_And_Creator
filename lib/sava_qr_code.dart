@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 
 class SaveQrCode extends StatefulWidget {
@@ -27,6 +29,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
   takeScreenShot(ref) async {
     PermissionStatus res;
     res = await Permission.storage.request();
+
     if (res.isGranted) {
       RenderRepaintBoundary? boundary = globalKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary?;
@@ -35,8 +38,9 @@ class _SaveQrCodeState extends State<SaveQrCode> {
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       final tempDir = await getExternalStorageDirectory();
-      final file = await File('${tempDir!.path}/${DateTime.now().microsecond}${ref}.png')
-          .create(recursive: true);
+      final file =
+          await File('${tempDir!.path}/${DateTime.now().microsecond}${ref}.png')
+              .create(recursive: true);
       await file.writeAsBytes(pngBytes);
       GallerySaver.saveImage(file.path);
 
@@ -61,6 +65,34 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         content: Text("Saved to Gallery"),
         behavior: SnackBarBehavior.floating,
       ));
+    } else if (res.isDenied) {
+      Alert(
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        closeIcon: SizedBox(),
+        context: context,
+        type: AlertType.none,
+        title: "Clear history",
+        content: SizedBox(
+            child: Text(
+          "Are you sure you want to delete?",
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 15.sp,
+          ),
+        )),
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Yes",
+              style: TextStyle(color: Colors.white, fontSize: 20.sp),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            color: Colors.blue,
+          )
+        ],
+      ).show();
     }
   }
 
