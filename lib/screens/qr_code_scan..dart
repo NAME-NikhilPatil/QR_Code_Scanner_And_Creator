@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/screens/result.dart';
 import 'package:vibration/vibration.dart';
 import '../Provider/scan_data.dart';
 import '../model/history.dart';
+import 'exit.dart';
 
 class QrScanScreen extends StatefulWidget {
   const QrScanScreen({Key? key}) : super(key: key);
@@ -25,22 +26,26 @@ class _QrScanScreenState extends State<QrScanScreen> {
   String? barcode;
   late List<History> historyi = [];
   late Box<History> historyBox;
-
   bool isStarted = true;
 
   @override
   void initState() {
     super.initState();
+
     historyBox = Hive.box('history');
 
     controller = MobileScannerController();
-    // restart();
   }
 
   bool isEnabled = true;
   Future<void> restart() async {
     // await controller.stop();
     await controller.start();
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+    } else if (state == AppLifecycleState.paused) {}
   }
 
   onDetect(String barcode, MobileScannerArguments? _, String formate) {
@@ -64,6 +69,21 @@ class _QrScanScreenState extends State<QrScanScreen> {
     });
   }
 
+  permission() {
+    PermissionStatus res;
+    res = Permission.camera.request() as PermissionStatus;
+    if (res.isGranted) {
+      // controller = MobileScannerController();
+    } else if (res.isDenied) {
+    } else if (res.isPermanentlyDenied) {
+      openAppSettings();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please unable camera permission in setting"),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final scanWindow = Rect.fromCenter(
@@ -72,149 +92,183 @@ class _QrScanScreenState extends State<QrScanScreen> {
       height: 250.h,
     );
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Builder(
-        builder: (context) {
-          return Stack(fit: StackFit.expand, children: [
-            MobileScanner(
-              allowDuplicates: false,
-              fit: BoxFit.cover,
-              scanWindow: scanWindow,
-              controller: controller,
-              onDetect: (barcode, args) => isEnabled
-                  ? onDetect(barcode.rawValue.toString(), args,
-                      barcode.type.name.toString())
-                  : null,
-            ),
-            Padding(
-              padding: EdgeInsets.zero, //widget.overlayMargin,
-              child: Container(
-                decoration: ShapeDecoration(
-                  shape: QrScannerOverlayShape(
-                    borderRadius: 10.r,
-                    borderColor: Colors.white,
-                    borderLength: 18.w,
-                    borderWidth: 12.w,
-                    cutOutHeight: 250.h,
-                    cutOutWidth: 250.h,
+    return WillPopScope(
+      onWillPop: () => showExitPopup(context),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Builder(
+          builder: (context) {
+            return Stack(fit: StackFit.expand, children: [
+              MobileScanner(
+                allowDuplicates: false,
+                fit: BoxFit.cover,
+                scanWindow: scanWindow,
+                controller: controller,
+                onDetect: (barcode, args) => isEnabled
+                    ? onDetect(barcode.rawValue.toString(), args,
+                        barcode.type.name.toString())
+                    : null,
+              ),
+              Padding(
+                padding: EdgeInsets.zero, //widget.overlayMargin,
+                child: Container(
+                  decoration: ShapeDecoration(
+                    shape: QrScannerOverlayShape(
+                      borderRadius: 0.r,
+                      borderColor: Colors.white,
+                      borderLength: 18.w,
+                      borderWidth: 9.w,
+                      cutOutHeight: 250.h,
+                      cutOutWidth: 250.h,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              left: 88.w,
-              top: 60.h,
-              child: Text(
-                "QRSCANNER",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32.sp,
-                  fontWeight: FontWeight.bold,
+              // SaveSetting.getgranted() == false
+              //     ? Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           GestureDetector(
+              //             onTap: () {
+              //               openAppSettings();
+              //             },
+              //             child: Text(
+              //               "Open Setting",
+              //               style: TextStyle(
+              //                 color: Colors.white,
+              //               ),
+              //             ),
+              //           ),
+              //           Text(
+              //             "open app setting and unable camera permission ",
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //         ],
+              //       )
+              //     : SizedBox(),
+              Positioned(
+                left: 88.w,
+                top: 60.h,
+                child: Text(
+                  "QRSCANNER",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 50.h,
-              left: 95.w,
-              child: Row(
-                children: [
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.w),
-                    margin: EdgeInsets.symmetric(horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Column(
-                      children: [
-                        IconButton(
-                            color: Colors.white,
-                            icon: ValueListenableBuilder(
-                              valueListenable: controller.torchState,
-                              builder: (context, state, child) {
-                                if (state == null) {
-                                  return const Icon(
-                                    MdiIcons.flashlight,
-                                    color: Colors.white,
-                                  );
-                                }
-                                switch (state as TorchState) {
-                                  case TorchState.off:
+              Positioned(
+                bottom: 50.h,
+                left: 95.w,
+                child: Row(
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.w),
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        children: [
+                          IconButton(
+                              color: Colors.white,
+                              icon: ValueListenableBuilder(
+                                valueListenable: controller.torchState,
+                                builder: (context, state, child) {
+                                  if (state == null) {
                                     return const Icon(
                                       MdiIcons.flashlight,
                                       color: Colors.white,
                                     );
-                                  case TorchState.on:
-                                    return const Icon(
-                                      Icons.flashlight_on,
-                                      color: Colors.yellow,
-                                    );
-                                }
-                              },
-                            ),
-                            iconSize: 30.0,
-                            padding: EdgeInsets.zero,
+                                  }
+                                  switch (state as TorchState) {
+                                    case TorchState.off:
+                                      return const Icon(
+                                        MdiIcons.flashlight,
+                                        color: Colors.white,
+                                      );
+                                    case TorchState.on:
+                                      return const Icon(
+                                        Icons.flashlight_on,
+                                        color: Colors.yellow,
+                                      );
+                                  }
+                                },
+                              ),
+                              iconSize: 30.0,
+                              padding: EdgeInsets.zero,
+                              onPressed: () async {
+                                controller.toggleTorch();
+                                Provider.of<ScanData>(context, listen: false)
+                                            .vibrate ==
+                                        true
+                                    ? Vibration.vibrate(duration: 100)
+                                    : null;
+                              }),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.w),
+                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        children: [
+                          IconButton(
+                            color: Colors.white,
+                            icon: const Icon(Icons.image),
+                            iconSize: 25.0,
                             onPressed: () async {
-                              controller.toggleTorch();
+                              Provider.of<ScanData>(context, listen: false)
+                                          .vibrate ==
+                                      true
+                                  ? Vibration.vibrate(duration: 100)
+                                  : null;
 
-                              Vibration.vibrate(duration: 100);
-                            }),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.w),
-                    margin: EdgeInsets.symmetric(horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Column(
-                      children: [
-                        IconButton(
-                          color: Colors.white,
-                          icon: const Icon(Icons.image),
-                          iconSize: 25.0,
-                          onPressed: () async {
-                            Vibration.vibrate(duration: 100);
-
-                            final ImagePicker picker = ImagePicker();
-                            // Pick an image
-                            final XFile? image = await picker.pickImage(
-                              source: ImageSource.gallery,
-                            );
-                            if (image != null) {
-                              if (await controller.analyzeImage(image.path)) {
-                                if (!mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Barcode found!'),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-                              } else {
-                                if (!mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('No barcode found!'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
+                              final ImagePicker picker = ImagePicker();
+                              // Pick an image
+                              final XFile? image = await picker.pickImage(
+                                source: ImageSource.gallery,
+                              );
+                              if (image != null) {
+                                if (await controller.analyzeImage(image.path)) {
+                                  if (!mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Barcode found!'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else {
+                                  if (!mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('No barcode found!'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
                               }
-                            }
-                          },
-                        ),
-                      ],
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ]);
-        },
+            ]);
+          },
+        ),
       ),
     );
   }
@@ -224,9 +278,10 @@ class QrScannerOverlayShape extends ShapeBorder {
   QrScannerOverlayShape({
     this.borderColor = Colors.red,
     this.borderWidth = 3.0,
-    this.overlayColor = const Color.fromRGBO(0, 0, 0, 80),
+    // this.overlayColor = const Color.fromRGBO(0, 0, 0, 80),
+    this.overlayColor = const Color.fromRGBO(0, 0, 0, 120),
     this.borderRadius = 0,
-    this.borderLength = 40,
+    this.borderLength = 40.0,
     double? cutOutSize,
     double? cutOutWidth,
     double? cutOutHeight,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'package:qr_code_scan/screens/history_screen.dart';
 import 'package:qr_code_scan/screens/qr_code_scan..dart';
-import 'package:qr_code_scan/settings.dart';
+import 'package:qr_code_scan/screens/settings.dart';
+
 import '../screens/create_qr_code.dart';
 
 class MyNavigationBar extends StatefulWidget {
@@ -59,8 +58,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         enableFeedback: true,
         currentIndex: selectedIndex,
         unselectedItemColor: Colors.grey[500],
-        selectedItemColor:  Colors.blue,
-        backgroundColor:  Colors.white ,
+        selectedItemColor: Colors.blue,
+        backgroundColor: Colors.white,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),

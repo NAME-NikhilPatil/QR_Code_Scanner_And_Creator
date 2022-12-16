@@ -9,6 +9,8 @@ import 'package:qr_code_scan/screens/exit.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../components/bottom_navigation.dart';
+
 class ScanResult extends StatefulWidget {
   ScanResult({Key? key, required this.barcode, this.formate}) : super(key: key);
   String? barcode;
@@ -84,7 +86,8 @@ class _ScanResultState extends State<ScanResult> {
               Icons.arrow_back,
               color: Colors.black,
             ),
-            onPressed: () => Navigator.pushNamed(context, '/'),
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyNavigationBar())),
           ),
         ),
         body: SingleChildScrollView(

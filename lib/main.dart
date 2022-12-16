@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
-import 'package:qr_code_scan/components/bottom_navigation.dart';
 import 'package:qr_code_scan/model/history.dart';
-import 'package:qr_code_scan/saved_setting.dart';
+import 'package:qr_code_scan/model/saved_setting.dart';
+import 'package:qr_code_scan/screens/first_time.dart';
 import 'model/create.dart';
 
 void main() async {
@@ -37,13 +37,14 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (context) => ScanData()),
           ],
           child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Qr Code Scanner',
-              theme: ThemeData(),
-              home: const MyNavigationBar()),
+            debugShowCheckedModeBanner: false,
+            title: 'Qr Code Scanner',
+            theme: ThemeData(),
+            home: FirstTime(),
+          ),
         );
       },
-      child: const MyNavigationBar(),
+      child: const FirstTime(),
     );
   }
 }

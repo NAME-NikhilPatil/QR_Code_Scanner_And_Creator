@@ -4,8 +4,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/model/history.dart';
 
-import '../saved_setting.dart';
-
 class ScanData with ChangeNotifier {
   addItem(History? item) async {
     var box = await Hive.openBox<History>('history');
@@ -31,8 +29,9 @@ class ScanData with ChangeNotifier {
 
   List get createList => _createList;
 
-  bool click =false;
+  bool click = false;
   bool vibrate = true;
+  bool isgranted = false;
 
   // List<String> search = ["Google", "Bing", "Yahoo", "DuckDuckGo", "Yandex"];
   String search = "Google";
