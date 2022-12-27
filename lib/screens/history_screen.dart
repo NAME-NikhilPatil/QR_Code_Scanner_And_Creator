@@ -6,7 +6,7 @@ import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/sava_qr_code.dart';
 import 'package:qr_code_scan/screens/detail_history_screen.dart';
-import 'package:qr_code_scan/screens/result.dart';
+
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:vibration/vibration.dart';
 
@@ -72,7 +72,7 @@ class _History_screenState extends State<History_screen>
           'History',
           style: TextStyle(
             fontSize: 22.sp,
-            color: Colors.black,
+            color: Colors.grey,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -178,7 +178,7 @@ class _History_screenState extends State<History_screen>
               },
               icon: Icon(
                 Icons.delete_rounded,
-                color: Colors.black,
+                color: Colors.black54,
               ))
         ],
       ),
@@ -269,148 +269,153 @@ class _History_screenState extends State<History_screen>
         itemBuilder: (context, index) {
           History his =
               Provider.of<ScanData>(context, listen: false).historyList![index];
-          return Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ScanResult(
-                        barcode: his.qrCodeValue,
-                        formate: his.formate,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 5.r,
+          return Container(
+            margin: EdgeInsets.only(bottom: 5.h),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HistoryScreenDetail(
+                          barcode: his.qrCodeValue,
+                          formate: his.formate,
                         ),
-                      ],
-                    ),
-                    margin: EdgeInsets.only(left: 10.w, top: 20.h, right: 10.w),
-                    padding:
-                        EdgeInsets.only(left: 5.w, top: 10.h, bottom: 10.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ScanResult(
-                                  formate: his.formate,
-                                  barcode: his.qrCodeValue,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Stack(alignment: Alignment.center, children: [
-                                Container(
-                                  height: 40.h,
-                                  width: 40.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(10.r),
+                      ),
+                    );
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 5.r,
+                          ),
+                        ],
+                      ),
+                      margin:
+                          EdgeInsets.only(left: 10.w, top: 15.h, right: 10.w),
+                      padding:
+                          EdgeInsets.only(left: 5.w, top: 10.h, bottom: 10.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HistoryScreenDetail(
+                                    formate: his.formate,
+                                    barcode: his.qrCodeValue,
                                   ),
                                 ),
-                                his.formate == "url"
-                                    ? SvgPicture.asset(
-                                        "assets/website.svg",
-                                        height: 20.h,
-                                        width: 35.h,
-                                        fit: BoxFit.contain,
-                                      )
-                                    : SvgPicture.asset(
-                                        "assets/text1.svg",
-                                        height: 20.h,
-                                        width: 35.h,
-                                        color: Colors.grey,
-                                        fit: BoxFit.contain,
-                                      ),
-                              ]),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HistoryScreenDetail(
-                                        barcode: his.qrCodeValue,
-                                        formate: his.formate,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: SizedBox(
-                                  width: 190.w,
-                                  child: Text(
-                                    his.qrCodeValue!,
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                    style: TextStyle(
-                                      fontSize: 20.0.sp,
-                                      color: Colors.black,
+                              );
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Stack(alignment: Alignment.center, children: [
+                                  Container(
+                                    height: 40.h,
+                                    width: 40.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(10.r),
                                     ),
                                   ),
+                                  his.formate == "url"
+                                      ? SvgPicture.asset(
+                                          "assets/website.svg",
+                                          height: 20.h,
+                                          width: 35.h,
+                                          fit: BoxFit.contain,
+                                        )
+                                      : SvgPicture.asset(
+                                          "assets/text1.svg",
+                                          height: 20.h,
+                                          width: 35.h,
+                                          color: Colors.grey,
+                                          fit: BoxFit.contain,
+                                        ),
+                                ]),
+                                SizedBox(
+                                  width: 10.w,
                                 ),
-                              ),
-                              SizedBox(
-                                width: 45.w,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
+                                GestureDetector(
+                                  onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             HistoryScreenDetail(
-                                          formate: his.formate,
                                           barcode: his.qrCodeValue,
+                                          formate: his.formate,
                                         ),
                                       ),
                                     );
                                   },
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: Colors.blueAccent,
-                                    size: 40.h,
+                                  child: SizedBox(
+                                    width: 190.w,
+                                    child: Text(
+                                      his.qrCodeValue!,
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(
+                                        fontSize: 20.0.sp,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 45.w,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              his.delete();
-                            },
-                            icon: Icon(
-                              Icons.delete_rounded,
-                              color: Colors.blueAccent,
-                              size: 25.h,
+                                SizedBox(
+                                  width: 45.w,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              HistoryScreenDetail(
+                                            formate: his.formate,
+                                            barcode: his.qrCodeValue,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_right,
+                                      color: Colors.blueAccent,
+                                      size: 40.h,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
+                          SizedBox(
+                            width: 45.w,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                his.delete();
+                              },
+                              icon: Icon(
+                                Icons.delete_rounded,
+                                color: Colors.blueAccent,
+                                size: 25.h,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
           );
         });
   }
@@ -422,127 +427,132 @@ class _History_screenState extends State<History_screen>
         itemBuilder: (context, index) {
           CreateQr his =
               Provider.of<ScanData>(context, listen: false).createList[index];
-          return Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SaveQrCode(
-                        dataString: his.qrCodeValue,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 5.r,
+          return Container(
+            margin: EdgeInsets.only(bottom: 5.h),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SaveQrCode(
+                          dataString: his.qrCodeValue,
                         ),
-                      ],
-                    ),
-                    margin: EdgeInsets.only(left: 10.w, top: 20.h, right: 10.w),
-                    padding:
-                        EdgeInsets.only(left: 5.w, top: 10.h, bottom: 10.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SaveQrCode(
-                                  dataString: his.qrCodeValue,
-                                  formate: his.formate,
+                      ),
+                    );
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 5.r,
+                          ),
+                        ],
+                      ),
+                      margin:
+                          EdgeInsets.only(left: 10.w, top: 15.h, right: 10.w),
+                      padding:
+                          EdgeInsets.only(left: 5.w, top: 10.h, bottom: 10.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SaveQrCode(
+                                    dataString: his.qrCodeValue,
+                                    formate: his.formate,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    height: 40.h,
-                                    width: 40.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(10.r),
+                              );
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: 40.h,
+                                      width: 40.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                      ),
+                                    ),
+                                    SvgPicture.asset(
+                                      "assets/${his.formate}.svg",
+                                      height: 20.h,
+                                      width: 35.h,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                SizedBox(
+                                  width: 190.w,
+                                  child: Text(
+                                    his.qrCodeValue,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    style: TextStyle(
+                                      fontSize: 20.0.sp,
+                                      color: Colors.black,
                                     ),
                                   ),
-                                  SvgPicture.asset(
-                                    "assets/${his.formate}.svg",
-                                    height: 20.h,
-                                    width: 35.h,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              SizedBox(
-                                width: 190.w,
-                                child: Text(
-                                  his.qrCodeValue,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  overflow: TextOverflow.fade,
-                                  style: TextStyle(
-                                    fontSize: 20.0.sp,
-                                    color: Colors.black,
-                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 45.w,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SaveQrCode(
-                                          dataString: his.qrCodeValue,
+                                SizedBox(
+                                  width: 45.w,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SaveQrCode(
+                                            dataString: his.qrCodeValue,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: Colors.blueAccent,
-                                    size: 40.h,
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_right,
+                                      color: Colors.blueAccent,
+                                      size: 40.h,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 45.w,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              his.delete();
-                            },
-                            icon: Icon(
-                              Icons.delete_rounded,
-                              color: Colors.blueAccent,
-                              size: 25.h,
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
+                          SizedBox(
+                            width: 45.w,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                his.delete();
+                              },
+                              icon: Icon(
+                                Icons.delete_rounded,
+                                color: Colors.blueAccent,
+                                size: 25.h,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
           );
         });
   }

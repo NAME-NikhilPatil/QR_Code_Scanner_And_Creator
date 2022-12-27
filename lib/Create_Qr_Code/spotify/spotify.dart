@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
+import '../../constants.dart';
 import '../../model/create.dart';
 import '../../sava_qr_code.dart';
 
@@ -25,6 +26,7 @@ class _SpotifyState extends State<Spotify> {
 
   TextEditingController controller2 = TextEditingController();
   TextEditingController controller1 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> deviceInfo() async {
     String name = "${controller.text}";
@@ -47,134 +49,139 @@ class _SpotifyState extends State<Spotify> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Boxy(text: "Spotify", image: "spotify"),
-                SizedBox(
-                  height: 60.h,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Artist Name",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      minLines: 1,
-                      controller: controller,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Boxy(text: "Spotify", image: "spotify"),
+                  SizedBox(
+                    height: 60.h,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Artist Name",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
+
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        minLines: 1,
+                        controller: controller,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Song Name",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SizedBox(
+                        height: 7.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.done,
-                      minLines: 1,
-                      controller: controller1,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Song Name",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
+
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.done,
+                        minLines: 1,
+                        controller: controller1,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(primaryColor),
-                        // : MaterialStateProperty.all<Color>(Colors.grey),
-                        enableFeedback: true,
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                                horizontal: 50.w, vertical: 10.h))),
-                    onPressed: () {
-                      deviceInfo();
-                      var createDb =
-                          Provider.of<ScanData>(context, listen: false);
-                      createDb.addItemC(CreateQr(_dataString, "spotify"));
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SaveQrCode(
-                                    dataString: _dataString,
-                                  )));
-                    },
-                    child: const Text("Create")),
-              ],
-              // children: [_contentWidget()],
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  ElevatedButton(
+                      style: Constants.buttonStyle(primaryColor),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "spotify"));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SaveQrCode(
+                                        dataString: _dataString,
+                                      )));
+                        }
+                      },
+                      child: Text(
+                        "Create",
+                        style: Constants.buttonText,
+                      )),
+                ],
+                // children: [_contentWidget()],
+              ),
             ),
           ),
         ),

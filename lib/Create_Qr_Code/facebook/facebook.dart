@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scan/constants.dart';
 
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
@@ -26,6 +27,7 @@ class _FacebookState extends State<Facebook> {
 
   String hinttext = "Please enter Facebook ID";
   List<String> _choicesList = ['URL', 'Facebook Id'];
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -56,124 +58,130 @@ class _FacebookState extends State<Facebook> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Boxy(text: "Facebook", image: "facebook"),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Row(
-                  children: [
-                    Wrap(
-                      spacing: 5.w,
-                      children: List.generate(_choicesList.length, (index) {
-                        return ChoiceChip(
-                          labelPadding: EdgeInsets.all(5.0.w),
-                          backgroundColor: Colors.white,
-                          label: Text(_choicesList[index],
-                              style: TextStyle(
-                                color: defaultChoiceIndex == index
-                                    ? Colors.white
-                                    : Colors.grey,
-                              )),
-                          selected: defaultChoiceIndex == index,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5.r),
-                                  topRight: Radius.circular(5.r),
-                                  bottomLeft: Radius.circular(5.r),
-                                  bottomRight: Radius.circular(5.r))),
-                          selectedColor: Colors.blue,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Boxy(text: "Facebook", image: "facebook"),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Row(
+                    children: [
+                      Wrap(
+                        spacing: 5.w,
+                        children: List.generate(_choicesList.length, (index) {
+                          return ChoiceChip(
+                            labelPadding: EdgeInsets.all(5.0.w),
+                            backgroundColor: Colors.white,
+                            label: Text(_choicesList[index],
+                                style: TextStyle(
+                                  color: defaultChoiceIndex == index
+                                      ? Colors.white
+                                      : Colors.grey,
+                                )),
+                            selected: defaultChoiceIndex == index,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5.r),
+                                    topRight: Radius.circular(5.r),
+                                    bottomLeft: Radius.circular(5.r),
+                                    bottomRight: Radius.circular(5.r))),
+                            selectedColor: Colors.blue,
 
-                          onSelected: (value) {
-                            setState(() {
-                              defaultChoiceIndex =
-                                  value ? index : defaultChoiceIndex;
-                              controller1 = _choicesList[index];
-                              if (_choicesList[index] == "URL") {
-                                hinttext = "Please enter URL";
-                                ispress = false;
-                              }
+                            onSelected: (value) {
+                              setState(() {
+                                defaultChoiceIndex =
+                                    value ? index : defaultChoiceIndex;
+                                controller1 = _choicesList[index];
+                                if (_choicesList[index] == "URL") {
+                                  hinttext = "Please enter URL";
+                                  ispress = false;
+                                }
 
-                              if (_choicesList[index] == "Facebook Id") {
-                                hinttext = "Please enter Facebook Id";
-                                ispress = true;
-                              }
-                            });
-                          },
-                          // backgroundColor: color,
-                          pressElevation: 0,
-                          side: BorderSide(
-                              color: Colors.grey.shade300, width: 0.9.h),
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(horizontal: 23.w),
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                TextField(
-                  onChanged: (val) {
-                    setState(() {
-                      primaryColor = val.isNotEmpty ? Colors.blue : Colors.grey;
-                    });
-                  },
-
-                  // maxLines: null,
-                  minLines: 1,
-                  controller: controller,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    // hintText:  "Please enter Facebook ID",
-                    hintText: hinttext,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.r),
-                      borderSide: BorderSide(
-                        width: 2.h,
-                        color: Colors.grey.shade200,
+                                if (_choicesList[index] == "Facebook Id") {
+                                  hinttext = "Please enter Facebook Id";
+                                  ispress = true;
+                                }
+                              });
+                            },
+                            // backgroundColor: color,
+                            pressElevation: 0,
+                            side: BorderSide(
+                                color: Colors.grey.shade300, width: 0.9.h),
+                            elevation: 0,
+                            padding: EdgeInsets.symmetric(horizontal: 23.w),
+                          );
+                        }),
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.r),
-                      borderSide: BorderSide(width: 3.h, color: Colors.grey),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  TextFormField(
+                    onChanged: (val) {
+                      _formKey.currentState!.validate();
+                      setState(() {
+                        primaryColor =
+                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                      });
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter the value first';
+                      }
+                      return null;
+                    },
+
+                    // maxLines: null,
+                    minLines: 1,
+                    controller: controller,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      // hintText:  "Please enter Facebook ID",
+                      hintStyle: Constants.hintStyle,
+                      hintText: hinttext,
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 15.w, vertical: 15.h),
+                      errorBorder: Constants.border,
+                      focusedBorder: Constants.border,
+                      border: Constants.border,
+                      focusedErrorBorder: Constants.border,
+                      errorStyle: Constants.errroStyle,
+                      enabledBorder: Constants.border,
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(primaryColor),
-                        // : MaterialStateProperty.all<Color>(Colors.grey),
-                        enableFeedback: true,
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                                horizontal: 50.w, vertical: 12.h))),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  ElevatedButton(
+                    style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      deviceInfo();
-                      var createDb =
-                          Provider.of<ScanData>(context, listen: false);
-                      createDb.addItemC(CreateQr(_dataString, "facebook"));
-                      Navigator.push(
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "facebook"));
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SaveQrCode(
-                                    dataString: _dataString,
-                                  )));
+                            builder: (context) => SaveQrCode(
+                              dataString: _dataString,
+                            ),
+                          ),
+                        );
+                      }
                     },
-                    child: Text("Create".toUpperCase())),
-              ],
-              // children: [_contentWidget()],
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                ],
+                // children: [_contentWidget()],
+              ),
             ),
           ),
         ),

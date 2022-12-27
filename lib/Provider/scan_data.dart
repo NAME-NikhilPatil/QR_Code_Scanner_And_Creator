@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/model/history.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 class ScanData with ChangeNotifier {
   addItem(History? item) async {
@@ -27,10 +28,11 @@ class ScanData with ChangeNotifier {
   List? get historyList => _historyList;
   List _createList = <CreateQr>[];
   List get createList => _createList;
+  RateMyApp? rateMyApp;
 
   bool click = false;
   bool vibrate = true;
-  bool isgranted = true;
+  bool isgranted = false;
   isgranty(bool isgrant) {
     isgranted = isgrant;
     notifyListeners();

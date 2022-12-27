@@ -16,7 +16,7 @@ class SaveSetting {
       await _preferences?.setBool(vibrate.toString(), vibrateName);
   static bool? getVibrate() => _preferences?.getBool(vibrate.toString());
 
-  static String isgranted = "isgranted";
+  static String isgranted = "false";
 
   static Future granted(bool grant) async =>
       await _preferences?.setBool(isgranted, grant);

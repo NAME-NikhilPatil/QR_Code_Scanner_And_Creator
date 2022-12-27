@@ -1,14 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/model/saved_setting.dart';
+import 'package:qr_code_scan/rate_app_init.dart';
 import 'package:qr_code_scan/screens/feedback_screen.dart';
 import 'package:qr_code_scan/screens/privacy_policy.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  Settings({
+    super.key,
+  });
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -16,6 +20,8 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   late bool isSwitched;
+  RateMyApp? rateMyApp;
+  static const playStoreId = "com.example.qr_code_scanner";
   late bool isVibrate;
   List<String> searchEngine = [
     "Google",
@@ -24,6 +30,7 @@ class _SettingsState extends State<Settings> {
     "DuckDuckGo",
     "Yandex"
   ];
+
   late String search;
   @override
   void initState() {
@@ -37,7 +44,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue[50],
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
@@ -71,14 +78,14 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               SizedBox(
-                height: 7.h,
+                height: 10.h,
               ),
               Center(
                 child: Container(
                   width: 350.w,
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   decoration: BoxDecoration(
-                    color: Colors.blue[50],
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Column(
@@ -99,7 +106,10 @@ class _SettingsState extends State<Settings> {
                               size: 18.h,
                               color: Colors.white,
                             )),
-                        title: Text("Auto copied to clipboard"),
+                        title: Text(
+                          "Auto copied to clipboard",
+                          // style: Constants.settingText,
+                        ),
                         trailing: Switch(
                           onChanged: (value) {
                             if (value == true) {
@@ -137,7 +147,10 @@ class _SettingsState extends State<Settings> {
                               size: 18.h,
                               color: Colors.white,
                             )),
-                        title: Text("Vibration"),
+                        title: Text(
+                          "Vibration",
+                          // style: Constants.settingText,
+                        ),
                         trailing: Switch(
                           onChanged: (value) {
                             if (value == true) {
@@ -175,7 +188,10 @@ class _SettingsState extends State<Settings> {
                               size: 18.h,
                               color: Colors.white,
                             )),
-                        title: Text("Search engine"),
+                        title: Text(
+                          "Search engine",
+                          // style: Constants.settingText,
+                        ),
                         trailing: PopupMenuButton(
                           color: Colors.blue[50],
                           onSelected: (value) {
@@ -250,12 +266,86 @@ class _SettingsState extends State<Settings> {
                 child: Container(
                   width: 350.w,
                   decoration: BoxDecoration(
-                    color: Colors.blue[50],
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      RateMyAppBuilder(
+                          rateMyApp: RateMyApp(
+                            googlePlayIdentifier: playStoreId,
+                            minDays: 0,
+                            minLaunches: 1,
+                          ),
+                          onInitialized: (context, rateMyApp) {
+                            setState(() {
+                              this.rateMyApp = rateMyApp;
+                            });
+                            if (rateMyApp.shouldOpenDialog) {
+                              rateMyApp.showRateDialog(context);
+                            }
+                          },
+                          builder: (context) =>
+                              //  rateMyApp == null
+                              //     ? Center(
+                              //         child: Settings(),
+                              //       )
+                              //     :
+
+                              ListTile(
+                                onTap: () {
+                                  Widget buildOkButton() {
+                                    return RateMyAppRateButton(rateMyApp!,
+                                        text: "OK");
+                                  }
+
+                                  Widget buildCancelButton() {
+                                    return RateMyAppNoButton(rateMyApp!,
+                                        text: "CANCEL");
+                                  }
+
+                                  setState(() {
+                                    rateMyApp!.showStarRateDialog(
+                                      context,
+                                      title: "Rate This App",
+                                      message:
+                                          "Do you like this app?Please leave a rating",
+                                      starRatingOptions:
+                                          StarRatingOptions(initialRating: 4),
+                                      actionsBuilder: (BuildContext context,
+                                          double? stars) {
+                                        return stars == null
+                                            ? [buildCancelButton()]
+                                            : [
+                                                buildOkButton(),
+                                                buildCancelButton()
+                                              ];
+                                      },
+                                    );
+                                  });
+                                },
+                                enableFeedback: true,
+                                leading: Container(
+                                    height: 30.h,
+                                    width: 30.h,
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius:
+                                            BorderRadius.circular(7.r)),
+                                    child: Icon(
+                                      Icons.rate_review,
+                                      color: Colors.white,
+                                      size: 18.h,
+                                    )),
+                                title: Text(
+                                  "Rate us",
+                                  // style: Constants.settingText,
+                                ),
+                              )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -281,7 +371,10 @@ class _SettingsState extends State<Settings> {
                               color: Colors.white,
                               size: 18.h,
                             )),
-                        title: Text("Feedback"),
+                        title: Text(
+                          "Feedback",
+                          // style: Constants.settingText,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -292,7 +385,7 @@ class _SettingsState extends State<Settings> {
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  PrivacyPolicy(),
+                                  const PrivacyPolicy(),
                             ),
                           );
                         },
@@ -308,7 +401,10 @@ class _SettingsState extends State<Settings> {
                               color: Colors.white,
                               size: 18.h,
                             )),
-                        title: Text("Privacy policy"),
+                        title: Text(
+                          "Privacy policy",
+                          // style: Constants.settingText,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -326,7 +422,10 @@ class _SettingsState extends State<Settings> {
                               color: Colors.white,
                               size: 18.h,
                             )),
-                        title: Text("Version 1.0"),
+                        title: Text(
+                          "Version 1.0",
+                          // style: Constants.settingText,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -335,6 +434,9 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 0.1.sh,
+              )
             ],
           ),
         ));

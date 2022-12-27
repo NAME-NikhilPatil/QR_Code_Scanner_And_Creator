@@ -79,6 +79,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
     } else if (res.isPermanentlyDenied) {
       permission = false;
       Alert(
+        // onWillPopActive: true,
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         closeIcon: SizedBox(),
         context: context,
@@ -110,7 +111,9 @@ class _SaveQrCodeState extends State<SaveQrCode> {
   }
 
   int originalSize = 2000;
+ 
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,24 +208,21 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                         children: [
                           ElevatedButton(
                             style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0.r),
-                                  ),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              enableFeedback: true,
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      EdgeInsets.symmetric(
+                                          horizontal: 50.w, vertical: 10.h)),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.r),
                                 ),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.black),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                // : MaterialStateProperty.all<Color>(Colors.grey),
-                                enableFeedback: true,
-                                padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                    EdgeInsets.symmetric(
-                                        horizontal: 50.w, vertical: 10.h))),
+                              ),
+                            ),
                             onPressed: () {
                               setState(() {
                                 takeScreenShot(widget.dataString);
@@ -235,23 +235,21 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                           ),
                           ElevatedButton(
                             style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0.r),
-                                  ),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              enableFeedback: true,
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      EdgeInsets.symmetric(
+                                          horizontal: 50.w, vertical: 10.h)),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.r),
                                 ),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.black),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                enableFeedback: true,
-                                padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                    EdgeInsets.symmetric(
-                                        horizontal: 50.w, vertical: 10.h))),
+                              ),
+                            ),
                             onPressed: () async {
                               // share(widget.dataString);
                               // ShareFilesAndScreenshotWidgets()

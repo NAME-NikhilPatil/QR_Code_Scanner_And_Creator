@@ -5,6 +5,7 @@ import '../../../Provider/scan_data.dart';
 import '../../../components/box.dart';
 import '../../../model/create.dart';
 import '../../../sava_qr_code.dart';
+import '../../constants.dart';
 
 class MyCard extends StatefulWidget {
   const MyCard({super.key});
@@ -25,6 +26,7 @@ class _MyCardState extends State<MyCard> {
   TextEditingController controller3 = TextEditingController();
   TextEditingController controller4 = TextEditingController();
   TextEditingController controller5 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> deviceInfo() async {
     String Name = "Name:${controller.text}";
@@ -54,390 +56,398 @@ class _MyCardState extends State<MyCard> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Boxy(text: "My Card", image: "mycard"),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Name",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      minLines: 1,
-                      controller: controller,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: "Please enter your name",
-                        hintStyle: TextStyle(color: Colors.grey),
-
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Boxy(text: "My Card", image: "mycard"),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Name",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
-                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Phone number",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SizedBox(
+                        height: 5.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      minLines: 1,
-                      controller: controller1,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: "Please enter phone number",
-                        hintStyle: TextStyle(color: Colors.grey),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
 
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        minLines: 1,
+                        controller: controller,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Please enter your name",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Phone number",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
-                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "E-mail",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SizedBox(
+                        height: 5.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      minLines: 1,
-                      controller: controller2,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: "Please enter email id",
-                        hintStyle: TextStyle(color: Colors.grey),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
 
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        minLines: 1,
+                        controller: controller1,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Please enter phone number",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "E-mail",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
-                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Address",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SizedBox(
+                        height: 5.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                    minLines: 1,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      controller: controller3,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: "Please enter your address",
-                        hintStyle: TextStyle(color: Colors.grey),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
 
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        minLines: 1,
+                        controller: controller2,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Please enter email id",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Address",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
+
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        minLines: 1,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        controller: controller3,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Please enter your address",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "BirthDate",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          OutlinedButton(
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0.r),
-                                        side: BorderSide(color: Colors.red)))),
-                            onPressed: () async {
-                              {
-                                final datePick = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2100));
-                                if (datePick != null && datePick != birthDate) {
-                                  setState(() {
-                                    birthDate = datePick;
-                                    isDateSelected = true;
-
-                                    birthDateInString =
-                                        "${birthDate!.day}/${birthDate!.month}/${birthDate?.year}"; // 08/14/2019
-                                  });
-                                }
-                              }
-                            },
-                            child: Text(
-                              isDateSelected
-                                  ? "$birthDateInString"
-                                  : "initialDate",
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "BirthDate",
                               style: TextStyle(
                                 color: Colors.grey,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Org",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      minLines: 1,
-                      
-                      controller: controller4,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: "Please enter your Org name",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text(
-                        "Note",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    TextField(
-                      onChanged: (val) {
-                        setState(() {
-                          primaryColor =
-                              val.isNotEmpty ? Colors.blue : Colors.grey;
-                        });
-                      },
-                      minLines: 5,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      controller: controller5,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: "Please enter your note",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15.w, vertical: 15.h),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                            width: 2.h,
-                            color: Colors.grey.shade200,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                          borderSide: BorderSide(
-                              width: 2.h, color: Colors.grey.shade200),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(primaryColor),
-                        // : MaterialStateProperty.all<Color>(Colors.grey),
-                        enableFeedback: true,
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                                horizontal: 50.w, vertical: 10.h))),
-                    onPressed: () {
-                      deviceInfo();
-                      var createDb =
-                          Provider.of<ScanData>(context, listen: false);
-                      createDb.addItemC(CreateQr(_dataString, "mycard"));
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SaveQrCode(
-                                    dataString: _dataString,
-                                  )));
-                    },
-                    child: const Text("Create")),
-                SizedBox(
-                  height: 100.h,
-                ),
-              ],
+                            OutlinedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0.r),
+                                          side:
+                                              BorderSide(color: Colors.red)))),
+                              onPressed: () async {
+                                {
+                                  final datePick = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime(2100));
+                                  if (datePick != null &&
+                                      datePick != birthDate) {
+                                    setState(() {
+                                      birthDate = datePick;
+                                      isDateSelected = true;
 
-              // children: [_contentWidget()],
+                                      birthDateInString =
+                                          "${birthDate!.day}/${birthDate!.month}/${birthDate?.year}"; // 08/14/2019
+                                    });
+                                  }
+                                }
+                              },
+                              child: Text(
+                                isDateSelected
+                                    ? "$birthDateInString"
+                                    : "initialDate",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Org",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
+
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        minLines: 1,
+                        controller: controller4,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Please enter your Org name",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: const Text(
+                          "Note",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      TextFormField(
+                        onChanged: (val) {
+                          _formKey.currentState!.validate();
+
+                          setState(() {
+                            primaryColor =
+                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter the value first';
+                          }
+                          return null;
+                        },
+                        minLines: 5,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        controller: controller5,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Please enter your note",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 15.h),
+                          hintStyle: Constants.hintStyle,
+                          focusedBorder: Constants.border,
+                          enabledBorder: Constants.border,
+                          focusedErrorBorder: Constants.border,
+                          border: Constants.border,
+                          errorBorder: Constants.border,
+                          errorStyle: Constants.errroStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  ElevatedButton(
+                      style: Constants.buttonStyle(primaryColor),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "mycard"));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SaveQrCode(
+                                        dataString: _dataString,
+                                      )));
+                        }
+                      },
+                      child: Text(
+                        "Create",
+                        style: Constants.buttonText,
+                      )),
+                  SizedBox(
+                    height: 100.h,
+                  ),
+                ],
+
+                // children: [_contentWidget()],
+              ),
             ),
           ),
         ),

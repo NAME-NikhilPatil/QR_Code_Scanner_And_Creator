@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
+import '../../constants.dart';
 import '../../model/create.dart';
 import '../../sava_qr_code.dart';
 
@@ -24,8 +25,7 @@ class _ClipboarState extends State<Clipboar> {
   bool? physicaldevice;
   TextEditingController controller = TextEditingController();
   Color primaryColor = Colors.grey;
-
-
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> deviceInfo() async {
     _dataString = controller.text;
@@ -52,68 +52,59 @@ class _ClipboarState extends State<Clipboar> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Boxy(text: "Clipboard", image: "clipboard"),
-                SizedBox(
-                  height: 30.h,
-                ),
-                TextFormField(
-                  maxLines: null,
-                  minLines: 1,
-                  controller: controller,
-                  // autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: "Please enter something",
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide(
-                        width: 2.h,
-                        color: Colors.grey.shade200,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide(
-                        width: 2.h,
-                        color: Colors.grey.shade200,
-                      ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Boxy(text: "Clipboard", image: "clipboard"),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  TextFormField(
+                    maxLines: null,
+                    minLines: 1,
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: "Please enter something",
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 15.w, vertical: 15.h),
+                      hintStyle: Constants.hintStyle,
+                      focusedBorder: Constants.border,
+                      enabledBorder: Constants.border,
+                      focusedErrorBorder: Constants.border,
+                      border: Constants.border,
+                      errorBorder: Constants.border,
+                      errorStyle: Constants.errroStyle,
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                      // : MaterialStateProperty.all<Color>(Colors.grey),
-                      enableFeedback: true,
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.symmetric(
-                              horizontal: 50.w, vertical: 10.h))),
-                  onPressed: () {
-                    deviceInfo();
-                    var createDb =
-                        Provider.of<ScanData>(context, listen: false);
-                    createDb.addItemC(CreateQr(_dataString, "clipboard"));
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                                  dataString: _dataString,
-                                )));
-                  },
-                  child: const Text('Create'),
-                ),
-              ],
-              // children: [_contentWidget()],
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  ElevatedButton(
+                    style: Constants.buttonStyle(Colors.blue),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "clipboard"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      'Create',
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                ],
+                // children: [_contentWidget()],
+              ),
             ),
           ),
         ),

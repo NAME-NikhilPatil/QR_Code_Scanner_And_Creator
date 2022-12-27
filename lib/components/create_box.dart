@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CreateBox extends StatelessWidget {
- const  CreateBox({
+  const CreateBox({
     super.key,
     required this.text,
     required this.image,
@@ -30,7 +30,6 @@ class CreateBox extends StatelessWidget {
                 height: 35.h,
                 width: 35.h,
               ),
-              
             ],
           ),
         ),
@@ -39,9 +38,10 @@ class CreateBox extends StatelessWidget {
         ),
         Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
+            fontSize: 15.sp,
             color: Colors.black,
-           fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],

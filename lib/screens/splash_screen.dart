@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,11 +8,16 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/components/bottom_navigation.dart';
 import 'package:qr_code_scan/model/saved_setting.dart';
+
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+import '../main.dart';
 
+class SplashScreen extends StatefulWidget {
+  SplashScreen({
+    Key? key,
+  }) : super(key: key);
+  // RateMyApp rateMyApp;
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -30,10 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
               SaveSetting.granted(true);
             });
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const MyNavigationBar()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyNavigationBar()));
           }
         }
       },
@@ -48,12 +50,15 @@ class _SplashScreenState extends State<SplashScreen> {
     ].request();
 
     if (statuses[Permission.camera]!.isPermanentlyDenied) {
-      setState(() {
-        Provider.of<ScanData>(context, listen: false).isgranty(false);
+      setState(() async {
+        Provider.of<ScanData>(context, listen: false).isgranted = false;
 
         SaveSetting.granted(false);
-        Alertx(context);
+        await Alertx(context);
       });
+      if (statuses[Permission.camera]!.isGranted) {
+        runApp(MyApp());
+      } else {}
     } else {
       if (statuses[Permission.camera]!.isDenied) {
         setState(() {
@@ -81,6 +86,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Alertx(context) {
     Alert(
+      onWillPopActive: true,
+
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       closeIcon: SizedBox(),
       context: context,
@@ -103,14 +110,12 @@ class _SplashScreenState extends State<SplashScreen> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
-            setState(() {
-              Provider.of<ScanData>(context, listen: false).isgranty(true);
-            });
+            // setState(() {
+            //   Provider.of<ScanData>(context, listen: false).isgranted = true;
+            // });
             SaveSetting.granted(true);
 
             openAppSettings();
-
-            Navigator.pop(context);
           },
           color: Colors.blue,
         )
@@ -120,6 +125,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Alertt(context) {
     Alert(
+      onWillPopActive: true,
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       closeIcon: SizedBox(),
       context: context,
@@ -156,8 +162,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _onIntroEnd(context) {
     setState(() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const MyNavigationBar()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MyNavigationBar()));
       permissionServiceCall();
     });
   }

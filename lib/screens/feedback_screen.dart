@@ -7,6 +7,8 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../constants.dart';
+
 class Feedback_Screen extends StatefulWidget {
   const Feedback_Screen({Key? key}) : super(key: key);
 
@@ -32,6 +34,7 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
   );
 
   String subject = "Qr Code Scanner";
+  final _formKey = GlobalKey<FormState>();
 
   final _bodyController = TextEditingController();
   @override
@@ -95,7 +98,7 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
 
     try {
       await FlutterEmailSender.send(email);
-      platformResponse = 'success';
+      platformResponse = 'Thank you for your feedback';
     } catch (error) {
       print(error);
       platformResponse = error.toString();
@@ -130,172 +133,175 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      child: buildCheckItem(
-                        title: "Bug",
-                        isSelected: isSelected[0],
-                      ),
-                      onTap: () {
-                        setState(() {
-                          isSelected[0] = !isSelected[0];
-                          isSelected[1] = false;
-                          isSelected[2] = false;
-                          subject = "Qr Code Scanner(BUG)";
-                        });
-                      },
-                    ),
-                    GestureDetector(
-                      child: buildCheckItem(
-                        title: "Feedback",
-                        isSelected: isSelected[1],
-                      ),
-                      onTap: () {
-                        setState(() {
-                          isSelected[1] = !isSelected[1];
-                          isSelected[0] = false;
-                          isSelected[2] = false;
-                          subject = "Qr Code Scanner(FEEDBACK)";
-                        });
-                      },
-                    ),
-                    GestureDetector(
-                      child: buildCheckItem(
-                        title: "Other",
-                        isSelected: isSelected[2],
-                      ),
-                      onTap: () {
-                        setState(() {
-                          isSelected[2] = !isSelected[2];
-                          isSelected[1] = false;
-                          isSelected[0] = false;
-                          subject = "Qr Code Scanner(OTHER)";
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                TextField(
-                  onChanged: (val) {
-                    setState(() {
-                      primaryColor = val.isNotEmpty ? Colors.blue : Colors.grey;
-                    });
-                  },
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  minLines: 10,
-                  controller: _bodyController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: "Enter your feedback",
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade500,
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide(
-                        width: 2.h,
-                        color: Colors.grey.shade200,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide(width: 3.h, color: Colors.grey),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                Text(
-                  "Upload screenshot (optional)",
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
+                        child: buildCheckItem(
+                          title: "Bug",
+                          isSelected: isSelected[0],
+                        ),
                         onTap: () {
-                          _openImagePicker();
+                          setState(() {
+                            isSelected[0] = !isSelected[0];
+                            isSelected[1] = false;
+                            isSelected[2] = false;
+                            subject = "Qr Code Scanner(BUG)";
+                          });
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE5E5E5),
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.add,
-                              color: Color(0xFFA5A5A5),
-                            ),
-                          ),
-                        ),
                       ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      for (var i = 0; i < attachments.length; i++)
-                        Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 100.w,
-                              child: Text(
-                                attachments[i],
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                ),
-                                softWrap: false,
-                                overflow: TextOverflow.fade,
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.remove_circle),
-                              onPressed: () => {_removeAttachment(i)},
-                            )
-                          ],
+                      GestureDetector(
+                        child: buildCheckItem(
+                          title: "Feedback",
+                          isSelected: isSelected[1],
                         ),
+                        onTap: () {
+                          setState(() {
+                            isSelected[1] = !isSelected[1];
+                            isSelected[0] = false;
+                            isSelected[2] = false;
+                            subject = "Qr Code Scanner(FEEDBACK)";
+                          });
+                        },
+                      ),
+                      GestureDetector(
+                        child: buildCheckItem(
+                          title: "Other",
+                          isSelected: isSelected[2],
+                        ),
+                        onTap: () {
+                          setState(() {
+                            isSelected[2] = !isSelected[2];
+                            isSelected[1] = false;
+                            isSelected[0] = false;
+                            subject = "Qr Code Scanner(OTHER)";
+                          });
+                        },
+                      ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                ElevatedButton(
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(primaryColor),
-                        // : MaterialStateProperty.all<Color>(Colors.grey),
-                        enableFeedback: true,
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                                horizontal: 100.w, vertical: 12.h))),
-                    onPressed: () {
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  TextFormField(
+                    onChanged: (val) {
+                      _formKey.currentState!.validate();
+
                       setState(() {
-                        send();
+                        primaryColor =
+                            val.isNotEmpty ? Colors.blue : Colors.grey;
                       });
                     },
-                    child: const Text("SEND")),
-              ],
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter the feedback first';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    minLines: 10,
+                    controller: _bodyController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: "Enter your feedback",
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade500,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 15.w, vertical: 15.h),
+                      errorBorder: Constants.border,
+                      focusedBorder: Constants.border,
+                      border: Constants.border,
+                      focusedErrorBorder: Constants.border,
+                      errorStyle: Constants.errroStyle,
+                      enabledBorder: Constants.border,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Text(
+                    "Upload screenshot (optional)",
+                    style: TextStyle(
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _openImagePicker();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFE5E5E5),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.add,
+                                color: Color(0xFFA5A5A5),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        for (var i = 0; i < attachments.length; i++)
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 100.w,
+                                child: Text(
+                                  attachments[i],
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                  ),
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.remove_circle),
+                                onPressed: () => {_removeAttachment(i)},
+                              )
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  ElevatedButton(
+                      style: Constants.buttonStyle(primaryColor),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            send();
+                          });
+                        }
+                      },
+                      child: Text(
+                        "Send",
+                        style: Constants.buttonText,
+                      )),
+                ],
+              ),
             ),
           ),
         ),
@@ -321,14 +327,14 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
 
   Widget buildCheckItem({String? title, bool? isSelected}) {
     return Container(
-      padding: const EdgeInsets.all(6.0),
+      padding: EdgeInsets.all(6.0.w),
       child: Row(
         children: [
           Icon(
             isSelected! ? Icons.check_circle : Icons.circle,
             color: isSelected ? Colors.blue : Colors.grey.shade500,
           ),
-          SizedBox(width: 10.0),
+          SizedBox(width: 10.0.w),
           Text(
             title!,
             style: TextStyle(
@@ -341,4 +347,3 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
     );
   }
 }
-

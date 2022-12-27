@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../components/bottom_navigation.dart';
+import '../constants.dart';
 import '../model/saved_setting.dart';
 
 class ScanResult extends StatefulWidget {
@@ -147,14 +148,22 @@ class _ScanResultState extends State<ScanResult> {
                       SizedBox(
                         height: 20.h,
                       ),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor:
-                              click == false ? Colors.white : Colors.blue,
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              click == false ? Colors.white : Colors.blue),
                           enableFeedback: true,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 70.w, vertical: 5.w),
-                          shape: const StadiumBorder(),
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                  EdgeInsets.symmetric(
+                                      horizontal: 70.w, vertical: 10.h)),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.r),
+                            ),
+                          ),
                         ),
                         onPressed: () {
                           setState(() {
@@ -171,9 +180,9 @@ class _ScanResultState extends State<ScanResult> {
                         child: Text(
                           click == false ? "Copy" : "Copied to clipboard",
                           style: TextStyle(
-                              color:
-                                  click == false ? Colors.black : Colors.white,
-                              fontSize: 15.sp),
+                            color: click == false ? Colors.black : Colors.white,
+                            fontSize: 15.sp,
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -184,14 +193,28 @@ class _ScanResultState extends State<ScanResult> {
                         children: [
                           Column(
                             children: [
-                              OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      enableFeedback: true,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 30.w,
-                                        vertical: 5.w,
-                                      )),
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      Colors.white,
+                                    ),
+                                    enableFeedback: true,
+                                    padding: MaterialStateProperty.all<
+                                            EdgeInsetsGeometry>(
+                                        EdgeInsets.symmetric(
+                                            horizontal: 30.w, vertical: 10.h)),
+                                    shape: MaterialStateProperty.all<
+                                        OutlinedBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.r),
+                                      ),
+                                    ),
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       if (widget.formate == "text") {
@@ -233,6 +256,55 @@ class _ScanResultState extends State<ScanResult> {
                                         : Icons.open_in_browser,
                                     color: Colors.black,
                                   )),
+                              // OutlinedButton(
+                              //     style: OutlinedButton.styleFrom(
+                              //         backgroundColor: Colors.white,
+                              //         enableFeedback: true,
+                              //         padding: EdgeInsets.symmetric(
+                              //           horizontal: 30.w,
+                              //           vertical: 5.w,
+                              //         )),
+                              //     onPressed: () {
+                              //       setState(() {
+                              //         if (widget.formate == "text") {
+                              //           if (search == 'Google')
+                              //             Utils.lauchURl(
+                              //               "https://www.google.com/search?q=${widget.barcode}",
+                              //             );
+                              //           if (search == 'Bing')
+                              //             Utils.lauchURl(
+                              //               "https://www.bing.com/search?q=${widget.barcode}",
+                              //             );
+                              //           if (search == 'Yahoo')
+                              //             Utils.lauchURl(
+                              //               "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=${widget.barcode}&b=1",
+                              //             );
+                              //           if (search == 'DuckDuckGo')
+                              //             Utils.lauchURl(
+                              //               "https://duckduckgo.com/?q=${widget.barcode}&t=h_&ia=definition",
+                              //             );
+                              //           if (search == 'Yandex')
+                              //             Utils.lauchURl(
+                              //               "https://yandex.com/search/?text=${widget.barcode}&lr=10558",
+                              //             );
+                              //         }
+
+                              //         if (widget.formate == "url") {
+                              //           // Utils.lauchURl(widget.barcode.toString());
+                              //           Utils.lauchURl(widget.barcode!);
+                              //         }
+                              //         // Utils.lauchURl(
+                              //         //   widget.formate == "url"
+                              //         //     ? widget.barcode.toString()
+                              //         //     : "https://www.google.com/search?q=${widget.barcode}");
+                              //       });
+                              //     },
+                              //     child: Icon(
+                              //       widget.formate == "text"
+                              //           ? Icons.search
+                              //           : Icons.open_in_browser,
+                              //       color: Colors.black,
+                              //     )),
                               SizedBox(
                                 height: 5.h,
                               ),
@@ -252,12 +324,28 @@ class _ScanResultState extends State<ScanResult> {
                           ),
                           Column(
                             children: [
-                              OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      enableFeedback: true,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 30.w)),
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      Colors.white,
+                                    ),
+                                    enableFeedback: true,
+                                    padding: MaterialStateProperty.all<
+                                            EdgeInsetsGeometry>(
+                                        EdgeInsets.symmetric(
+                                            horizontal: 30.w, vertical: 10.h)),
+                                    shape: MaterialStateProperty.all<
+                                        OutlinedBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.r),
+                                      ),
+                                    ),
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       Share.share(widget.barcode.toString());

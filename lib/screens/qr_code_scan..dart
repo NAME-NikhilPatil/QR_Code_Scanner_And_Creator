@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -9,36 +8,65 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scan/components/bottom_navigation.dart';
+import 'package:qr_code_scan/main.dart';
+import 'package:qr_code_scan/rate_app_init.dart';
 import 'package:qr_code_scan/screens/result.dart';
+import 'package:rate_my_app/rate_my_app.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:vibration/vibration.dart';
-
 import '../Provider/scan_data.dart';
 import '../model/history.dart';
 import '../model/saved_setting.dart';
 import 'exit.dart';
+import 'package:flutter/widgets.dart';
 
 class QrScanScreen extends StatefulWidget {
-  const QrScanScreen({Key? key}) : super(key: key);
-
+  QrScanScreen({
+    Key? key,
+  }) : super(key: key);
   @override
   _QrScanScreenState createState() => _QrScanScreenState();
 }
 
-class _QrScanScreenState extends State<QrScanScreen> {
+class _QrScanScreenState extends State<QrScanScreen>
+    with WidgetsBindingObserver {
   late MobileScannerController controller;
+  RateMyApp? rateMyApp;
+
   String? barcode;
   late List<History> historyi = [];
   late Box<History> historyBox;
   bool isStarted = true;
   late bool isVibrate;
-
+  late bool isgranted;
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
+    isgranted = SaveSetting.getgranted() ?? false;
     historyBox = Hive.box('history');
     controller = MobileScannerController();
     isVibrate = SaveSetting.getVibrate() ?? true;
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final granted = await Permission.camera.isGranted;
+      if (granted) {
+        SaveSetting.granted(true);
+
+        Navigator.push(context,
+            MaterialPageRoute(builder: ((context) => MyNavigationBar())));
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   bool isEnabled = true;
@@ -56,7 +84,10 @@ class _QrScanScreenState extends State<QrScanScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ScanResult(barcode: barcode, formate: formate),
+          builder: (context) => ScanResult(
+            barcode: barcode,
+            formate: formate,
+          ),
         ),
       );
 
@@ -98,7 +129,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                     shape: QrScannerOverlayShape(
                       borderRadius: 0.r,
                       borderColor: Colors.white,
-                      borderLength: 15.w,
+                      borderLength: 18.w,
                       borderWidth: 9.w,
                       cutOutHeight: 0.7.sw,
                       cutOutWidth: 0.7.sw,
@@ -106,40 +137,41 @@ class _QrScanScreenState extends State<QrScanScreen> {
                   ),
                 ),
               ),
-              Provider.of<ScanData>(context, listen: true).isgranted == false
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xff4FA4FA)),
-                              // : MaterialStateProperty.all<Color>(Colors.grey),
-                              enableFeedback: true,
-                            ),
-                            onPressed: () {
-                              openAppSettings();
-                              setState(() {
-                                Provider.of<ScanData>(context, listen: false)
-                                    .isgranted = true;
-                              });
-                            },
-                            child: const Text("Click here to open App info")),
-                        Text(
-                          "Please open app info and unable camera permission ",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                      ],
-                    )
-                  : SizedBox(),
+              // Provider.of<ScanData>(context, listen: false).isgranted == false
+              // isgranted == false
+              //     ? Column(
+              //         mainAxisAlignment: MainAxisAlignment.end,
+              //         children: [
+              //           ElevatedButton(
+              //               style: ButtonStyle(
+              //                 foregroundColor: MaterialStateProperty.all<Color>(
+              //                     Colors.white),
+              //                 backgroundColor: MaterialStateProperty.all<Color>(
+              //                     Color(0xff4FA4FA)),
+              //                 // : MaterialStateProperty.all<Color>(Colors.grey),
+              //                 enableFeedback: true,
+              //               ),
+              //               onPressed: () {
+              //                 openAppSettings();
+              //                 setState(() {
+              //                   Provider.of<ScanData>(context, listen: false)
+              //                       .isgranted = true;
+              //                 });
+              //               },
+              //               child: const Text("Click here to open App info")),
+              //           Text(
+              //             "Please open app info and unable camera permission ",
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //               fontSize: 12.sp,
+              //             ),
+              //           ),
+              //           SizedBox(
+              //             height: 10.h,
+              //           ),
+              //         ],
+              //       )
+              //     : SizedBox(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
