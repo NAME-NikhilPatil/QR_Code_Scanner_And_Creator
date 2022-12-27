@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
 import '../../model/create.dart';
@@ -26,12 +27,11 @@ class _SpotifyState extends State<Spotify> {
   TextEditingController controller1 = TextEditingController();
 
   Future<void> deviceInfo() async {
-   String name="${controller.text}";
-  String sname="${controller1.text}";
-    _dataString ="https://open.spotify.com/search/$name;$sname";
-   
-    
-  ;
+    String name = "${controller.text}";
+    String sname = "${controller1.text}";
+    _dataString = "https://open.spotify.com/search/$name;$sname";
+
+    ;
   }
 
   @override
@@ -60,10 +60,13 @@ class _SpotifyState extends State<Spotify> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text("Artist Name",style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),),
+                      child: const Text(
+                        "Artist Name",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 5.h,
@@ -79,7 +82,6 @@ class _SpotifyState extends State<Spotify> {
                       controller: controller,
                       autofocus: true,
                       decoration: InputDecoration(
-                        
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 15.w, vertical: 15.h),
                         focusedBorder: OutlineInputBorder(
@@ -91,7 +93,6 @@ class _SpotifyState extends State<Spotify> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.r),
-
                           borderSide: BorderSide(
                               width: 2.h, color: Colors.grey.shade200),
                         ),
@@ -103,11 +104,14 @@ class _SpotifyState extends State<Spotify> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text("Song Name",style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),),),
-                    
+                      child: const Text(
+                        "Song Name",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -118,13 +122,12 @@ class _SpotifyState extends State<Spotify> {
                               val.isNotEmpty ? Colors.blue : Colors.grey;
                         });
                       },
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.done,
                       minLines: 1,
                       controller: controller1,
                       autofocus: true,
                       decoration: InputDecoration(
-                     
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 15.w, vertical: 15.h),
                         focusedBorder: OutlineInputBorder(
@@ -141,10 +144,6 @@ class _SpotifyState extends State<Spotify> {
                         ),
                       ),
                     ),
-                 
-                  
-                   
-                   
                   ],
                 ),
                 SizedBox(

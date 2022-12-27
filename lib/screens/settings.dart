@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +28,7 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
+
     isSwitched = SaveSetting.getSwitch() ?? false;
     isVibrate = SaveSetting.getVibrate() ?? true;
     search = SaveSetting.getSearch() ?? "Google";

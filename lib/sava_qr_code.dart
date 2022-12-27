@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +24,7 @@ class SaveQrCode extends StatefulWidget {
 class _SaveQrCodeState extends State<SaveQrCode> {
   GlobalKey globalKey = GlobalKey();
 
-  // Future<Image>? image;
+  bool permission = true;
 
   takeScreenShot(ref) async {
     PermissionStatus res;
@@ -43,37 +44,20 @@ class _SaveQrCodeState extends State<SaveQrCode> {
       await file.writeAsBytes(pngBytes);
       GallerySaver.saveImage(file.path);
 
-      //   PermissionStatus res;
-      //   res = await Permission.storage.request();
-      //   if (res.isGranted) {
-      //     RenderRepaintBoundary? boundary =
-      //         globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
-      //     ui.Image image = await boundary.toImage(pixelRatio: 5.0);
-      //     ByteData? byteData = await (image.toByteData(format: ui.ImageByteFormat.png));
-      // //     if (byteData != null) {
-      //      Uint8List pngBytes = byteData!.buffer.asUint8List();
-      //       final directory = await getExternalStorageDirectory();
-      //       final imgFile =await File(
-      //         '${directory!.path}/${DateTime.now()}qr.png',
-      //       ).create();
-      //      await imgFile.writeAsBytes(pngBytes);
-      // // //
-      //       GallerySaver.saveImage(imgFile.path);
-
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Saved to Gallery"),
         behavior: SnackBarBehavior.floating,
       ));
     } else if (res.isDenied) {
       Alert(
-        padding: EdgeInsets.symmetric(vertical: 10.h),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         closeIcon: SizedBox(),
         context: context,
         type: AlertType.none,
-        title: "Permission",
         content: SizedBox(
             child: Text(
-          "need",
+          "We need storage permission for storing qr code",
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 15.sp,
@@ -82,11 +66,41 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         buttons: [
           DialogButton(
             child: Text(
-              "Yes",
+              "Ok",
               style: TextStyle(color: Colors.white, fontSize: 20.sp),
             ),
             onPressed: () {
               Navigator.pop(context);
+            },
+            color: Colors.blue,
+          )
+        ],
+      ).show();
+    } else if (res.isPermanentlyDenied) {
+      permission = false;
+      Alert(
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+        closeIcon: SizedBox(),
+        context: context,
+        type: AlertType.none,
+        content: Center(
+          child: Text(
+            "Open app info and enable storage permission",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 15.sp,
+            ),
+          ),
+        ),
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Ok",
+              style: TextStyle(color: Colors.white, fontSize: 20.sp),
+            ),
+            onPressed: () {
+              openAppSettings();
             },
             color: Colors.blue,
           )
@@ -102,7 +116,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,
       ),
@@ -173,7 +187,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                             foregroundColor: Colors.black,
                             version: QrVersions.auto,
                             size: 200.h,
-                            gapless: false,
+                            gapless: true,
                             embeddedImage:
                                 const AssetImage('assets/img/qr.png'),
                             embeddedImageStyle: QrEmbeddedImageStyle(
@@ -263,7 +277,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                         ],
                       ),
                       SizedBox(
-                        height: 50.h,
+                        height: 30.h,
                       ),
                     ],
                   ),

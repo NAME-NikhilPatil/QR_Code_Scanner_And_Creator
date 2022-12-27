@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -10,8 +11,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/screens/result.dart';
 import 'package:vibration/vibration.dart';
+
 import '../Provider/scan_data.dart';
 import '../model/history.dart';
+import '../model/saved_setting.dart';
 import 'exit.dart';
 
 class QrScanScreen extends StatefulWidget {
@@ -27,14 +30,15 @@ class _QrScanScreenState extends State<QrScanScreen> {
   late List<History> historyi = [];
   late Box<History> historyBox;
   bool isStarted = true;
+  late bool isVibrate;
 
   @override
   void initState() {
     super.initState();
 
     historyBox = Hive.box('history');
-
     controller = MobileScannerController();
+    isVibrate = SaveSetting.getVibrate() ?? true;
   }
 
   bool isEnabled = true;
@@ -43,16 +47,9 @@ class _QrScanScreenState extends State<QrScanScreen> {
     await controller.start();
   }
 
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-    } else if (state == AppLifecycleState.paused) {}
-  }
-
   onDetect(String barcode, MobileScannerArguments? _, String formate) {
     isEnabled = false;
-    Provider.of<ScanData>(context, listen: false).vibrate == true
-        ? Vibration.vibrate(duration: 300)
-        : null;
+    isVibrate == true ? Vibration.vibrate(duration: 100) : null;
 
     setState(() {
       var historyDb = Provider.of<ScanData>(context, listen: false);
@@ -67,21 +64,6 @@ class _QrScanScreenState extends State<QrScanScreen> {
         History(barcode.toString(), formate),
       );
     });
-  }
-
-  permission() {
-    PermissionStatus res;
-    res = Permission.camera.request() as PermissionStatus;
-    if (res.isGranted) {
-      // controller = MobileScannerController();
-    } else if (res.isDenied) {
-    } else if (res.isPermanentlyDenied) {
-      openAppSettings();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Please unable camera permission in setting"),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
   }
 
   @override
@@ -116,155 +98,175 @@ class _QrScanScreenState extends State<QrScanScreen> {
                     shape: QrScannerOverlayShape(
                       borderRadius: 0.r,
                       borderColor: Colors.white,
-                      borderLength: 18.w,
+                      borderLength: 15.w,
                       borderWidth: 9.w,
-                      cutOutHeight: 250.h,
-                      cutOutWidth: 250.h,
+                      cutOutHeight: 0.7.sw,
+                      cutOutWidth: 0.7.sw,
                     ),
                   ),
                 ),
               ),
-              // SaveSetting.getgranted() == false
-              //     ? Column(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           GestureDetector(
-              //             onTap: () {
-              //               openAppSettings();
-              //             },
-              //             child: Text(
-              //               "Open Setting",
-              //               style: TextStyle(
-              //                 color: Colors.white,
-              //               ),
-              //             ),
-              //           ),
-              //           Text(
-              //             "open app setting and unable camera permission ",
-              //             style: TextStyle(
-              //               color: Colors.white,
-              //             ),
-              //           ),
-              //         ],
-              //       )
-              //     : SizedBox(),
-              Positioned(
-                left: 88.w,
-                top: 60.h,
-                child: Text(
-                  "QRSCANNER",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
+              Provider.of<ScanData>(context, listen: true).isgranted == false
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xff4FA4FA)),
+                              // : MaterialStateProperty.all<Color>(Colors.grey),
+                              enableFeedback: true,
+                            ),
+                            onPressed: () {
+                              openAppSettings();
+                              setState(() {
+                                Provider.of<ScanData>(context, listen: false)
+                                    .isgranted = true;
+                              });
+                            },
+                            child: const Text("Click here to open App info")),
+                        Text(
+                          "Please open app info and unable camera permission ",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                      ],
+                    )
+                  : SizedBox(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 0.1.sh,
                   ),
-                ),
+                  Text(
+                    "QRSCANNER",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 0.1.sh,
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 50.h,
-                left: 95.w,
-                child: Row(
-                  children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.w),
-                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: Column(
-                        children: [
-                          IconButton(
-                              color: Colors.white,
-                              icon: ValueListenableBuilder(
-                                valueListenable: controller.torchState,
-                                builder: (context, state, child) {
-                                  if (state == null) {
-                                    return const Icon(
-                                      MdiIcons.flashlight,
-                                      color: Colors.white,
-                                    );
-                                  }
-                                  switch (state as TorchState) {
-                                    case TorchState.off:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 5.w),
+                        margin: EdgeInsets.symmetric(horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Column(
+                          children: [
+                            IconButton(
+                                color: Colors.white,
+                                icon: ValueListenableBuilder(
+                                  valueListenable: controller.torchState,
+                                  builder: (context, state, child) {
+                                    if (state == null) {
                                       return const Icon(
                                         MdiIcons.flashlight,
                                         color: Colors.white,
                                       );
-                                    case TorchState.on:
-                                      return const Icon(
-                                        Icons.flashlight_on,
-                                        color: Colors.yellow,
-                                      );
-                                  }
-                                },
-                              ),
-                              iconSize: 30.0,
-                              padding: EdgeInsets.zero,
+                                    }
+                                    switch (state as TorchState) {
+                                      case TorchState.off:
+                                        return const Icon(
+                                          MdiIcons.flashlight,
+                                          color: Colors.white,
+                                        );
+                                      case TorchState.on:
+                                        return const Icon(
+                                          Icons.flashlight_on,
+                                          color: Colors.yellow,
+                                        );
+                                    }
+                                  },
+                                ),
+                                iconSize: 30.0,
+                                padding: EdgeInsets.zero,
+                                onPressed: () async {
+                                  controller.toggleTorch();
+                                  isVibrate == true
+                                      ? Vibration.vibrate(duration: 100)
+                                      : null;
+                                }),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 5.w),
+                        margin: EdgeInsets.symmetric(horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              color: Colors.white,
+                              icon: const Icon(Icons.image),
+                              iconSize: 25.0,
                               onPressed: () async {
-                                controller.toggleTorch();
-                                Provider.of<ScanData>(context, listen: false)
-                                            .vibrate ==
-                                        true
+                                isVibrate == true
                                     ? Vibration.vibrate(duration: 100)
                                     : null;
-                              }),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.w),
-                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            icon: const Icon(Icons.image),
-                            iconSize: 25.0,
-                            onPressed: () async {
-                              Provider.of<ScanData>(context, listen: false)
-                                          .vibrate ==
-                                      true
-                                  ? Vibration.vibrate(duration: 100)
-                                  : null;
 
-                              final ImagePicker picker = ImagePicker();
-                              // Pick an image
-                              final XFile? image = await picker.pickImage(
-                                source: ImageSource.gallery,
-                              );
-                              if (image != null) {
-                                if (await controller.analyzeImage(image.path)) {
-                                  if (!mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Barcode found!'),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                } else {
-                                  if (!mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('No barcode found!'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
+                                final ImagePicker picker = ImagePicker();
+                                // Pick an image
+                                final XFile? image = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                );
+                                if (image != null) {
+                                  if (await controller
+                                      .analyzeImage(image.path)) {
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Barcode found!'),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                  } else {
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('No barcode found!'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
                                 }
-                              }
-                            },
-                          ),
-                        ],
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 0.1.sh,
+                  ),
+                ],
               ),
             ]);
           },

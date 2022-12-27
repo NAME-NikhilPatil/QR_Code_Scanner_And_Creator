@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
 import '../../model/create.dart';
@@ -16,26 +17,29 @@ class Twitter extends StatefulWidget {
 class _TwitterState extends State<Twitter> {
   GlobalKey globalKey = GlobalKey();
   late String _dataString;
-
+  int? defaultChoiceIndex;
   TextEditingController controller = TextEditingController();
   Color primaryColor = Colors.grey;
   late List<bool> isSelected;
-  String? hinttext="@Username";
+  String? hinttext = "Please enter url";
+  List<String> _choicesList = ['URL', 'Username'];
+  late String controller1;
 
   @override
   void initState() {
     super.initState();
-    isSelected = [true, false];
+    defaultChoiceIndex = 0;
   }
- bool ispress=false;
+
+  bool ispress = false;
 
   Future<void> deviceInfo() async {
     // _dataString = "https://twitter.com/${controller.text}";
 
-     if (ispress==true) {
+    if (ispress == true) {
+      _dataString = "https://twitter.com/${controller.text}";
+    } else {
       _dataString = "${controller.text}";
-    }else{
-    _dataString = "https://twitter.com/${controller.text}";
     }
   }
 
@@ -59,47 +63,58 @@ class _TwitterState extends State<Twitter> {
                 SizedBox(
                   height: 30.h,
                 ),
-                ToggleButtons(
-                  fillColor: Colors.blue,
-                  selectedColor: Colors.white,
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int i = 0; i < isSelected.length; i++) {
-                        isSelected[i] = i == index;
-                        if (isSelected[0] == true) {
-                          hinttext = "@Username";
-                        }
-                        if (isSelected[1] == true) {
-                          hinttext = "URL";
-                          ispress=true;
-                        }
-                      }
-                    });
-                  },
-                  isSelected: isSelected,
-                  borderRadius: BorderRadius.circular(15.r),
+                Row(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 40.w, vertical: 10.h),
-                      child: Text(
-                        'Username',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 65.w, vertical: 10.h),
-                      child: Text(
-                        'URL',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
+                    Wrap(
+                      spacing: 5.w,
+                      children: List.generate(_choicesList.length, (index) {
+                        return ChoiceChip(
+                          labelPadding: EdgeInsets.all(5.0.w),
+                          backgroundColor: Colors.white,
+                          label: Text(_choicesList[index],
+                              style: TextStyle(
+                                color: defaultChoiceIndex == index
+                                    ? Colors.white
+                                    : Colors.grey,
+                              )),
+                          selected: defaultChoiceIndex == index,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.r),
+                                  topRight: Radius.circular(5.r),
+                                  bottomLeft: Radius.circular(5.r),
+                                  bottomRight: Radius.circular(5.r))),
+                          selectedColor: Colors.blue,
+
+                          onSelected: (value) {
+                            setState(() {
+                              defaultChoiceIndex =
+                                  value ? index : defaultChoiceIndex;
+                              controller1 = _choicesList[index];
+                              if (_choicesList[index] == "URL") {
+                                hinttext = "Please enter URL";
+                                ispress = false;
+                              }
+
+                              if (_choicesList[index] == "Username") {
+                                hinttext = "Please enter username";
+                                ispress = true;
+                              }
+                            });
+                          },
+                          // backgroundColor: color,
+                          pressElevation: 0,
+                          side: BorderSide(
+                              color: Colors.grey.shade300, width: 0.9.h),
+                          elevation: 0,
+                          padding: EdgeInsets.symmetric(horizontal: 23.w),
+                        );
+                      }),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 30.h,
+                  height: 15.h,
                 ),
                 TextField(
                   onChanged: (val) {

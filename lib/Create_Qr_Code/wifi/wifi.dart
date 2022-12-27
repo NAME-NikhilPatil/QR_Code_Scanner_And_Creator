@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
 import '../../model/create.dart';
@@ -32,7 +33,6 @@ class _WifiState extends State<Wifi> {
   final List<String> _choicesList = ['WPA', 'WEP', 'None'];
   final List<String> _choiceList = ['WPA', 'WEP', ''];
 
-
   bool _isHidden = true;
   void _togglePasswordView() {
     setState(() {
@@ -43,20 +43,19 @@ class _WifiState extends State<Wifi> {
   @override
   void initState() {
     super.initState();
-    defaultChoiceIndex = 0;
+    defaultChoiceIndex = 3;
   }
 
   Future<void> deviceInfo() async {
-    String Name = "${controller.text}";
-    String mode = "$controller1";
-    String password = "${controller2.text}";
-    _dataString = "$Name,$mode,$password";
-    _dataString="WIFI:S:<$Name>;T:<$mode>;P:<$password>;";
+    String Name = "${controller.text}" ?? "";
+    String mode = "$controller1" ?? "WPA";
+    String password = "${controller2.text}" ?? "";
+    // _dataString = "$Name,$mode,$password";
+    _dataString = "WIFI:S:$Name;T:$mode;P:$password;";
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -83,14 +82,15 @@ class _WifiState extends State<Wifi> {
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       child: const Text(
                         "Netword Name(SSID)",
-                        style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,),
-                        
-
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                     SizedBox(
-                  height: 5.h,
-                ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
                     TextField(
                       onChanged: (val) {
                         setState(() {
@@ -103,8 +103,9 @@ class _WifiState extends State<Wifi> {
                       autofocus: true,
                       decoration: InputDecoration(
                         hintText: "Please enter something",
-                        hintStyle:TextStyle(color: Colors.grey,), 
-                      
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 15.w, vertical: 15.h),
                         focusedBorder: OutlineInputBorder(
@@ -120,17 +121,20 @@ class _WifiState extends State<Wifi> {
                         ),
                       ),
                     ),
-                     SizedBox(
-                  height: 10.h,
-                ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text("Security mode",
-                        style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,),
+                      child: const Text(
+                        "Select security mode",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  
                     Row(
                       children: [
                         SizedBox(
@@ -160,6 +164,7 @@ class _WifiState extends State<Wifi> {
                                   });
                                 },
                                 // backgroundColor: color,
+
                                 elevation: 1,
                                 padding: EdgeInsets.symmetric(horizontal: 27.w),
                               );
@@ -168,20 +173,27 @@ class _WifiState extends State<Wifi> {
                         ),
                       ],
                     ),
-               
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      child: const Text("Password",
-                        style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,),
+                      child: const Text(
+                        "Password",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                     SizedBox(
-                  height: 5.h,
-                ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
                     TextField(
                       onChanged: (val) {
                         setState(() {
+                          if (defaultChoiceIndex == 2) {
+                            primaryColor =
+                                val.isEmpty ? Colors.blue : Colors.grey;
+                          }
                           primaryColor =
                               val.isNotEmpty ? Colors.blue : Colors.grey;
                         });
@@ -194,14 +206,13 @@ class _WifiState extends State<Wifi> {
                         suffixIcon: InkWell(
                           onTap: _togglePasswordView,
                           child: Icon(
-                            
                             _isHidden ? Icons.visibility : Icons.visibility_off,
-                            
                           ),
                         ),
                         hintText: "Please enter something",
-                         
-                        hintStyle:TextStyle(color: Colors.grey,), 
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 15.w, vertical: 15.h),
                         focusedBorder: OutlineInputBorder(

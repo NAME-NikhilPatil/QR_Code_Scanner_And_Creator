@@ -31,20 +31,16 @@ class _YoutubeState extends State<Youtube> {
     super.initState();
     defaultChoiceIndex = 0;
   }
-bool ispress=false;
+
+  bool ispress = false;
   Future<void> deviceInfo() async {
-    if(ispress==true){
-    // _dataString = "https://youtu.be/${controller.text}";
-    // _dataString = "https://www.youtube.com/watch?v=${controller.text}";
-    _dataString = "https://www.youtube.com/c/${controller.text}";
-
-
-    }else{
-    _dataString = "${controller.text}";
-
+    if (ispress == true) {
+      // _dataString = "https://youtu.be/${controller.text}";
+      // _dataString = "https://www.youtube.com/watch?v=${controller.text}";
+      _dataString = "https://www.youtube.com/c/${controller.text}";
+    } else {
+      _dataString = "${controller.text}";
     }
-
-
   }
 
   @override
@@ -97,21 +93,20 @@ bool ispress=false;
                               controller1 = _choicesList[index];
                               if (_choicesList[index] == "URL") {
                                 hinttext = "Please enter URL";
+                                ispress = false;
                               }
-                           
+
                               if (_choicesList[index] == "Channel Name") {
                                 hinttext = "Please enter Channel Id";
-                                ispress=true;
+                                ispress = true;
                               }
                             });
                           },
                           // backgroundColor: color,
-                      pressElevation: 0,
-                      side: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 0.9.h
-                      ),
-                      elevation: 0,
+                          pressElevation: 0,
+                          side: BorderSide(
+                              color: Colors.grey.shade300, width: 0.9.h),
+                          elevation: 0,
                           padding: EdgeInsets.symmetric(horizontal: 23.w),
                         );
                       }),

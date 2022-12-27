@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/model/history.dart';
 
@@ -23,18 +24,21 @@ class ScanData with ChangeNotifier {
   }
 
   List? _historyList = <History>[];
-
   List? get historyList => _historyList;
   List _createList = <CreateQr>[];
-
   List get createList => _createList;
 
   bool click = false;
   bool vibrate = true;
-  bool isgranted = false;
+  bool isgranted = true;
+  isgranty(bool isgrant) {
+    isgranted = isgrant;
+    notifyListeners();
+  }
 
   // List<String> search = ["Google", "Bing", "Yahoo", "DuckDuckGo", "Yandex"];
   String search = "Google";
+  bool visible = true;
 
   getItem() async {
     final box = await Hive.openBox<History>('history');

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
-
 import '../../model/create.dart';
 import '../../sava_qr_code.dart';
 
@@ -23,18 +22,25 @@ class _InstagramState extends State<Instagram> {
   Color primaryColor = Colors.grey;
   late List<bool> isSelected;
   String? hinttext = "Enter Instagram Username";
+  int? defaultChoiceIndex;
+  late String controller1;
+
+  List<String> _choicesList = ['URL', 'Username'];
 
   @override
   void initState() {
     super.initState();
-    isSelected = [true, false];
+    defaultChoiceIndex = 0;
   }
- bool ispress=false;
+
+  bool ispress = false;
   Future<void> deviceInfo() async {
-    if (ispress==true) {
+    if (ispress == true) {
+      // _dataString = "${controller.text}";
+      _dataString = "https://www.instagram.com/${controller.text}";
+    } else {
+      // _dataString = "https://www.instagram.com/${controller.text}";
       _dataString = "${controller.text}";
-    }else{
-    _dataString = "https://www.instagram.com/${controller.text}";
     }
   }
 
@@ -58,42 +64,53 @@ class _InstagramState extends State<Instagram> {
                 SizedBox(
                   height: 30.h,
                 ),
-                ToggleButtons(
-                  fillColor: Colors.blue,
-                  selectedColor: Colors.white,
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int i = 0; i < isSelected.length; i++) {
-                        isSelected[i] = i == index;
-                        if (isSelected[0] == true) {
-                          hinttext = "Enter Instagram Username";
-                        }
-                        if (isSelected[1] == true) {
-                          hinttext = "URL";
-                          ispress=true;
-                        }
-                      }
-                    });
-                  },
-                  isSelected: isSelected,
-                  borderRadius: BorderRadius.circular(15.r),
+                Row(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 40.w, vertical: 10.h),
-                      child: Text(
-                        'Username',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 65.w, vertical: 10.h),
-                      child: Text(
-                        'URL',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
+                    Wrap(
+                      spacing: 5.w,
+                      children: List.generate(_choicesList.length, (index) {
+                        return ChoiceChip(
+                          labelPadding: EdgeInsets.all(5.0.w),
+                          backgroundColor: Colors.white,
+                          label: Text(_choicesList[index],
+                              style: TextStyle(
+                                color: defaultChoiceIndex == index
+                                    ? Colors.white
+                                    : Colors.grey,
+                              )),
+                          selected: defaultChoiceIndex == index,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.r),
+                                  topRight: Radius.circular(5.r),
+                                  bottomLeft: Radius.circular(5.r),
+                                  bottomRight: Radius.circular(5.r))),
+                          selectedColor: Colors.blue,
+
+                          onSelected: (value) {
+                            setState(() {
+                              defaultChoiceIndex =
+                                  value ? index : defaultChoiceIndex;
+                              controller1 = _choicesList[index];
+                              if (_choicesList[index] == "URL") {
+                                hinttext = "Please enter url";
+                                ispress = false;
+                              }
+
+                              if (_choicesList[index] == "Username") {
+                                hinttext = "Please enter Username";
+                                ispress = true;
+                              }
+                            });
+                          },
+                          // backgroundColor: color,
+                          pressElevation: 0,
+                          side: BorderSide(
+                              color: Colors.grey.shade300, width: 0.9.h),
+                          elevation: 0,
+                          padding: EdgeInsets.symmetric(horizontal: 23.w),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -144,8 +161,7 @@ class _InstagramState extends State<Instagram> {
                                 horizontal: 50.w, vertical: 10.h))),
                     onPressed: () {
                       setState(() {
-                      deviceInfo();
-                        
+                        deviceInfo();
                       });
                       var createDb =
                           Provider.of<ScanData>(context, listen: false);

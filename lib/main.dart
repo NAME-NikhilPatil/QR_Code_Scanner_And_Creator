@@ -7,6 +7,7 @@ import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/model/history.dart';
 import 'package:qr_code_scan/model/saved_setting.dart';
 import 'package:qr_code_scan/screens/first_time.dart';
+import 'package:qr_code_scan/screens/splash_screen.dart';
 import 'model/create.dart';
 
 void main() async {
@@ -30,7 +31,6 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       useInheritedMediaQuery: true,
       designSize: const Size(375, 667),
-      minTextAdapt: true,
       builder: (context, child) {
         return MultiProvider(
           providers: [
@@ -40,11 +40,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Qr Code Scanner',
             theme: ThemeData(),
-            home: FirstTime(),
+            home: SplashScreen(),
           ),
         );
       },
-      child: const FirstTime(),
+      child: SplashScreen(),
     );
   }
 }

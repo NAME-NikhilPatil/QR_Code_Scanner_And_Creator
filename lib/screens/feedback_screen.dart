@@ -195,7 +195,7 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
                   controller: _bodyController,
                   autofocus: true,
                   decoration: InputDecoration(
-                    hintText: "The email contains at least 10 characters",
+                    hintText: "Enter your feedback",
                     hintStyle: TextStyle(
                       color: Colors.grey.shade500,
                     ),
@@ -341,3 +341,4 @@ class _Feedback_ScreenState extends State<Feedback_Screen> {
     );
   }
 }
+

@@ -73,6 +73,8 @@ dependencies:
 
   custom_radio_grouped_button: ^2.1.2+2
   mobile_scanner: ^2.0.0
+  introduction_screen: ^3.1.1
+
   
 
   
@@ -136,8 +138,17 @@ flutter:
     - assets/text1.svg
     - assets/instagram.svg
     - assets/spotify.svg
-    - assets/boxy.svg
+
     - assets/twitter.svg
+    - assets/boxy.svg
+
+    - assets/1.svg
+    - assets/2.svg
+    - assets/3.svg
+    - assets/4.svg
+
+
+
 
 
 

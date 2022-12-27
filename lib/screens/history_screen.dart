@@ -21,7 +21,6 @@ class History_screen extends StatefulWidget {
 
 class _History_screenState extends State<History_screen>
     with SingleTickerProviderStateMixin {
-  List<String> _choicesList = ['SCAN', 'CREATE'];
   @override
   void initState() {
     _controller = TabController(
@@ -45,6 +44,7 @@ class _History_screenState extends State<History_screen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 1,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         bottom: TabBar(
@@ -58,6 +58,7 @@ class _History_screenState extends State<History_screen>
             fontSize: 15.sp,
             fontWeight: FontWeight.bold,
           ),
+          automaticIndicatorColorAdjustment: true,
           tabs: const [
             Tab(
               text: "SCAN",
@@ -275,7 +276,7 @@ class _History_screenState extends State<History_screen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HistoryScreenDetail(
+                      builder: (context) => ScanResult(
                         barcode: his.qrCodeValue,
                         formate: his.formate,
                       ),
@@ -304,7 +305,7 @@ class _History_screenState extends State<History_screen>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HistoryScreenDetail(
+                                builder: (context) => ScanResult(
                                   formate: his.formate,
                                   barcode: his.qrCodeValue,
                                 ),

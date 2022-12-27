@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/components/bottom_navigation.dart';
 import 'package:qr_code_scan/screens/splash_screen.dart';
-
+import '../Provider/scan_data.dart';
 import '../model/saved_setting.dart';
 
 class FirstTime extends StatefulWidget {

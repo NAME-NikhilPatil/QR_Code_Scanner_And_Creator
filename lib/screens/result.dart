@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../components/bottom_navigation.dart';
+import '../model/saved_setting.dart';
 
 class ScanResult extends StatefulWidget {
   ScanResult({Key? key, required this.barcode, this.formate}) : super(key: key);
@@ -25,7 +26,9 @@ class _ScanResultState extends State<ScanResult> {
   @override
   void initState() {
     super.initState();
-    click = Provider.of<ScanData>(context, listen: false).click;
+    // click = Provider.of<ScanData>(context, listen: false).click;
+    click = SaveSetting.getSwitch() ??
+        Provider.of<ScanData>(context, listen: false).click;
 
     click == true ? updateButton() : null;
   }
@@ -120,7 +123,9 @@ class _ScanResultState extends State<ScanResult> {
                       Text(
                         widget.formate == null
                             ? ""
-                            : widget.formate.toString().toUpperCase(),
+                            : widget.formate.toString().replaceFirst(
+                                widget.formate![0],
+                                widget.formate![0].toUpperCase()),
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,

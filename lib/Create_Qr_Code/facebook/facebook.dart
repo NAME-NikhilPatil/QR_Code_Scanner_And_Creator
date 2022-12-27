@@ -21,16 +21,26 @@ class _FacebookState extends State<Facebook> {
   TextEditingController controller = TextEditingController();
   Color primaryColor = Colors.grey;
   late List<bool> isSelected;
+  int? defaultChoiceIndex;
+  late String controller1;
+
   String hinttext = "Please enter Facebook ID";
+  List<String> _choicesList = ['URL', 'Facebook Id'];
 
   @override
   void initState() {
     super.initState();
-    isSelected = [true, false];
+    defaultChoiceIndex = 0;
   }
 
+  bool ispress = false;
+
   Future<void> deviceInfo() async {
-    _dataString ="fb://profile/${controller.text}";
+    if (ispress == true) {
+      _dataString = "fb://profile/${controller.text}";
+    } else {
+      _dataString = "${controller.text}";
+    }
   }
 
   @override
@@ -53,41 +63,53 @@ class _FacebookState extends State<Facebook> {
                 SizedBox(
                   height: 30.h,
                 ),
-                ToggleButtons(
-                  fillColor: Colors.blue,
-                  selectedColor: Colors.white,
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int i = 0; i < isSelected.length; i++) {
-                        isSelected[i] = i == index;
-                        if (isSelected[0] == true) {
-                          hinttext = "Please enter Facebook ID";
-                        }
-                        if (isSelected[1] == true) {
-                          hinttext = "Please enter URL";
-                        }
-                      }
-                    });
-                  },
-                  isSelected: isSelected,
-                  borderRadius: BorderRadius.circular(15.r),
+                Row(
                   children: [
-                    Container(
-                      
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 40.w, vertical: 10.h),
-                      child: Text(
-                        'Facebook ID',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 65.w, vertical: 10.h),
-                      child: Text(
-                        'URL',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
+                    Wrap(
+                      spacing: 5.w,
+                      children: List.generate(_choicesList.length, (index) {
+                        return ChoiceChip(
+                          labelPadding: EdgeInsets.all(5.0.w),
+                          backgroundColor: Colors.white,
+                          label: Text(_choicesList[index],
+                              style: TextStyle(
+                                color: defaultChoiceIndex == index
+                                    ? Colors.white
+                                    : Colors.grey,
+                              )),
+                          selected: defaultChoiceIndex == index,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5.r),
+                                  topRight: Radius.circular(5.r),
+                                  bottomLeft: Radius.circular(5.r),
+                                  bottomRight: Radius.circular(5.r))),
+                          selectedColor: Colors.blue,
+
+                          onSelected: (value) {
+                            setState(() {
+                              defaultChoiceIndex =
+                                  value ? index : defaultChoiceIndex;
+                              controller1 = _choicesList[index];
+                              if (_choicesList[index] == "URL") {
+                                hinttext = "Please enter URL";
+                                ispress = false;
+                              }
+
+                              if (_choicesList[index] == "Facebook Id") {
+                                hinttext = "Please enter Facebook Id";
+                                ispress = true;
+                              }
+                            });
+                          },
+                          // backgroundColor: color,
+                          pressElevation: 0,
+                          side: BorderSide(
+                              color: Colors.grey.shade300, width: 0.9.h),
+                          elevation: 0,
+                          padding: EdgeInsets.symmetric(horizontal: 23.w),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -111,13 +133,14 @@ class _FacebookState extends State<Facebook> {
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(5.r),
                       borderSide: BorderSide(
                         width: 2.h,
                         color: Colors.grey.shade200,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.r),
                       borderSide: BorderSide(width: 3.h, color: Colors.grey),
                     ),
                   ),
@@ -135,7 +158,7 @@ class _FacebookState extends State<Facebook> {
                         enableFeedback: true,
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                             EdgeInsets.symmetric(
-                                horizontal: 50.w, vertical: 10.h))),
+                                horizontal: 50.w, vertical: 12.h))),
                     onPressed: () {
                       deviceInfo();
                       var createDb =
@@ -148,7 +171,7 @@ class _FacebookState extends State<Facebook> {
                                     dataString: _dataString,
                                   )));
                     },
-                    child: const Text("Create")),
+                    child: Text("Create".toUpperCase())),
               ],
               // children: [_contentWidget()],
             ),
