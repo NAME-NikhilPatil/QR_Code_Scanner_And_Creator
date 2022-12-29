@@ -137,8 +137,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                   ),
                 ),
               ),
-              // Provider.of<ScanData>(context, listen: false).isgranted == false
-              // isgranted == false
+              // Provider.of<ScanData>(context, listen: true).isgranted == false
               //     ? Column(
               //         mainAxisAlignment: MainAxisAlignment.end,
               //         children: [
