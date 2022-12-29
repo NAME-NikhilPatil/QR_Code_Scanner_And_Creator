@@ -33,102 +33,39 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
       CreateQrCode(),
       Settings(),
     ];
-    RateMyApp rateMyApp;
-    const playStoreId = "com.example.qr_code_scanner";
-    return RateMyAppBuilder(
-      rateMyApp: RateMyApp(
-        googlePlayIdentifier: playStoreId,
-        minDays: 0,
-        minLaunches: 3,
-        remindDays: 1,
-        remindLaunches: 2,
+
+    return Scaffold(
+      body: Center(
+        child: _widgetOptions.elementAt(selectedIndex),
       ),
-      onInitialized: (context, rateMyApp) {
-        setState(() {
-          rateMyApp = rateMyApp;
-        });
-        Widget buildOkButton(double star) {
-          return TextButton(
-              onPressed: () async {
-                final event = RateMyAppEventType.rateButtonPressed;
-                await rateMyApp.callEvent(event);
-                final launchAppStore = star >= 4;
-                if (launchAppStore) {
-                  rateMyApp.launchStore();
-                }
-
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.white,
-                  content: Text(
-                    "Thanks for your feedback",
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ));
-
-                Navigator.pop(context);
-              },
-              child: Text("OK"));
-        }
-
-        Widget buildCancelButton() {
-          return RateMyAppNoButton(rateMyApp, text: "CANCEL");
-        }
-
-        if (rateMyApp.shouldOpenDialog) {
-          // rateMyApp.showRateDialog(context);
-          rateMyApp.showStarRateDialog(
-            context,
-            title: "Rate This App",
-            message: "Do you like this app?Please leave a rating",
-            starRatingOptions: StarRatingOptions(initialRating: 4),
-            actionsBuilder: (BuildContext context, double? stars) {
-              return stars == null
-                  ? [buildCancelButton()]
-                  : [buildOkButton(stars), buildCancelButton()];
-            },
-          );
-        }
-      },
-      builder: (context) =>
-          //  rateMyApp == null
-          //     ? Center(
-          //         child: Settings(),
-          //       )
-          //     :
-
-          Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.qr_code_scanner,
-              ),
-              label: 'Scan',
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.qr_code_scanner,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(MdiIcons.clockTimeFiveOutline),
-              label: 'History',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_box_outlined),
-              label: 'Create',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              label: 'Setting',
-            ),
-          ],
-          enableFeedback: true,
-          currentIndex: selectedIndex,
-          unselectedItemColor: Colors.grey[500],
-          selectedItemColor: Colors.blue,
-          backgroundColor: Colors.white,
-          onTap: _onItemTapped,
-          type: BottomNavigationBarType.fixed,
-        ),
+            label: 'Scan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(MdiIcons.clockTimeFiveOutline),
+            label: 'History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_box_outlined),
+            label: 'Create',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_outlined),
+            label: 'Setting',
+          ),
+        ],
+        enableFeedback: true,
+        currentIndex: selectedIndex,
+        unselectedItemColor: Colors.grey[500],
+        selectedItemColor: Colors.blue,
+        backgroundColor: Colors.white,
+        onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

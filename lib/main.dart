@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      child: FirstTime(),
+    
       useInheritedMediaQuery: true,
       designSize: const Size(375, 667),
       builder: (context, child) {
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Qr Code Scanner',
             theme: ThemeData(),
-            home: FirstTime(),
+            home:const  FirstTime(),
           ),
         );
       },

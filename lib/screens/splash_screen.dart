@@ -114,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen> {
             //   Provider.of<ScanData>(context, listen: false).isgranted = true;
             // });
             SaveSetting.granted(true);
-
+            Provider.of<ScanData>(context, listen: false).open = true;
             openAppSettings();
           },
           color: Colors.blue,

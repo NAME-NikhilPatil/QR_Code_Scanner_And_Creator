@@ -30,6 +30,7 @@ class ScanData with ChangeNotifier {
   List get createList => _createList;
   RateMyApp? rateMyApp;
 
+  bool open = false;
   bool click = false;
   bool vibrate = true;
   bool isgranted = false;

@@ -279,7 +279,9 @@ class _SettingsState extends State<Settings> {
                           rateMyApp: RateMyApp(
                             googlePlayIdentifier: playStoreId,
                             minDays: 0,
-                            minLaunches: 1,
+                            minLaunches: 3,
+                            remindDays: 1,
+                            remindLaunches: 2,
                           ),
                           onInitialized: (context, rateMyApp) {
                             setState(() {
@@ -313,7 +315,7 @@ class _SettingsState extends State<Settings> {
                                       context,
                                       title: "Rate This App",
                                       message:
-                                          "Do you like this app?Please leave a rating",
+                                          "Do you like this app?, Please leave a rating",
                                       starRatingOptions:
                                           StarRatingOptions(initialRating: 4),
                                       actionsBuilder: (BuildContext context,
