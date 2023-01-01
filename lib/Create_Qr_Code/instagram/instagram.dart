@@ -22,11 +22,11 @@ class _InstagramState extends State<Instagram> {
   TextEditingController controller = TextEditingController();
   Color primaryColor = Colors.grey;
   late List<bool> isSelected;
-  String? hinttext = "Enter Instagram Username";
+  String? hinttext = "Please enter instagram username";
   int? defaultChoiceIndex;
   late String controller1;
 
-  List<String> _choicesList = ['URL', 'Username'];
+  List<String> _choicesList = ['Username', 'URL'];
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -35,7 +35,7 @@ class _InstagramState extends State<Instagram> {
     defaultChoiceIndex = 0;
   }
 
-  bool ispress = false;
+  bool ispress = true;
   Future<void> deviceInfo() async {
     if (ispress == true) {
       // _dataString = "${controller.text}";
@@ -81,6 +81,7 @@ class _InstagramState extends State<Instagram> {
                                   color: defaultChoiceIndex == index
                                       ? Colors.white
                                       : Colors.grey,
+                                  fontWeight: FontWeight.w500,
                                 )),
                             selected: defaultChoiceIndex == index,
                             shape: RoundedRectangleBorder(
@@ -89,7 +90,7 @@ class _InstagramState extends State<Instagram> {
                                     topRight: Radius.circular(5.r),
                                     bottomLeft: Radius.circular(5.r),
                                     bottomRight: Radius.circular(5.r))),
-                            selectedColor: Colors.blue,
+                            selectedColor: Constants.primaryColor,
 
                             onSelected: (value) {
                               setState(() {
@@ -102,7 +103,7 @@ class _InstagramState extends State<Instagram> {
                                 }
 
                                 if (_choicesList[index] == "Username") {
-                                  hinttext = "Please enter Username";
+                                  hinttext = "Please enter instagram username";
                                   ispress = true;
                                 }
                               });
@@ -110,7 +111,9 @@ class _InstagramState extends State<Instagram> {
                             // backgroundColor: color,
                             pressElevation: 0,
                             side: BorderSide(
-                                color: Colors.grey.shade300, width: 0.9.h),
+                              color: Colors.grey.shade200,
+                              width: 0.9.h,
+                            ),
                             elevation: 0,
                             padding: EdgeInsets.symmetric(horizontal: 23.w),
                           );
@@ -125,8 +128,9 @@ class _InstagramState extends State<Instagram> {
                     onChanged: (val) {
                       _formKey.currentState!.validate();
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
@@ -157,27 +161,31 @@ class _InstagramState extends State<Instagram> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
 
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "instagram"));
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "instagram"));
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

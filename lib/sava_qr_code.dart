@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
+
+import 'constants.dart';
 
 class SaveQrCode extends StatefulWidget {
   SaveQrCode({super.key, this.dataString, this.formate});
@@ -44,22 +47,32 @@ class _SaveQrCodeState extends State<SaveQrCode> {
       await file.writeAsBytes(pngBytes);
       GallerySaver.saveImage(file.path);
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Saved to Gallery"),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Saved to Gallery",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         behavior: SnackBarBehavior.floating,
+        backgroundColor: Constants.primaryColor,
       ));
     } else if (res.isDenied) {
       Alert(
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         closeIcon: SizedBox(),
         context: context,
+        style: AlertStyle(
+          backgroundColor: Constants.creamColor,
+        ),
         type: AlertType.none,
         content: SizedBox(
             child: Text(
-          "We need storage permission for storing qr code",
+          "We need storage permission for storing Qrcode",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontWeight: FontWeight.normal,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
             fontSize: 15.sp,
           ),
         )),
@@ -67,12 +80,15 @@ class _SaveQrCodeState extends State<SaveQrCode> {
           DialogButton(
             child: Text(
               "Ok",
-              style: TextStyle(color: Colors.white, fontSize: 20.sp),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.sp,
+              ),
             ),
             onPressed: () {
               Navigator.pop(context);
             },
-            color: Colors.blue,
+            color: Constants.primaryColor,
           )
         ],
       ).show();
@@ -83,13 +99,17 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         closeIcon: SizedBox(),
         context: context,
+        style: AlertStyle(
+          backgroundColor: Constants.creamColor,
+        ),
         type: AlertType.none,
         content: Center(
           child: Text(
-            "Open app info and enable storage permission",
+            "Please open app info and enable storage permission",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontWeight: FontWeight.normal,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
               fontSize: 15.sp,
             ),
           ),
@@ -98,12 +118,16 @@ class _SaveQrCodeState extends State<SaveQrCode> {
           DialogButton(
             child: Text(
               "Ok",
-              style: TextStyle(color: Colors.white, fontSize: 20.sp),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.sp,
+              ),
             ),
             onPressed: () {
               openAppSettings();
+              Navigator.pop(context);
             },
-            color: Colors.blue,
+            color: Constants.primaryColor,
           )
         ],
       ).show();
@@ -170,7 +194,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         }
       },
       builder: (context) => Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Constants.creamColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.black,
@@ -191,7 +215,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                       borderRadius: BorderRadius.circular(15.r),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey,
+                          color: Colors.grey.shade300,
                           blurRadius: 15.r,
                         ),
                       ],
@@ -206,7 +230,9 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                         Text(
                           widget.formate == null
                               ? ""
-                              : widget.formate.toString().toUpperCase(),
+                              : widget.formate.toString().replaceFirst(
+                                  widget.formate![0],
+                                  widget.formate![0].toUpperCase()),
                           style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
@@ -236,9 +262,6 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                                 horizontal: 20.h, vertical: 20.w),
                             child: QrImage(
                               data: widget.dataString!,
-
-                              // data:abid,  uid,  txnid,
-
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
                               version: QrVersions.auto,
@@ -263,19 +286,21 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                               style: ButtonStyle(
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                  Colors.white,
+                                ),
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                  Constants.primaryColor,
+                                ),
                                 enableFeedback: true,
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                        horizontal: 50.w, vertical: 10.h)),
+                                        horizontal: 50.w, vertical: 15.h)),
                                 shape:
                                     MaterialStateProperty.all<OutlinedBorder>(
                                   RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.r),
+                                    borderRadius: BorderRadius.circular(30.r),
                                   ),
                                 ),
                               ),
@@ -284,7 +309,13 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                                   takeScreenShot(widget.dataString);
                                 });
                               },
-                              child: const Text('Save'),
+                              child: Text(
+                                'Save',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
                             ),
                             SizedBox(
                               width: 30.w,
@@ -293,19 +324,19 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                               style: ButtonStyle(
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                        Colors.white),
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                        Constants.primaryColor),
                                 enableFeedback: true,
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                        horizontal: 50.w, vertical: 10.h)),
+                                        horizontal: 50.w, vertical: 15.h)),
                                 shape:
                                     MaterialStateProperty.all<OutlinedBorder>(
                                   RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.r),
+                                    borderRadius: BorderRadius.circular(30.r),
                                   ),
                                 ),
                               ),
@@ -329,7 +360,13 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                                     text:
                                         "This qr code is generated by this app");
                               },
-                              child: const Text('Share'),
+                              child: Text(
+                                'Share',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -339,6 +376,9 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 30.h,
+                  )
                 ]),
           ),
         ),

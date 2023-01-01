@@ -32,7 +32,7 @@ class ScanData with ChangeNotifier {
 
   bool open = false;
   bool click = false;
-  bool vibrate = true;
+  bool vibrate = false;
   bool isgranted = false;
   isgranty(bool isgrant) {
     isgranted = isgrant;

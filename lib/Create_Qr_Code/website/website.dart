@@ -54,13 +54,14 @@ class _WebsiteState extends State<Website> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the value first';
+                        return 'Please enter the url first';
                       }
                       return null;
                     },
@@ -68,9 +69,11 @@ class _WebsiteState extends State<Website> {
                     controller: controller,
                     autofocus: true,
                     decoration: InputDecoration(
-                      hintText: "Please enter url",
+                      hintText: "Please enter website url",
                       contentPadding: EdgeInsets.symmetric(
-                          horizontal: 15.w, vertical: 15.h),
+                        horizontal: 15.w,
+                        vertical: 15.h,
+                      ),
                       hintStyle: Constants.hintStyle,
                       focusedBorder: Constants.border,
                       enabledBorder: Constants.border,
@@ -87,91 +90,114 @@ class _WebsiteState extends State<Website> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       ElevatedButton(
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.grey),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      EdgeInsets.symmetric(
-                                          horizontal: 20.w, vertical: 5.h))),
-                          onPressed: () {
-                            setState(() {
-                              controller.text = controller.text + "https://";
-                              controller.selection = TextSelection.fromPosition(
-                                  TextPosition(offset: controller.text.length));
-                            });
-                          },
-                          child: const Text("https://")),
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.grey),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            padding:
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                        horizontal: 20.w, vertical: 5.h))),
+                        onPressed: () {
+                          setState(() {
+                            controller.text = controller.text + "https://";
+                            controller.selection = TextSelection.fromPosition(
+                                TextPosition(offset: controller.text.length));
+                          });
+                        },
+                        child: Text(
+                          "https://",
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         width: 20.w,
                       ),
                       ElevatedButton(
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.grey),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      EdgeInsets.symmetric(
-                                          horizontal: 20.w, vertical: 5.h))),
-                          onPressed: () {
-                            setState(() {
-                              controller.text = controller.text + "www.";
-                              controller.selection = TextSelection.fromPosition(
-                                  TextPosition(offset: controller.text.length));
-                            });
-                          },
-                          child: const Text("www.")),
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.grey),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            padding:
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                        horizontal: 20.w, vertical: 5.h))),
+                        onPressed: () {
+                          setState(() {
+                            controller.text = controller.text + "www.";
+                            controller.selection = TextSelection.fromPosition(
+                                TextPosition(offset: controller.text.length));
+                          });
+                        },
+                        child: Text(
+                          "www.",
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         width: 20.w,
                       ),
                       ElevatedButton(
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.grey),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      EdgeInsets.symmetric(
-                                          horizontal: 20.w, vertical: 5.h))),
-                          onPressed: () {
-                            setState(() {
-                              controller.text = controller.text + ".com";
-                              controller.selection = TextSelection.fromPosition(
-                                  TextPosition(offset: controller.text.length));
-                            });
-                          },
-                          child: const Text(".com")),
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.grey),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            padding:
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                              EdgeInsets.symmetric(
+                                  horizontal: 20.w, vertical: 5.h),
+                            )),
+                        onPressed: () {
+                          setState(() {
+                            controller.text = controller.text + ".com";
+                            controller.selection = TextSelection.fromPosition(
+                                TextPosition(offset: controller.text.length));
+                          });
+                        },
+                        child: Text(
+                          ".com",
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "website"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                        formate: "website",
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "website"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                      formate: "website",
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

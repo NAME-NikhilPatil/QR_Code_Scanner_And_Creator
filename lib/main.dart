@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
+import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/model/history.dart';
-import 'package:qr_code_scan/model/saved_setting.dart';
+import 'package:qr_code_scan/Provider/saved_setting.dart';
 import 'package:qr_code_scan/screens/first_time.dart';
 import 'package:qr_code_scan/screens/splash_screen.dart';
 import 'model/create.dart';
@@ -29,7 +30,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-    
       useInheritedMediaQuery: true,
       designSize: const Size(375, 667),
       builder: (context, child) {
@@ -40,8 +40,10 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Qr Code Scanner',
-            theme: ThemeData(),
-            home:const  FirstTime(),
+            theme: ThemeData(
+              primaryColor: Constants.primaryColor,
+            ),
+            home: const FirstTime(),
           ),
         );
       },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/constants.dart';
+
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
 import '../../model/create.dart';
@@ -20,7 +21,7 @@ class _WhatsappState extends State<Whatsapp> {
   late String _dataString;
   bool? physicaldevice;
   TextEditingController controller = TextEditingController();
-  Color primaryColor = Colors.grey;
+  Color primaryColor = Colors.grey.shade500;
   late FlCountryCodePicker countryCodePicker;
 
   Future<void> deviceInfo() async {
@@ -61,8 +62,9 @@ class _WhatsappState extends State<Whatsapp> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey.shade500;
                       });
                     },
                     validator: (value) {
@@ -107,12 +109,12 @@ class _WhatsappState extends State<Whatsapp> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 15.w, vertical: 10.h),
                                     decoration: BoxDecoration(
-                                        color: Colors.blue,
+                                        color: Constants.primaryColor,
                                         borderRadius:
                                             BorderRadius.circular(10.r)),
                                     child: Text(
                                       countryCode?.dialCode ?? "+1",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                       ),
                                     ),
@@ -139,38 +141,44 @@ class _WhatsappState extends State<Whatsapp> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (countryCode != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  "${countryCode!.dialCode}-${controller.text.trim()}")));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                        formate: "whatsapp",
-                                      )));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              "Please select the country code",
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (countryCode != null) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                      formate: "whatsapp",
+                                    )));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text(
+                            "Please select the country code",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
-                            behavior: SnackBarBehavior.floating,
-                          ));
-                        }
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "whatsapp"));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Constants.primaryColor,
+                        ));
+                      }
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "whatsapp"));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

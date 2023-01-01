@@ -6,16 +6,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:provider/provider.dart';
-
+import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/screens/result.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:vibration/vibration.dart';
 import '../Provider/scan_data.dart';
 import '../components/bottom_navigation.dart';
 import '../model/history.dart';
-import '../model/saved_setting.dart';
+import '../Provider/saved_setting.dart';
 import 'exit.dart';
 
 class QrScanScreen extends StatefulWidget {
@@ -45,7 +44,7 @@ class _QrScanScreenState extends State<QrScanScreen>
     isgranted = SaveSetting.getgranted() ?? false;
     historyBox = Hive.box('history');
     controller = MobileScannerController();
-    isVibrate = SaveSetting.getVibrate() ?? true;
+    isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
   @override
@@ -181,8 +180,8 @@ class _QrScanScreenState extends State<QrScanScreen>
                     decoration: ShapeDecoration(
                       shape: QrScannerOverlayShape(
                         borderRadius: 0.r,
-                        borderColor: Colors.white,
-                        borderLength: 18.w,
+                        borderColor: Constants.creamColor,
+                        borderLength: 15.w,
                         borderWidth: 9.w,
                         cutOutHeight: 0.7.sw,
                         cutOutWidth: 0.7.sw,
@@ -200,7 +199,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                     Text(
                       "QRSCANNER",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Constants.creamColor,
                         fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -227,24 +226,24 @@ class _QrScanScreenState extends State<QrScanScreen>
                           child: Column(
                             children: [
                               IconButton(
-                                  color: Colors.white,
+                                  color: Constants.creamColor,
                                   icon: ValueListenableBuilder(
                                     valueListenable: controller.torchState,
                                     builder: (context, state, child) {
                                       if (state == null) {
-                                        return const Icon(
+                                        return Icon(
                                           MdiIcons.flashlight,
-                                          color: Colors.white,
+                                          color: Constants.creamColor,
                                         );
                                       }
                                       switch (state as TorchState) {
                                         case TorchState.off:
-                                          return const Icon(
+                                          return Icon(
                                             MdiIcons.flashlight,
-                                            color: Colors.white,
+                                            color: Constants.creamColor,
                                           );
                                         case TorchState.on:
-                                          return const Icon(
+                                          return Icon(
                                             Icons.flashlight_on,
                                             color: Colors.yellow,
                                           );
@@ -273,7 +272,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                           child: Column(
                             children: [
                               IconButton(
-                                color: Colors.white,
+                                color: Constants.creamColor,
                                 icon: const Icon(Icons.image),
                                 iconSize: 25.0,
                                 onPressed: () async {
@@ -292,17 +291,32 @@ class _QrScanScreenState extends State<QrScanScreen>
                                       if (!mounted) return;
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Barcode found!'),
-                                          backgroundColor: Colors.green,
+                                        SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          content: Text(
+                                            'Barcode found',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              Constants.primaryColor,
                                         ),
                                       );
                                     } else {
                                       if (!mounted) return;
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(
-                                          content: Text('No barcode found!'),
+                                        SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          content: Text(
+                                            'No barcode found!',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
                                           backgroundColor: Colors.red,
                                         ),
                                       );

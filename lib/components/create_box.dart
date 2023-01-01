@@ -20,7 +20,15 @@ class CreateBox extends StatelessWidget {
           height: 70.w,
           width: 70.w,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10.r)),
+            color: Colors.white70,
+            borderRadius: BorderRadius.circular(10.r),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.grey.shade300,
+            //     blurRadius: 3.r,
+            //   ),
+            // ]),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

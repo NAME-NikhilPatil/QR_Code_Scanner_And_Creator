@@ -14,8 +14,10 @@ import 'package:qr_code_scan/Create_Qr_Code/twitter/twitter.dart';
 import 'package:qr_code_scan/Create_Qr_Code/whatsapp/whatsapp.dart';
 import 'package:qr_code_scan/Create_Qr_Code/wifi/wifi.dart';
 import 'package:qr_code_scan/Create_Qr_Code/youtube/youtube.dart';
+
 import '../Create_Qr_Code/website/website.dart';
 import '../components/create_box.dart';
+import '../constants.dart';
 
 class CreateQrCode extends StatefulWidget {
   const CreateQrCode({Key? key}) : super(key: key);
@@ -31,7 +33,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
     ScreenUtil.init(context, designSize: const Size(375, 667));
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Constants.backgroundColor,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -42,12 +44,18 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                 SizedBox(
                   height: 30.h,
                 ),
-                Text(
-                  "QR Code Creator",
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "QR Code Creator",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 20.h,
@@ -80,7 +88,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Whatsapp',
                             // image: 'assets/whatsapp.png',
                             image: 'whatsapp',
@@ -95,7 +103,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Instagram',
                             image: 'instagram',
                             // image: 'assets/mycard.png',
@@ -118,7 +126,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Twitter',
                             // image: 'assets/email.png',
                             image: 'twitter',
@@ -133,7 +141,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Youtube',
                             image: 'youtube',
                           ),
@@ -147,7 +155,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Website',
                             image: 'website',
                             // image: 'assets/website.png',
@@ -170,7 +178,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Spotify',
                             // image: 'assets/sms.png',
                             image: 'spotify',
@@ -185,7 +193,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Clipboard',
                             image: 'clipboard',
                             // image: 'assets/clipboard.png',
@@ -200,7 +208,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Wi-Fi',
                             image: 'wifi',
                             // image: 'assets/wifi.png',
@@ -223,7 +231,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Text',
                             // image: 'assets/text.png',
                             image: 'text',
@@ -238,7 +246,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Contacts',
                             // image: 'assets/contacts.png',
                             image: 'contacts',
@@ -253,7 +261,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'Telephone',
                             // image: 'assets/telephone.png',
                             image: 'telephone',
@@ -276,7 +284,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'E-mail',
                             // image: 'assets/email.png',
                             image: 'email',
@@ -291,7 +299,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'SMS',
                             // image: 'assets/sms.png',
                             image: 'sms',
@@ -306,7 +314,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               ),
                             );
                           }),
-                          child:const  CreateBox(
+                          child: const CreateBox(
                             text: 'My Card',
                             image: 'mycard',
                             // image: 'assets/mycard.png',

@@ -10,11 +10,11 @@ class SaveSetting {
       await _preferences?.setBool(switchCopy, switchName);
   static bool? getSwitch() => _preferences?.getBool(switchCopy);
 
-  static String vibrate = 'vibrate';
+  static String vibrate = 'hello';
 
   static Future setVibrate(bool vibrateName) async =>
-      await _preferences?.setBool(vibrate.toString(), vibrateName);
-  static bool? getVibrate() => _preferences?.getBool(vibrate.toString());
+      await _preferences?.setBool(vibrate, vibrateName);
+  static bool? getVibrate() => _preferences?.getBool(vibrate);
 
   static String isgranted = "false";
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:provider/provider.dart';
+
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
 import '../../constants.dart';
@@ -49,7 +49,7 @@ class _ContactsState extends State<Contacts> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Boxy(text: "contacts", image: "contacts"),
+                  const Boxy(text: "Contacts", image: "contacts"),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -59,11 +59,12 @@ class _ContactsState extends State<Contacts> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Name",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -75,13 +76,14 @@ class _ContactsState extends State<Contacts> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the name first';
                           }
                           return null;
                         },
@@ -102,16 +104,17 @@ class _ContactsState extends State<Contacts> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Phone number",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -123,13 +126,14 @@ class _ContactsState extends State<Contacts> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the phone number';
                           }
                           return null;
                         },
@@ -152,16 +156,17 @@ class _ContactsState extends State<Contacts> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "E-mail",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -173,13 +178,14 @@ class _ContactsState extends State<Contacts> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the email id';
                           }
                           return null;
                         },
@@ -205,26 +211,30 @@ class _ContactsState extends State<Contacts> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "contacts"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                        formate: "ContactInfo",
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "contacts"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                      formate: "ContactInfo",
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

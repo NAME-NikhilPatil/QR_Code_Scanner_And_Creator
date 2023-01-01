@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 import '../../Provider/scan_data.dart';
 import '../../components/box.dart';
 import '../../constants.dart';
@@ -54,8 +55,9 @@ class _SmsState extends State<Sms> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
@@ -86,25 +88,29 @@ class _SmsState extends State<Sms> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "sms"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "sms"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

@@ -5,7 +5,7 @@ import 'package:qr_code_scan/rate_app_init.dart';
 import 'package:qr_code_scan/screens/splash_screen.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import '../Provider/scan_data.dart';
-import '../model/saved_setting.dart';
+import '../Provider/saved_setting.dart';
 
 class FirstTime extends StatefulWidget {
   const FirstTime({

@@ -1,17 +1,16 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scan/Provider/saved_setting.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/components/bottom_navigation.dart';
-import 'package:qr_code_scan/model/saved_setting.dart';
-
+import 'package:qr_code_scan/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
-import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({
@@ -56,9 +55,10 @@ class _SplashScreenState extends State<SplashScreen> {
         SaveSetting.granted(false);
         await Alertx(context);
       });
-      if (statuses[Permission.camera]!.isGranted) {
-        runApp(MyApp());
-      } else {}
+      // if (statuses[Permission.camera]!.isGranted) {
+      //   runApp(MyApp());
+      // }
+      //  else {}
     } else {
       if (statuses[Permission.camera]!.isDenied) {
         setState(() {
@@ -91,11 +91,13 @@ class _SplashScreenState extends State<SplashScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       closeIcon: SizedBox(),
       context: context,
-      style: AlertStyle(),
+      style: AlertStyle(
+        backgroundColor: Constants.creamColor,
+      ),
       type: AlertType.none,
       // title: "Permission",
       content: Text(
-        "Go to App info and unable camera permission",
+        "Please go to App info and unable camera permission",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -107,17 +109,20 @@ class _SplashScreenState extends State<SplashScreen> {
         DialogButton(
           child: Text(
             "Ok",
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           onPressed: () {
             // setState(() {
             //   Provider.of<ScanData>(context, listen: false).isgranted = true;
             // });
-            SaveSetting.granted(true);
             Provider.of<ScanData>(context, listen: false).open = true;
             openAppSettings();
           },
-          color: Colors.blue,
+          color: Constants.primaryColor,
         )
       ],
     ).show();
@@ -129,11 +134,14 @@ class _SplashScreenState extends State<SplashScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       closeIcon: SizedBox(),
       context: context,
-      style: AlertStyle(),
+      style: AlertStyle(
+        backgroundColor: Constants.creamColor,
+      ),
       type: AlertType.none,
+
       // title: "Permission",
       content: Text(
-        "We need camera permission for scanning qrcodes or barcodes",
+        "We need camera permission for scanning Qrcodes or Barcodes",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -145,14 +153,18 @@ class _SplashScreenState extends State<SplashScreen> {
         DialogButton(
           child: Text(
             "Ok",
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           onPressed: () {
             // openAppSettings();
             permissionServiceCall();
             Navigator.pop(context);
           },
-          color: Color(0xff4FA4FA),
+          color: Constants.primaryColor,
         )
       ],
     ).show();
@@ -174,19 +186,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var bodyStyle = TextStyle(fontSize: 19.0.sp);
+    var bodyStyle = TextStyle(
+      fontSize: 19.0.sp,
+    );
 
     var pageDecoration = PageDecoration(
-      titleTextStyle: TextStyle(fontSize: 28.0.sp, fontWeight: FontWeight.w700),
+      titleTextStyle: TextStyle(
+        fontSize: 28.0.sp,
+        fontWeight: FontWeight.w700,
+        color: Constants.primaryColor,
+      ),
       bodyTextStyle: bodyStyle,
       bodyPadding: EdgeInsets.fromLTRB(16.0.w, 0.0, 16.0.h, 16.0.w),
-      pageColor: Colors.white,
+      pageColor: Constants.creamColor,
       imagePadding: EdgeInsets.zero,
     );
     return Scaffold(
       body: IntroductionScreen(
         key: introKey,
-        globalBackgroundColor: Colors.white,
+        globalBackgroundColor: Constants.creamColor,
         autoScrollDuration: 7000,
         pages: [
           PageViewModel(
@@ -222,19 +240,29 @@ class _SplashScreenState extends State<SplashScreen> {
         skipOrBackFlex: 0,
         nextFlex: 0,
         showBackButton: false,
-        skip: Text("Skip"),
-
-        // skipStyle: ,
-        next: Text(
-          "Next",
+        skip: Text(
+          "Skip",
           style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
+        skipStyle: ButtonStyle(
+          foregroundColor:
+              MaterialStateProperty.all<Color>(Constants.primaryColor),
+        ),
+        next: Text(
+          "Next",
+          style: TextStyle(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.bold,
+            color: Constants.creamColor,
+          ),
+        ),
         nextStyle: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Constants.primaryColor),
             enableFeedback: true,
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                 EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h))),
@@ -243,24 +271,26 @@ class _SplashScreenState extends State<SplashScreen> {
           style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.bold,
+            color: Constants.creamColor,
           ),
         ),
         doneStyle: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Constants.primaryColor),
           enableFeedback: true,
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
             EdgeInsets.symmetric(horizontal: 35.w, vertical: 10.h),
           ),
         ),
-
         curve: Curves.fastLinearToSlowEaseIn,
         controlsMargin: EdgeInsets.only(bottom: 15.h),
         dotsDecorator: DotsDecorator(
+          activeColor: Constants.primaryColor,
           size: Size(10.0.w, 10.0.w),
-          color: Color(0xFFBDBDBD),
+          color: const Color(0xFFBDBDBD),
           activeSize: Size(22.0.w, 10.0.w),
-          activeShape: RoundedRectangleBorder(
+          activeShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
           ),
         ),

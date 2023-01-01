@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/screens/history_screen.dart';
 import 'package:qr_code_scan/screens/qr_code_scan..dart';
 import 'package:qr_code_scan/screens/settings.dart';
-import 'package:rate_my_app/rate_my_app.dart';
 
 import '../screens/create_qr_code.dart';
 
@@ -61,8 +61,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         ],
         enableFeedback: true,
         currentIndex: selectedIndex,
-        unselectedItemColor: Colors.grey[500],
-        selectedItemColor: Colors.blue,
+        // unselectedItemColor: Colors.grey[500],
+        unselectedItemColor: Colors.grey.shade500,
+        selectedItemColor: Constants.primaryColor,
+        // backgroundColor: Constants.creamColor,
         backgroundColor: Colors.white,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

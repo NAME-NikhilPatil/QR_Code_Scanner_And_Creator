@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:provider/provider.dart';
+import 'package:qr_code_scan/Provider/saved_setting.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
-import 'package:qr_code_scan/model/saved_setting.dart';
-import 'package:qr_code_scan/rate_app_init.dart';
 import 'package:qr_code_scan/screens/feedback_screen.dart';
 import 'package:qr_code_scan/screens/privacy_policy.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 
+import '../constants.dart';
+
 class Settings extends StatefulWidget {
-  Settings({
+  const Settings({
     super.key,
   });
 
@@ -37,20 +37,20 @@ class _SettingsState extends State<Settings> {
     super.initState();
 
     isSwitched = SaveSetting.getSwitch() ?? false;
-    isVibrate = SaveSetting.getVibrate() ?? true;
+    isVibrate = SaveSetting.getVibrate() ?? false;
     search = SaveSetting.getSearch() ?? "Google";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blue[50],
+        backgroundColor: Constants.backgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
             "Settings",
             style: TextStyle(
-              color: Colors.blueGrey,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 20.sp,
             ),
@@ -71,9 +71,9 @@ class _SettingsState extends State<Settings> {
                 child: Text(
                   "General settings",
                   style: TextStyle(
-                    color: Colors.blueGrey,
+                    color: Constants.primaryColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
+                    fontSize: 15.sp,
                   ),
                 ),
               ),
@@ -86,7 +86,7 @@ class _SettingsState extends State<Settings> {
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(12.r),
+                    borderRadius: BorderRadius.circular(15.r),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,8 +98,8 @@ class _SettingsState extends State<Settings> {
                             height: 30.h,
                             width: 30.h,
                             decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(7.r),
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Icon(
                               Icons.copy,
@@ -108,9 +108,12 @@ class _SettingsState extends State<Settings> {
                             )),
                         title: Text(
                           "Auto copied to clipboard",
-                          // style: Constants.settingText,
+                          style: Constants.settingText,
                         ),
                         trailing: Switch(
+                          activeColor: Constants.primaryColor,
+                          // activeTrackColor: Colors.grey.shade300,
+                          inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) {
                             if (value == true) {
                               Provider.of<ScanData>(context, listen: false)
@@ -140,7 +143,7 @@ class _SettingsState extends State<Settings> {
                             height: 30.h,
                             width: 30.h,
                             decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Constants.primaryColor,
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(
                               Icons.vibration,
@@ -149,9 +152,12 @@ class _SettingsState extends State<Settings> {
                             )),
                         title: Text(
                           "Vibration",
-                          // style: Constants.settingText,
+                          style: Constants.settingText,
                         ),
                         trailing: Switch(
+                          activeColor: Constants.primaryColor,
+                          // activeTrackColor: Colors.grey.shade300,
+                          inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) {
                             if (value == true) {
                               Provider.of<ScanData>(context, listen: false)
@@ -181,7 +187,7 @@ class _SettingsState extends State<Settings> {
                             height: 30.h,
                             width: 30.h,
                             decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Constants.primaryColor,
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(
                               Icons.search,
@@ -190,10 +196,11 @@ class _SettingsState extends State<Settings> {
                             )),
                         title: Text(
                           "Search engine",
-                          // style: Constants.settingText,
+                          style: Constants.settingText,
                         ),
                         trailing: PopupMenuButton(
-                          color: Colors.blue[50],
+                          color: Colors.white,
+                          enableFeedback: true,
                           onSelected: (value) {
                             setState(() {
                               Provider.of<ScanData>(context, listen: false)
@@ -209,7 +216,7 @@ class _SettingsState extends State<Settings> {
                               //     .search,
                               search,
                               style: TextStyle(
-                                color: Colors.blue,
+                                color: Constants.primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15.sp,
                               ),
@@ -219,22 +226,42 @@ class _SettingsState extends State<Settings> {
                             return [
                               PopupMenuItem(
                                 child: Text(searchEngine[0]),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 value: searchEngine[0],
                               ),
                               PopupMenuItem(
                                 child: Text(searchEngine[1]),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 value: searchEngine[1],
                               ),
                               PopupMenuItem(
                                 child: Text(searchEngine[2]),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 value: searchEngine[2],
                               ),
                               PopupMenuItem(
                                 child: Text(searchEngine[3]),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 value: searchEngine[3],
                               ),
                               PopupMenuItem(
                                 child: Text(searchEngine[4]),
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 value: searchEngine[4],
                               ),
                             ];
@@ -253,9 +280,9 @@ class _SettingsState extends State<Settings> {
                 child: Text(
                   "Help",
                   style: TextStyle(
-                    color: Colors.blueGrey,
+                    color: Constants.primaryColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
+                    fontSize: 15.sp,
                   ),
                 ),
               ),
@@ -287,9 +314,6 @@ class _SettingsState extends State<Settings> {
                             setState(() {
                               this.rateMyApp = rateMyApp;
                             });
-                            if (rateMyApp.shouldOpenDialog) {
-                              rateMyApp.showRateDialog(context);
-                            }
                           },
                           builder: (context) =>
                               //  rateMyApp == null
@@ -300,9 +324,34 @@ class _SettingsState extends State<Settings> {
 
                               ListTile(
                                 onTap: () {
-                                  Widget buildOkButton() {
-                                    return RateMyAppRateButton(rateMyApp!,
-                                        text: "OK");
+                                  Widget buildOkButton(double star) {
+                                    return TextButton(
+                                        onPressed: () async {
+                                          const event = RateMyAppEventType
+                                              .rateButtonPressed;
+                                          await rateMyApp!.callEvent(event);
+                                          final launchAppStore = star >= 4;
+                                          if (launchAppStore) {
+                                            rateMyApp!.launchStore();
+                                          }
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor:
+                                                Constants.primaryColor,
+                                            content: Text(
+                                              "Thanks for your feedback",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            behavior: SnackBarBehavior.floating,
+                                          ));
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("OK"));
                                   }
 
                                   Widget buildCancelButton() {
@@ -323,7 +372,7 @@ class _SettingsState extends State<Settings> {
                                         return stars == null
                                             ? [buildCancelButton()]
                                             : [
-                                                buildOkButton(),
+                                                buildOkButton(stars),
                                                 buildCancelButton()
                                               ];
                                       },
@@ -335,7 +384,7 @@ class _SettingsState extends State<Settings> {
                                     height: 30.h,
                                     width: 30.h,
                                     decoration: BoxDecoration(
-                                        color: Colors.blue,
+                                        color: Constants.primaryColor,
                                         borderRadius:
                                             BorderRadius.circular(7.r)),
                                     child: Icon(
@@ -345,7 +394,7 @@ class _SettingsState extends State<Settings> {
                                     )),
                                 title: Text(
                                   "Rate us",
-                                  // style: Constants.settingText,
+                                  style: Constants.settingText,
                                 ),
                               )),
                       SizedBox(
@@ -366,7 +415,7 @@ class _SettingsState extends State<Settings> {
                             height: 30.h,
                             width: 30.h,
                             decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Constants.primaryColor,
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(
                               Icons.chat_bubble,
@@ -375,7 +424,7 @@ class _SettingsState extends State<Settings> {
                             )),
                         title: Text(
                           "Feedback",
-                          // style: Constants.settingText,
+                          style: Constants.settingText,
                         ),
                       ),
                       SizedBox(
@@ -396,7 +445,7 @@ class _SettingsState extends State<Settings> {
                             height: 30.h,
                             width: 30.h,
                             decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Constants.primaryColor,
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(
                               Icons.remove_red_eye,
@@ -405,7 +454,7 @@ class _SettingsState extends State<Settings> {
                             )),
                         title: Text(
                           "Privacy policy",
-                          // style: Constants.settingText,
+                          style: Constants.settingText,
                         ),
                       ),
                       SizedBox(
@@ -417,7 +466,7 @@ class _SettingsState extends State<Settings> {
                             height: 30.h,
                             width: 30.h,
                             decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: Constants.primaryColor,
                                 borderRadius: BorderRadius.circular(7.r)),
                             child: Icon(
                               Icons.info,
@@ -426,7 +475,7 @@ class _SettingsState extends State<Settings> {
                             )),
                         title: Text(
                           "Version 1.0",
-                          // style: Constants.settingText,
+                          style: Constants.settingText,
                         ),
                       ),
                       SizedBox(

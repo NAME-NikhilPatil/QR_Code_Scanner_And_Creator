@@ -43,22 +43,29 @@ class _EmailState extends State<Email> {
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Center(child: Boxy(text: "E-mail", image: "email")),
+                  Boxy(text: "E-mail", image: "email"),
                   SizedBox(
-                    height: 60.h,
+                    height: 30.h,
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                    child: const Text(
-                      "E-mail",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 4.h),
+                        child: Text(
+                          "E-mail",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   SizedBox(
                     height: 5.h,
@@ -68,13 +75,14 @@ class _EmailState extends State<Email> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the value first';
+                        return 'Please enter the email id first';
                       }
                       return null;
                     },
@@ -98,28 +106,30 @@ class _EmailState extends State<Email> {
                   SizedBox(
                     height: 30.h,
                   ),
-                  Center(
-                    child: ElevatedButton(
-                        style: Constants.buttonStyle(primaryColor),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            deviceInfo();
-                            var createDb =
-                                Provider.of<ScanData>(context, listen: false);
-                            createDb.addItemC(CreateQr(_dataString, "email"));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SaveQrCode(
-                                          dataString: _dataString,
-                                          formate: "email",
-                                        )));
-                          }
-                        },
-                        child: Text(
-                          "Create",
-                          style: Constants.buttonText,
-                        )),
+                  ElevatedButton(
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "email"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                      formate: "email",
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
                   ),
                 ],
                 // children: [_contentWidget()],

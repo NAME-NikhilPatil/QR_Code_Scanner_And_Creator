@@ -22,8 +22,8 @@ class _TwitterState extends State<Twitter> {
   TextEditingController controller = TextEditingController();
   Color primaryColor = Colors.grey;
   late List<bool> isSelected;
-  String? hinttext = "Please enter url";
-  List<String> _choicesList = ['URL', 'Username'];
+  String? hinttext = "Please enter username";
+  List<String> _choicesList = ['Username', 'URL'];
   late String controller1;
   final _formKey = GlobalKey<FormState>();
 
@@ -33,7 +33,7 @@ class _TwitterState extends State<Twitter> {
     defaultChoiceIndex = 0;
   }
 
-  bool ispress = false;
+  bool ispress = true;
 
   Future<void> deviceInfo() async {
     // _dataString = "https://twitter.com/${controller.text}";
@@ -75,12 +75,15 @@ class _TwitterState extends State<Twitter> {
                           return ChoiceChip(
                             labelPadding: EdgeInsets.all(5.0.w),
                             backgroundColor: Colors.white,
-                            label: Text(_choicesList[index],
-                                style: TextStyle(
-                                  color: defaultChoiceIndex == index
-                                      ? Colors.white
-                                      : Colors.grey,
-                                )),
+                            label: Text(
+                              _choicesList[index],
+                              style: TextStyle(
+                                color: defaultChoiceIndex == index
+                                    ? Colors.white
+                                    : Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             selected: defaultChoiceIndex == index,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
@@ -88,7 +91,7 @@ class _TwitterState extends State<Twitter> {
                                     topRight: Radius.circular(5.r),
                                     bottomLeft: Radius.circular(5.r),
                                     bottomRight: Radius.circular(5.r))),
-                            selectedColor: Colors.blue,
+                            selectedColor: Constants.primaryColor,
 
                             onSelected: (value) {
                               setState(() {
@@ -109,7 +112,9 @@ class _TwitterState extends State<Twitter> {
                             // backgroundColor: color,
                             pressElevation: 0,
                             side: BorderSide(
-                                color: Colors.grey.shade300, width: 0.9.h),
+                              color: Colors.grey.shade200,
+                              width: 0.9.h,
+                            ),
                             elevation: 0,
                             padding: EdgeInsets.symmetric(horizontal: 23.w),
                           );
@@ -125,8 +130,9 @@ class _TwitterState extends State<Twitter> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
@@ -158,26 +164,27 @@ class _TwitterState extends State<Twitter> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "facebook"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                        formate: "twitter",
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "facebook"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                      formate: "twitter",
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

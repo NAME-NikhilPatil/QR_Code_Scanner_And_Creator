@@ -23,9 +23,9 @@ class _YoutubeState extends State<Youtube> {
   late String controller1;
   Color primaryColor = Colors.grey;
   late List<bool> isSelected;
-  String hinttext = "Please enter URL";
+  String hinttext = "Please enter channel name";
   int? defaultChoiceIndex;
-  List<String> _choicesList = ['URL', 'Channel Name'];
+  List<String> _choicesList = ['Channel Name', 'URL'];
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -34,7 +34,7 @@ class _YoutubeState extends State<Youtube> {
     defaultChoiceIndex = 0;
   }
 
-  bool ispress = false;
+  bool ispress = true;
   Future<void> deviceInfo() async {
     if (ispress == true) {
       // _dataString = "https://youtu.be/${controller.text}";
@@ -75,12 +75,15 @@ class _YoutubeState extends State<Youtube> {
                           return ChoiceChip(
                             labelPadding: EdgeInsets.all(5.0.w),
                             backgroundColor: Colors.white,
-                            label: Text(_choicesList[index],
-                                style: TextStyle(
-                                  color: defaultChoiceIndex == index
-                                      ? Colors.white
-                                      : Colors.grey,
-                                )),
+                            label: Text(
+                              _choicesList[index],
+                              style: TextStyle(
+                                color: defaultChoiceIndex == index
+                                    ? Colors.white
+                                    : Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             selected: defaultChoiceIndex == index,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
@@ -88,7 +91,7 @@ class _YoutubeState extends State<Youtube> {
                                     topRight: Radius.circular(5.r),
                                     bottomLeft: Radius.circular(5.r),
                                     bottomRight: Radius.circular(5.r))),
-                            selectedColor: Colors.blue,
+                            selectedColor: Constants.primaryColor,
 
                             onSelected: (value) {
                               setState(() {
@@ -101,7 +104,7 @@ class _YoutubeState extends State<Youtube> {
                                 }
 
                                 if (_choicesList[index] == "Channel Name") {
-                                  hinttext = "Please enter Channel Id";
+                                  hinttext = "Please enter Channel name";
                                   ispress = true;
                                 }
                               });
@@ -109,7 +112,9 @@ class _YoutubeState extends State<Youtube> {
                             // backgroundColor: color,
                             pressElevation: 0,
                             side: BorderSide(
-                                color: Colors.grey.shade300, width: 0.9.h),
+                              color: Colors.grey.shade200,
+                              width: 0.9.h,
+                            ),
                             elevation: 0,
                             padding: EdgeInsets.symmetric(horizontal: 23.w),
                           );
@@ -125,8 +130,9 @@ class _YoutubeState extends State<Youtube> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
@@ -158,25 +164,29 @@ class _YoutubeState extends State<Youtube> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "youtube"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "youtube"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

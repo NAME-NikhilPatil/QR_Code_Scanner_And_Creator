@@ -32,8 +32,6 @@ class _SpotifyState extends State<Spotify> {
     String name = "${controller.text}";
     String sname = "${controller1.text}";
     _dataString = "https://open.spotify.com/search/$name;$sname";
-
-    ;
   }
 
   @override
@@ -56,7 +54,7 @@ class _SpotifyState extends State<Spotify> {
                 children: [
                   Boxy(text: "Spotify", image: "spotify"),
                   SizedBox(
-                    height: 60.h,
+                    height: 30.h,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,10 +62,10 @@ class _SpotifyState extends State<Spotify> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Artist Name",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.grey.shade500,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -80,13 +78,14 @@ class _SpotifyState extends State<Spotify> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the artist name first';
                           }
                           return null;
                         },
@@ -95,7 +94,9 @@ class _SpotifyState extends State<Spotify> {
                         autofocus: true,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15.w, vertical: 15.h),
+                            horizontal: 15.w,
+                            vertical: 15.h,
+                          ),
                           hintStyle: Constants.hintStyle,
                           focusedBorder: Constants.border,
                           enabledBorder: Constants.border,
@@ -106,15 +107,15 @@ class _SpotifyState extends State<Spotify> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Song Name",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.grey.shade500,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -127,13 +128,14 @@ class _SpotifyState extends State<Spotify> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the song name first';
                           }
                           return null;
                         },
@@ -144,7 +146,9 @@ class _SpotifyState extends State<Spotify> {
                         autofocus: true,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15.w, vertical: 15.h),
+                            horizontal: 15.w,
+                            vertical: 15.h,
+                          ),
                           hintStyle: Constants.hintStyle,
                           focusedBorder: Constants.border,
                           enabledBorder: Constants.border,
@@ -160,25 +164,29 @@ class _SpotifyState extends State<Spotify> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "spotify"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "spotify"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

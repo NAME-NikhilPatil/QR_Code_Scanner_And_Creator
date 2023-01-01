@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +30,7 @@ class _WifiState extends State<Wifi> {
   dynamic password;
 
   int? defaultChoiceIndex;
-  final List<String> _choicesList = ['WPA', 'WEP', 'None'];
+  final List<String> _choicesList = ['WPA / WPA2', 'WEP', 'None'];
   final List<String> _choiceList = ['WPA', 'WEP', ''];
 
   bool _isHidden = true;
@@ -74,7 +72,7 @@ class _WifiState extends State<Wifi> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Boxy(text: "Wi-fi", image: "wifi"),
+                  Boxy(text: "Wi-Fi", image: "wifi"),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -84,11 +82,12 @@ class _WifiState extends State<Wifi> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Netword Name(SSID)",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -100,13 +99,14 @@ class _WifiState extends State<Wifi> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the network name first';
                           }
                           return null;
                         },
@@ -114,9 +114,11 @@ class _WifiState extends State<Wifi> {
                         controller: controller,
                         autofocus: true,
                         decoration: InputDecoration(
-                          hintText: "Please enter something",
+                          hintText: "Please enter network name",
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15.w, vertical: 15.h),
+                            horizontal: 15.w,
+                            vertical: 15.h,
+                          ),
                           hintStyle: Constants.hintStyle,
                           focusedBorder: Constants.border,
                           enabledBorder: Constants.border,
@@ -131,12 +133,15 @@ class _WifiState extends State<Wifi> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
+                        child: Text(
                           "Select security mode",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -151,15 +156,19 @@ class _WifiState extends State<Wifi> {
                                 return ChoiceChip(
                                   labelPadding: EdgeInsets.all(2.0.w),
                                   backgroundColor: Colors.white,
-                                  label: Text(_choicesList[index],
-                                      style: TextStyle(
-                                        color: defaultChoiceIndex == index
-                                            ? Colors.white
-                                            : Colors.grey,
-                                      )),
+                                  label: Text(
+                                    _choicesList[index],
+                                    style: TextStyle(
+                                      color: defaultChoiceIndex == index
+                                          ? Colors.white
+                                          : Colors.grey,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
                                   selected: defaultChoiceIndex == index,
 
-                                  selectedColor: Colors.blue,
+                                  selectedColor: Constants.primaryColor,
 
                                   onSelected: (value) {
                                     setState(() {
@@ -179,14 +188,20 @@ class _WifiState extends State<Wifi> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
+                        child: Text(
                           "Password",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -199,18 +214,20 @@ class _WifiState extends State<Wifi> {
 
                           setState(() {
                             if (defaultChoiceIndex == 2) {
-                              primaryColor =
-                                  val.isEmpty ? Colors.blue : Colors.grey;
+                              primaryColor = val.isEmpty
+                                  ? Constants.primaryColor
+                                  : Colors.grey;
                             }
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty && defaultChoiceIndex == 0) {
-                            return 'Please enter the value first';
+                            return 'Please enter the password first';
                           } else if (value.isEmpty && defaultChoiceIndex == 1) {
-                            return 'Please enter the value first';
+                            return 'Please enter the password first';
                           } else if (value.isEmpty && defaultChoiceIndex == 2) {
                             return null;
                           }
@@ -225,11 +242,12 @@ class _WifiState extends State<Wifi> {
                             onTap: _togglePasswordView,
                             child: Icon(
                               _isHidden
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey.shade500,
                             ),
                           ),
-                          hintText: "Please enter something",
+                          hintText: "Please enter password",
                           hintStyle: Constants.hintStyle,
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 15.w, vertical: 15.h),
@@ -292,7 +310,10 @@ class _WifiState extends State<Wifi> {
                       "Create",
                       style: Constants.buttonText,
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                 ],
                 // children: [_contentWidget()],
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 import '../../../Provider/scan_data.dart';
 import '../../../components/box.dart';
 import '../../../model/create.dart';
@@ -71,11 +72,12 @@ class _MyCardState extends State<MyCard> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Name",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -87,13 +89,14 @@ class _MyCardState extends State<MyCard> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the name first';
                           }
                           return null;
                         },
@@ -114,16 +117,17 @@ class _MyCardState extends State<MyCard> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Phone number",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -135,13 +139,14 @@ class _MyCardState extends State<MyCard> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the phone number';
                           }
                           return null;
                         },
@@ -164,16 +169,17 @@ class _MyCardState extends State<MyCard> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "E-mail",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -185,13 +191,14 @@ class _MyCardState extends State<MyCard> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the email id ';
                           }
                           return null;
                         },
@@ -213,16 +220,17 @@ class _MyCardState extends State<MyCard> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Address",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -234,13 +242,14 @@ class _MyCardState extends State<MyCard> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the address';
                           }
                           return null;
                         },
@@ -263,7 +272,7 @@ class _MyCardState extends State<MyCard> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -275,18 +284,19 @@ class _MyCardState extends State<MyCard> {
                               "BirthDate",
                               style: TextStyle(
                                 color: Colors.grey,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
                               ),
                             ),
                             OutlinedButton(
                               style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0.r),
-                                          side:
-                                              BorderSide(color: Colors.red)))),
+                                      RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0.r),
+                                  side: BorderSide(color: Colors.red),
+                                ),
+                              )),
                               onPressed: () async {
                                 {
                                   final datePick = await showDatePicker(
@@ -296,13 +306,15 @@ class _MyCardState extends State<MyCard> {
                                       lastDate: DateTime(2100));
                                   if (datePick != null &&
                                       datePick != birthDate) {
-                                    setState(() {
-                                      birthDate = datePick;
-                                      isDateSelected = true;
+                                    setState(
+                                      () {
+                                        birthDate = datePick;
+                                        isDateSelected = true;
 
-                                      birthDateInString =
-                                          "${birthDate!.day}/${birthDate!.month}/${birthDate?.year}"; // 08/14/2019
-                                    });
+                                        birthDateInString =
+                                            "${birthDate!.day}/${birthDate!.month}/${birthDate?.year}"; // 08/14/2019
+                                      },
+                                    );
                                   }
                                 }
                               },
@@ -312,6 +324,8 @@ class _MyCardState extends State<MyCard> {
                                     : "initialDate",
                                 style: TextStyle(
                                   color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.sp,
                                 ),
                               ),
                             ),
@@ -319,16 +333,17 @@ class _MyCardState extends State<MyCard> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Org",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -340,13 +355,14 @@ class _MyCardState extends State<MyCard> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the org name';
                           }
                           return null;
                         },
@@ -367,16 +383,17 @@ class _MyCardState extends State<MyCard> {
                         ),
                       ),
                       SizedBox(
-                        height: 7.h,
+                        height: 10.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 4.h),
-                        child: const Text(
+                        child: Text(
                           "Note",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -388,13 +405,14 @@ class _MyCardState extends State<MyCard> {
                           _formKey.currentState!.validate();
 
                           setState(() {
-                            primaryColor =
-                                val.isNotEmpty ? Colors.blue : Colors.grey;
+                            primaryColor = val.isNotEmpty
+                                ? Constants.primaryColor
+                                : Colors.grey;
                           });
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter the value first';
+                            return 'Please enter the note';
                           }
                           return null;
                         },
@@ -422,27 +440,28 @@ class _MyCardState extends State<MyCard> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                      style: Constants.buttonStyle(primaryColor),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "mycard"));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SaveQrCode(
-                                        dataString: _dataString,
-                                      )));
-                        }
-                      },
-                      child: Text(
-                        "Create",
-                        style: Constants.buttonText,
-                      )),
+                    style: Constants.buttonStyle(primaryColor),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        deviceInfo();
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "mycard"));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SaveQrCode(
+                                      dataString: _dataString,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      "Create",
+                      style: Constants.buttonText,
+                    ),
+                  ),
                   SizedBox(
-                    height: 100.h,
+                    height: 30.h,
                   ),
                 ],
 

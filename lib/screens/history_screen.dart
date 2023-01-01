@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
+import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/sava_qr_code.dart';
 import 'package:qr_code_scan/screens/detail_history_screen.dart';
-
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:vibration/vibration.dart';
 
@@ -49,9 +49,9 @@ class _History_screenState extends State<History_screen>
         backgroundColor: Colors.white,
         bottom: TabBar(
           controller: _controller,
-          indicatorColor: Colors.blueAccent,
+          indicatorColor: Constants.primaryColor,
           indicatorWeight: 3.h,
-          labelColor: Colors.blueAccent,
+          labelColor: Constants.primaryColor,
           unselectedLabelColor: Colors.grey,
           enableFeedback: true,
           labelStyle: TextStyle(
@@ -72,7 +72,7 @@ class _History_screenState extends State<History_screen>
           'History',
           style: TextStyle(
             fontSize: 22.sp,
-            color: Colors.grey,
+            color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -85,34 +85,52 @@ class _History_screenState extends State<History_screen>
                       Vibration.vibrate(duration: 100);
 
                       Alert(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.h, horizontal: 20.w),
                         closeIcon: SizedBox(),
                         context: context,
                         type: AlertType.none,
                         title: "Clear history",
-                        content: SizedBox(
-                            child: Text(
-                          "Are you sure you want to delete?",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
+                        style: AlertStyle(
+                          backgroundColor: Constants.creamColor,
+                          titleStyle: TextStyle(
+                            fontSize: 20.sp,
                           ),
-                        )),
+                        ),
+                        content: Column(
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                                child: Text(
+                              "Are you sure you want to delete?",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15.sp,
+                              ),
+                            )),
+                          ],
+                        ),
                         buttons: [
                           DialogButton(
                             child: Text(
                               "No",
                               style: TextStyle(
-                                  color: Colors.blue, fontSize: 20.sp),
+                                color: Constants.primaryColor,
+                                fontSize: 20.sp,
+                              ),
                             ),
                             onPressed: () => Navigator.pop(context),
-                            color: Colors.white,
+                            color: Constants.creamColor,
                           ),
                           DialogButton(
                             child: Text(
                               "Yes",
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 20.sp),
+                                color: Colors.white,
+                                fontSize: 20.sp,
+                              ),
                             ),
                             onPressed: () {
                               Provider.of<ScanData>(context, listen: false)
@@ -120,7 +138,7 @@ class _History_screenState extends State<History_screen>
 
                               Navigator.pop(context);
                             },
-                            color: Colors.blue,
+                            color: Constants.primaryColor,
                           )
                         ],
                       ).show();
@@ -133,28 +151,44 @@ class _History_screenState extends State<History_screen>
                       Vibration.vibrate(duration: 100);
 
                       Alert(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        closeIcon: const SizedBox(),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.h, horizontal: 20.w),
+                        closeIcon: SizedBox(),
                         context: context,
                         type: AlertType.none,
                         title: "Clear history",
-                        content: SizedBox(
-                            child: Text(
-                          "Are you sure you want to delete?",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
+                        style: AlertStyle(
+                          backgroundColor: Constants.creamColor,
+                          titleStyle: TextStyle(
+                            fontSize: 20.sp,
                           ),
-                        )),
+                        ),
+                        content: Column(
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                                child: Text(
+                              "Are you sure you want to delete?",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15.sp,
+                              ),
+                            )),
+                          ],
+                        ),
                         buttons: [
                           DialogButton(
                             child: Text(
                               "No",
                               style: TextStyle(
-                                  color: Colors.blue, fontSize: 20.sp),
+                                color: Constants.primaryColor,
+                                fontSize: 20.sp,
+                              ),
                             ),
                             onPressed: () => Navigator.pop(context),
-                            color: Colors.white,
+                            color: Constants.creamColor,
                           ),
                           DialogButton(
                             child: Text(
@@ -168,7 +202,7 @@ class _History_screenState extends State<History_screen>
 
                               Navigator.pop(context);
                             },
-                            color: Colors.blue,
+                            color: Constants.primaryColor,
                           )
                         ],
                       ).show();
@@ -177,8 +211,8 @@ class _History_screenState extends State<History_screen>
                 }
               },
               icon: Icon(
-                Icons.delete_rounded,
-                color: Colors.black54,
+                Icons.delete_sweep,
+                color: Colors.black,
               ))
         ],
       ),
@@ -210,10 +244,11 @@ class _History_screenState extends State<History_screen>
                           ],
                         ),
                       ),
-                      const Text(
+                      Text(
                         "No history",
                         style: TextStyle(
                           color: Colors.grey,
+                          fontSize: 18.sp,
                         ),
                       ),
                     ],
@@ -317,30 +352,63 @@ class _History_screenState extends State<History_screen>
                             },
                             child: Row(
                               children: <Widget>[
-                                Stack(alignment: Alignment.center, children: [
-                                  Container(
-                                    height: 40.h,
-                                    width: 40.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(10.r),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: 40.h,
+                                      width: 40.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius:
+                                            BorderRadius.circular(5.r),
+                                      ),
                                     ),
-                                  ),
-                                  his.formate == "url"
-                                      ? SvgPicture.asset(
-                                          "assets/website.svg",
-                                          height: 20.h,
-                                          width: 35.h,
-                                          fit: BoxFit.contain,
-                                        )
-                                      : SvgPicture.asset(
-                                          "assets/text1.svg",
-                                          height: 20.h,
-                                          width: 35.h,
-                                          color: Colors.grey,
-                                          fit: BoxFit.contain,
-                                        ),
-                                ]),
+                                    his.formate == "url"
+                                        ? SvgPicture.asset(
+                                            "assets/website.svg",
+                                            height: 20.h,
+                                            width: 35.h,
+                                            fit: BoxFit.contain,
+                                          )
+                                        : his.formate == "wifi"
+                                            ? SvgPicture.asset(
+                                                "assets/wifi.svg",
+                                                height: 20.h,
+                                                width: 35.h,
+                                                fit: BoxFit.contain,
+                                              )
+                                            : his.formate == "phone"
+                                                ? SvgPicture.asset(
+                                                    "assets/telephone.svg",
+                                                    height: 20.h,
+                                                    width: 35.h,
+                                                    fit: BoxFit.contain,
+                                                  )
+                                                : his.formate == "email"
+                                                    ? SvgPicture.asset(
+                                                        "assets/email.svg",
+                                                        height: 20.h,
+                                                        width: 35.h,
+                                                        fit: BoxFit.contain,
+                                                      )
+                                                    : his.formate ==
+                                                            "contactInfo"
+                                                        ? SvgPicture.asset(
+                                                            "assets/contacts.svg",
+                                                            height: 20.h,
+                                                            width: 35.h,
+                                                            fit: BoxFit.contain,
+                                                          )
+                                                        : SvgPicture.asset(
+                                                            "assets/text1.svg",
+                                                            height: 20.h,
+                                                            width: 35.h,
+                                                            color: Colors.grey,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                  ],
+                                ),
                                 SizedBox(
                                   width: 10.w,
                                 ),
@@ -389,7 +457,7 @@ class _History_screenState extends State<History_screen>
                                     },
                                     icon: Icon(
                                       Icons.keyboard_arrow_right,
-                                      color: Colors.blueAccent,
+                                      color: Constants.primaryColor,
                                       size: 40.h,
                                     ),
                                   ),
@@ -406,7 +474,7 @@ class _History_screenState extends State<History_screen>
                               },
                               icon: Icon(
                                 Icons.delete_rounded,
-                                color: Colors.blueAccent,
+                                color: Constants.primaryColor,
                                 size: 25.h,
                               ),
                             ),
@@ -481,9 +549,9 @@ class _History_screenState extends State<History_screen>
                                       height: 40.h,
                                       width: 40.h,
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade200,
+                                        color: Colors.grey.shade100,
                                         borderRadius:
-                                            BorderRadius.circular(10.r),
+                                            BorderRadius.circular(5.r),
                                       ),
                                     ),
                                     SvgPicture.asset(
@@ -520,13 +588,14 @@ class _History_screenState extends State<History_screen>
                                         MaterialPageRoute(
                                           builder: (context) => SaveQrCode(
                                             dataString: his.qrCodeValue,
+                                            formate: his.formate,
                                           ),
                                         ),
                                       );
                                     },
                                     icon: Icon(
                                       Icons.keyboard_arrow_right,
-                                      color: Colors.blueAccent,
+                                      color: Constants.primaryColor,
                                       size: 40.h,
                                     ),
                                   ),
@@ -543,7 +612,7 @@ class _History_screenState extends State<History_screen>
                               },
                               icon: Icon(
                                 Icons.delete_rounded,
-                                color: Colors.blueAccent,
+                                color: Constants.primaryColor,
                                 size: 25.h,
                               ),
                             ),

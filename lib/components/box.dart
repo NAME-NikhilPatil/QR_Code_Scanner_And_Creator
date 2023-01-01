@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../constants.dart';
+
 class Boxy extends StatelessWidget {
   const Boxy({
     super.key,
@@ -20,7 +22,10 @@ class Boxy extends StatelessWidget {
           height: 74.h,
           width: 74.h,
           decoration: BoxDecoration(
-              color: Colors.grey, borderRadius: BorderRadius.circular(15.r)),
+            color: Constants.creamColor,
+            borderRadius: BorderRadius.circular(10.r),
+            // boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -38,8 +43,8 @@ class Boxy extends StatelessWidget {
         ),
         Text(
           text,
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: Colors.grey, fontSize: 15.sp, fontWeight: FontWeight.w500,
 
             // fontWeight: FontWeight.w300,
           ),
