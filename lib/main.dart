@@ -4,12 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scan/Provider/scan_data.dart';
+import 'package:qr_code_scan/providers/scan_data.dart';
 import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/model/history.dart';
-import 'package:qr_code_scan/Provider/saved_setting.dart';
-import 'package:qr_code_scan/screens/first_time.dart';
-import 'package:qr_code_scan/screens/splash_screen.dart';
+import 'package:qr_code_scan/providers/saved_setting.dart';
+import 'package:qr_code_scan/other_screen/first_time.dart';
 import 'model/create.dart';
 
 void main() async {
@@ -41,17 +40,18 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 667),
       builder: (context, child) {
         return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => ScanData()),
-            ],
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Qr Code Scanner',
-              theme: ThemeData(
-                primaryColor: Constants.primaryColor,
-              ),
-              home: const FirstTime(),
-            ));
+          providers: [
+            ChangeNotifierProvider(create: (context) => ScanData()),
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Qr Code Scanner',
+            theme: ThemeData(
+              primaryColor: Constants.primaryColor,
+            ),
+            home: const FirstTime(),
+          ),
+        );
       },
     );
   }

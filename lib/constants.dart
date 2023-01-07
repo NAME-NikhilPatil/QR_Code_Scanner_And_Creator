@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Constants {
-  // static const
+ 
 
-  static Color primaryColor = Color(0xff00ABFF);
-  static Color backgroundColor = Color(0xffF9F9F9);
-  static Color creamColor = Color(0xffF7FBFF);
+  static Color primaryColor = const Color(0xff00ABFF);
+  static Color backgroundColor = const Color(0xffF9F9F9);
+  static Color creamColor = const Color(0xffF7FBFF);
 
   static InputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5.r),
@@ -26,7 +26,7 @@ class Constants {
   static TextStyle buttonText =
       TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold);
 
-  static TextStyle settingText = TextStyle(
+  static TextStyle settingText = const TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w400,
   );

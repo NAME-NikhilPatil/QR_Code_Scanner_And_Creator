@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:qr_code_scan/constants.dart';
-import 'package:qr_code_scan/screens/exit.dart';
-import 'package:qr_code_scan/screens/history_screen.dart';
-import 'package:qr_code_scan/screens/qr_code_scan..dart';
-import 'package:qr_code_scan/screens/settings.dart';
-
-import '../screens/create_qr_code.dart';
+import 'package:qr_code_scan/history_screen/history_screen.dart';
+import 'package:qr_code_scan/home_screen/qr_code_scan..dart';
+import 'package:qr_code_scan/setting_screen/settings.dart';
+import '../create_qr_code_screen/create_qr_code.dart';
 
 class MyNavigationBar extends StatefulWidget {
-  MyNavigationBar({
+  const MyNavigationBar({
     Key? key,
   }) : super(key: key);
 
@@ -28,16 +26,17 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _widgetOptions = <Widget>[
-      QrScanScreen(),
-      History_screen(),
-      CreateQrCode(),
-      Settings(),
+    List<Widget> widgetOptions = <Widget>[
+      const QrScanScreen(),
+      const History_screen(),
+      const CreateQrCode(),
+      const Settings(),
     ];
+    
 
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(selectedIndex),
+        child: widgetOptions.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -62,11 +61,9 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         ],
         enableFeedback: true,
         currentIndex: selectedIndex,
-
-        // unselectedItemColor: Colors.grey[500],
         unselectedItemColor: Colors.grey.shade500,
         selectedItemColor: Constants.primaryColor,
-        // backgroundColor: Constants.creamColor,
+      
         backgroundColor: Colors.white,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
