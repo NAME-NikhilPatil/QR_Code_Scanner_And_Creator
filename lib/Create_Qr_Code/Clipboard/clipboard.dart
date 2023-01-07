@@ -81,7 +81,7 @@ class _ClipboarState extends State<Clipboar> {
                     height: 30.h,
                   ),
                   ElevatedButton(
-                    style: Constants.buttonStyle(Colors.blue),
+                    style: Constants.buttonStyle(Constants.primaryColor),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         deviceInfo();

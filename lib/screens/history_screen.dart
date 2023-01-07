@@ -7,6 +7,7 @@ import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/sava_qr_code.dart';
 import 'package:qr_code_scan/screens/detail_history_screen.dart';
+import 'package:qr_code_scan/screens/exit.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:vibration/vibration.dart';
 
@@ -100,7 +101,7 @@ class _History_screenState extends State<History_screen>
                         content: Column(
                           children: [
                             SizedBox(
-                              height: 10,
+                              height: 10.h,
                             ),
                             SizedBox(
                                 child: Text(
@@ -298,6 +299,12 @@ class _History_screenState extends State<History_screen>
   }
 
   Widget ListviewHistory(context) {
+    TextStyle _style = TextStyle(
+      // decoration: TextDecoration.underline,
+
+      color: Colors.black,
+      fontSize: 21.sp,
+    );
     return ListView.builder(
         itemCount:
             Provider.of<ScanData>(context, listen: false).historyList?.length,
@@ -313,7 +320,7 @@ class _History_screenState extends State<History_screen>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HistoryScreenDetail(
+                        builder: (context) => HistoryScreenDetails(
                           barcode: his.qrCodeValue,
                           formate: his.formate,
                         ),
@@ -343,7 +350,7 @@ class _History_screenState extends State<History_screen>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HistoryScreenDetail(
+                                  builder: (context) => HistoryScreenDetails(
                                     formate: his.formate,
                                     barcode: his.qrCodeValue,
                                   ),
@@ -418,7 +425,7 @@ class _History_screenState extends State<History_screen>
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            HistoryScreenDetail(
+                                            HistoryScreenDetails(
                                           barcode: his.qrCodeValue,
                                           formate: his.formate,
                                         ),
@@ -427,15 +434,101 @@ class _History_screenState extends State<History_screen>
                                   },
                                   child: SizedBox(
                                     width: 190.w,
-                                    child: Text(
-                                      his.qrCodeValue!,
+                                    child: RichText(
                                       maxLines: 1,
-                                      softWrap: false,
                                       overflow: TextOverflow.fade,
-                                      style: TextStyle(
-                                        fontSize: 20.0.sp,
-                                        color: Colors.black,
-                                      ),
+                                      softWrap: false,
+                                      // his.qrCodeValue!.toString()
+                                      text: his.formate == 'url'
+                                          ? TextSpan(
+                                              style: _style,
+                                              text: his.qrCodeValue['url'],
+                                            )
+                                          : his.formate == 'phone'
+                                              ? TextSpan(
+                                                  style: _style,
+                                                  text:
+                                                      his.qrCodeValue['number'],
+                                                )
+                                              : his.formate == 'email'
+                                                  ? TextSpan(
+                                                      style: _style,
+                                                      text: his.qrCodeValue[
+                                                          'address'],
+                                                    )
+                                                  : his.formate == 'sms'
+                                                      ? TextSpan(
+                                                          style: _style,
+                                                          text: his.qrCodeValue[
+                                                              'message'],
+                                                        )
+                                                      : his.formate == 'wifi'
+                                                          ? TextSpan(
+                                                              style: _style,
+                                                              children: [
+                                                                TextSpan(
+                                                                  text:
+                                                                      "Network name(ssid): ${his.qrCodeValue['ssid']}\n",
+                                                                ),
+                                                                TextSpan(
+                                                                  text:
+                                                                      "EncryptionType: ${his.qrCodeValue['encryptionType']}\n",
+                                                                ),
+                                                                TextSpan(
+                                                                  text:
+                                                                      "Password: ${his.qrCodeValue['password']}",
+                                                                ),
+                                                              ],
+                                                            )
+                                                          : his.formate ==
+                                                                  'calendarEvent'
+                                                              ? TextSpan(
+                                                                  style: _style,
+                                                                  children: [
+                                                                    TextSpan(
+                                                                      text:
+                                                                          "Start: ${his.qrCodeValue['start']}\n",
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text:
+                                                                          "End: ${his.qrCodeValue['end']}\n",
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text:
+                                                                          "Location: ${his.qrCodeValue['location'] ?? "No location"}",
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text:
+                                                                          "Description: ${his.qrCodeValue['description'] ?? "No description"}",
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              : his.formate ==
+                                                                      'geoPoint'
+                                                                  ? TextSpan(
+                                                                      style:
+                                                                          _style,
+                                                                      children: [
+                                                                        TextSpan(
+                                                                          text:
+                                                                              "Latitude: ${his.qrCodeValue['latitude']}\n",
+                                                                        ),
+                                                                        TextSpan(
+                                                                          text:
+                                                                              "Longitude: ${his.qrCodeValue['longitude']}\n",
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  : TextSpan(
+                                                                      style:
+                                                                          _style,
+                                                                      text: his
+                                                                              .qrCodeValue[
+                                                                          'text'],
+                                                                    ),
+                                      // maxLines: 1,
+                                      // softWrap: false,
+                                      // overflow: TextOverflow.fade,
                                     ),
                                   ),
                                 ),
@@ -448,7 +541,7 @@ class _History_screenState extends State<History_screen>
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              HistoryScreenDetail(
+                                              HistoryScreenDetails(
                                             formate: his.formate,
                                             barcode: his.qrCodeValue,
                                           ),

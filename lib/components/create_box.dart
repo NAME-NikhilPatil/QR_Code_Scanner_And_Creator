@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../constants.dart';
+
 class CreateBox extends StatelessWidget {
   const CreateBox({
     super.key,
@@ -20,7 +22,7 @@ class CreateBox extends StatelessWidget {
           height: 70.w,
           width: 70.w,
           decoration: BoxDecoration(
-            color: Colors.white70,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
             // boxShadow: [
             //   BoxShadow(

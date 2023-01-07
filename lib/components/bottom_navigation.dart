@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:qr_code_scan/constants.dart';
+import 'package:qr_code_scan/screens/exit.dart';
 import 'package:qr_code_scan/screens/history_screen.dart';
 import 'package:qr_code_scan/screens/qr_code_scan..dart';
 import 'package:qr_code_scan/screens/settings.dart';
@@ -61,6 +62,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         ],
         enableFeedback: true,
         currentIndex: selectedIndex,
+
         // unselectedItemColor: Colors.grey[500],
         unselectedItemColor: Colors.grey.shade500,
         selectedItemColor: Constants.primaryColor,

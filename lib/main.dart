@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +23,12 @@ void main() async {
   await Hive.openBox<CreateQr>('create');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
+  // runApp(DevicePreview(
+  //     enabled: true,
+  //     tools: [
+  //       ...DevicePreview.defaultTools,
+  //     ],
+  //     builder: (context) => MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -34,18 +41,17 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 667),
       builder: (context, child) {
         return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => ScanData()),
-          ],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Qr Code Scanner',
-            theme: ThemeData(
-              primaryColor: Constants.primaryColor,
-            ),
-            home: const FirstTime(),
-          ),
-        );
+            providers: [
+              ChangeNotifierProvider(create: (context) => ScanData()),
+            ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Qr Code Scanner',
+              theme: ThemeData(
+                primaryColor: Constants.primaryColor,
+              ),
+              home: const FirstTime(),
+            ));
       },
     );
   }

@@ -1,48 +1,64 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-Future<bool> showExitPopup(context) async{
-  return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            height: 90,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Do you want to exit?"),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          print('yes selected');
-                          exit(0);
-                        },
-                        child: Text("Yes"),
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.red.shade800),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Expanded(
-                        child: ElevatedButton(
-                      onPressed: () {
-                        print('no selected');
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("No", style: TextStyle(color: Colors.black)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
-                    ))
-                  ],
-                )
-              ],
-            ),
+import '../constants.dart';
+
+showExitPopup(context) async {
+  return await Alert(
+    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+    closeIcon: SizedBox(),
+
+    context: context,
+    type: AlertType.none,
+    // title: "Do you want to exit?",
+    style: AlertStyle(
+      backgroundColor: Colors.white,
+      titleStyle: TextStyle(
+        fontSize: 20.sp,
+      ),
+    ),
+    content: Column(
+      children: [
+        SizedBox(
+          height: 10.h,
+        ),
+        SizedBox(
+            child: Text(
+          "Do you want to exit?",
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 18.sp,
           ),
-        );
-      });
-} 
+        )),
+      ],
+    ),
+    buttons: [
+      DialogButton(
+        child: Text(
+          "No",
+          style: TextStyle(
+            color: Constants.primaryColor,
+            fontSize: 20.sp,
+          ),
+        ),
+        onPressed: () => Navigator.pop(context),
+        color: Constants.creamColor,
+      ),
+      DialogButton(
+        child: Text(
+          "Yes",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.sp,
+          ),
+        ),
+        onPressed: () {
+          exit(0);
+        },
+        color: Constants.primaryColor,
+      )
+    ],
+  ).show();
+}

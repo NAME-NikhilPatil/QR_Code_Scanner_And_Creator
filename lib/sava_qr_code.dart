@@ -164,7 +164,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: Colors.white,
                   content: Text(
-                    "Thanks for your feedback",
+                    "Thanks for your feedback 😊",
                   ),
                   behavior: SnackBarBehavior.floating,
                 ));
@@ -182,8 +182,9 @@ class _SaveQrCodeState extends State<SaveQrCode> {
           // rateMyApp.showRateDialog(context);
           rateMyApp.showStarRateDialog(
             context,
-            title: "Rate This App",
-            message: "Do you like this app?Please leave a rating",
+            title: "Rate This App 😊",
+            message:
+                "Your feedback helps us to improve the app and provide a better experience for all of our users",
             starRatingOptions: StarRatingOptions(initialRating: 4),
             actionsBuilder: (BuildContext context, double? stars) {
               return stars == null
@@ -194,10 +195,10 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         }
       },
       builder: (context) => Scaffold(
-        backgroundColor: Constants.creamColor,
+        backgroundColor: Constants.primaryColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
+          foregroundColor: Colors.white,
           elevation: 0,
         ),
         body: SingleChildScrollView(
@@ -248,7 +249,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                           style: TextStyle(
                             // decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
+                            fontSize: 18.sp,
                           ),
                         ),
                         SizedBox(

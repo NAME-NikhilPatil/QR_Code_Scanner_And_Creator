@@ -37,7 +37,7 @@ class _SettingsState extends State<Settings> {
     super.initState();
 
     isSwitched = SaveSetting.getSwitch() ?? false;
-    isVibrate = SaveSetting.getVibrate() ?? false;
+    isVibrate = SaveSetting.getVibrate() ?? true;
     search = SaveSetting.getSearch() ?? "Google";
   }
 
@@ -113,7 +113,7 @@ class _SettingsState extends State<Settings> {
                         trailing: Switch(
                           activeColor: Constants.primaryColor,
                           // activeTrackColor: Colors.grey.shade300,
-                          inactiveTrackColor: Colors.grey.shade400,
+                          // inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) {
                             if (value == true) {
                               Provider.of<ScanData>(context, listen: false)
@@ -157,7 +157,7 @@ class _SettingsState extends State<Settings> {
                         trailing: Switch(
                           activeColor: Constants.primaryColor,
                           // activeTrackColor: Colors.grey.shade300,
-                          inactiveTrackColor: Colors.grey.shade400,
+                          // inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) {
                             if (value == true) {
                               Provider.of<ScanData>(context, listen: false)
@@ -225,9 +225,11 @@ class _SettingsState extends State<Settings> {
                           itemBuilder: (BuildContext context) {
                             return [
                               PopupMenuItem(
-                                child: Text(searchEngine[0]),
+                                child: Text(
+                                  searchEngine[0],
+                                ),
                                 textStyle: TextStyle(
-                                  color: Colors.black,
+                                  color: Constants.primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 value: searchEngine[0],
@@ -235,7 +237,7 @@ class _SettingsState extends State<Settings> {
                               PopupMenuItem(
                                 child: Text(searchEngine[1]),
                                 textStyle: TextStyle(
-                                  color: Colors.black,
+                                  color: Constants.primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 value: searchEngine[1],
@@ -243,7 +245,7 @@ class _SettingsState extends State<Settings> {
                               PopupMenuItem(
                                 child: Text(searchEngine[2]),
                                 textStyle: TextStyle(
-                                  color: Colors.black,
+                                  color: Constants.primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 value: searchEngine[2],
@@ -251,7 +253,7 @@ class _SettingsState extends State<Settings> {
                               PopupMenuItem(
                                 child: Text(searchEngine[3]),
                                 textStyle: TextStyle(
-                                  color: Colors.black,
+                                  color: Constants.primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 value: searchEngine[3],
@@ -259,7 +261,7 @@ class _SettingsState extends State<Settings> {
                               PopupMenuItem(
                                 child: Text(searchEngine[4]),
                                 textStyle: TextStyle(
-                                  color: Colors.black,
+                                  color: Constants.primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 value: searchEngine[4],
@@ -340,7 +342,7 @@ class _SettingsState extends State<Settings> {
                                             backgroundColor:
                                                 Constants.primaryColor,
                                             content: Text(
-                                              "Thanks for your feedback",
+                                              "Thank you for your feedback 😊",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
@@ -362,9 +364,9 @@ class _SettingsState extends State<Settings> {
                                   setState(() {
                                     rateMyApp!.showStarRateDialog(
                                       context,
-                                      title: "Rate This App",
+                                      title: "Rate This App 😊",
                                       message:
-                                          "Do you like this app?, Please leave a rating",
+                                          "Your feedback helps us to improve the app and provide a better experience for all of our users",
                                       starRatingOptions:
                                           StarRatingOptions(initialRating: 4),
                                       actionsBuilder: (BuildContext context,
@@ -388,7 +390,7 @@ class _SettingsState extends State<Settings> {
                                         borderRadius:
                                             BorderRadius.circular(7.r)),
                                     child: Icon(
-                                      Icons.rate_review,
+                                      Icons.rate_review_rounded,
                                       color: Colors.white,
                                       size: 18.h,
                                     )),

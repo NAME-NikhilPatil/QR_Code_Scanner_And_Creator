@@ -30,14 +30,34 @@ class _MyCardState extends State<MyCard> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> deviceInfo() async {
-    String Name = "Name:${controller.text}";
-    String email = "Phone no.: ${controller1.text}";
-    String address = "Address:${controller3.text}";
-    String birthdate = "BirthDate:$birthDateInString";
-    String org = "Org:${controller4.text}";
-    String note = "Note:${controller5.text}";
-    _dataString = "$Name,\n$email,\n$address,\n$birthDate,\n$org,\n$note";
+    String Name = "${controller.text}";
+    String phonenumber = "${controller1.text}";
+    String email = "${controller2.text}";
+    String address = "${controller3.text}";
+    String birthdate = "$birthDateInString";
+    String org = "${controller4.text}";
+    String note = "${controller5.text}";
+
+    final vCard = 'BEGIN:VCARD\n'
+        'FN:$Name\n'
+        'EMAIL;TYPE=INTERNET;TYPE=HOME:$email\n'
+        'TEL;TYPE=CELL:$phonenumber\n'
+        'ADR;TYPE=HOME:$address\n'
+        'BDAY:$birthdate\n'
+        'ORG:$org\n'
+        'NOTE:$note\n'
+        'END:VCARD';
+    _dataString = vCard;
+    // _dataString =
+    //     "$Name,\n$phonenumber,\n$email,\n$address,\n$birthdate,\n$org,\n$note";
   }
+
+  // final vCardLines = widget.barcode.toString().split('\n');
+  // final importantLines = vCardLines
+  //     .where((line) =>
+  // !line.startsWith('BEGIN:VCARD') && !line.startsWith('END:VCARD'))
+  //     .toList();
+  // final importantData = importantLines.join('\n');
 
   String? birthDateInString;
   DateTime? birthDate;

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/screens/result.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:vibration/vibration.dart';
 import '../Provider/scan_data.dart';
 import '../components/bottom_navigation.dart';
@@ -43,7 +44,9 @@ class _QrScanScreenState extends State<QrScanScreen>
 
     isgranted = SaveSetting.getgranted() ?? false;
     historyBox = Hive.box('history');
-    controller = MobileScannerController();
+    controller = MobileScannerController(
+      torchEnabled: false,
+    );
     isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
@@ -66,12 +69,18 @@ class _QrScanScreenState extends State<QrScanScreen>
   }
 
   bool isEnabled = true;
+  bool turnoff = false;
   // Future<void> restart() async {
   //   // await controller.stop();
   //   await controller.start();
   // }
 
-  onDetect(String barcode, MobileScannerArguments? _, String formate) {
+  onDetect(
+      Map<String, String> barcode, MobileScannerArguments? _, String formate) {
+    // turnoff = true;
+    if (turnoff == true) {
+      controller.toggleTorch();
+    }
     isEnabled = false;
     isVibrate == true ? Vibration.vibrate(duration: 100) : null;
 
@@ -88,7 +97,36 @@ class _QrScanScreenState extends State<QrScanScreen>
       );
 
       historyDb.addItem(
-        History(barcode.toString(), formate),
+        History(
+            formate == 'url'
+                ? {'url': barcode['url']}
+                : formate == 'phone'
+                    ? {'number': barcode['number']}
+                    : formate == 'email'
+                        ? {'address': barcode['address']}
+                        // : formate == 'sms'
+                        //     ? {'sms': barcode['message']!}
+                        : formate == 'wifi'
+                            ? {
+                                'encryptionType': barcode['encryptionType'],
+                                'ssid': barcode['ssid'],
+                                'password': barcode['password']
+                              }
+                            : formate == 'calendarEvent'
+                                ? {
+                                    'start': barcode["start"],
+                                    'end': barcode["end"],
+                                    'location': barcode["location"],
+                                    'organizer': barcode["organizer"],
+                                    'summary': barcode["summary"]!
+                                  }
+                                : formate == 'geoPoint'
+                                    ? {
+                                        'latitude': barcode["latitude"],
+                                        'longitude': barcode["longitude"],
+                                      }
+                                    : {'text': barcode["text"]},
+            formate),
       );
     });
   }
@@ -103,239 +141,431 @@ class _QrScanScreenState extends State<QrScanScreen>
       height: 250.h,
     );
 
-    return RateMyAppBuilder(
-      rateMyApp: RateMyApp(
-        googlePlayIdentifier: playStoreId,
-        minDays: 0,
-        minLaunches: 4,
-        remindLaunches: 4,
-        remindDays: 1,
+    return UpgradeAlert(
+      upgrader: Upgrader(
+        shouldPopScope:() =>  true,
+        durationUntilAlertAgain: const Duration(days: 1),
+        dialogStyle: UpgradeDialogStyle.material,
+        canDismissDialog: true,
       ),
-      onInitialized: (context, rateMyApp) {
-        setState(() {
-          rateMyApp = rateMyApp;
-        });
-        Widget buildOkButton(double star) {
-          return TextButton(
-              onPressed: () async {
-                const event = RateMyAppEventType.rateButtonPressed;
-                await rateMyApp.callEvent(event);
-                final launchAppStore = star >= 4;
-                if (launchAppStore) {
-                  rateMyApp.launchStore();
-                }
+      child: RateMyAppBuilder(
+        rateMyApp: RateMyApp(
+          googlePlayIdentifier: playStoreId,
+          minDays: 0,
+          minLaunches: 4,
+          remindLaunches: 4,
+          remindDays: 1,
+        ),
+        onInitialized: (context, rateMyApp) {
+          setState(() {
+            rateMyApp = rateMyApp;
+          });
+          Widget buildOkButton(double star) {
+            return TextButton(
+                onPressed: () async {
+                  const event = RateMyAppEventType.rateButtonPressed;
+                  await rateMyApp.callEvent(event);
+                  final launchAppStore = star >= 4;
+                  if (launchAppStore) {
+                    rateMyApp.launchStore();
+                  }
 
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.white,
-                  content: Text(
-                    "Thanks for your feedback",
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Colors.white,
+                    content: Text(
+                      "Thanks for your feedback🥰",
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ));
 
-                Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text("OK"));
+          }
+
+          Widget buildCancelButton() {
+            return RateMyAppNoButton(rateMyApp, text: "CANCEL");
+          }
+
+          if (rateMyApp.shouldOpenDialog) {
+            // rateMyApp.showRateDialog(context);
+            rateMyApp.showStarRateDialog(
+              context,
+              title: "Rate This App 😊",
+              message:
+                  "Your feedback helps us to improve the app and provide a better experience for all of our users",
+              starRatingOptions: StarRatingOptions(initialRating: 4),
+              actionsBuilder: (BuildContext context, double? stars) {
+                return stars == null
+                    ? [buildCancelButton()]
+                    : [buildOkButton(stars), buildCancelButton()];
               },
-              child: Text("OK"));
-        }
+            );
+          }
+        },
+        builder: (context) => WillPopScope(
+          onWillPop: () => showExitPopup(context),
+          child: Scaffold(
+            backgroundColor: Colors.black,
+            body: Builder(
+              builder: (context) {
+                return Stack(fit: StackFit.expand, children: [
+                  MobileScanner(
+                    allowDuplicates: false,
+                    fit: BoxFit.cover,
+                    scanWindow: scanWindow,
+                    controller: controller,
+                    onDetect: (barcode, args) => isEnabled
+                        ? onDetect(
+                            barcode.type.name == 'url'
+                                ? {"url": barcode.url!.url.toString()}
+                                : barcode.type.name == 'phone'
+                                    ? {
+                                        "number":
+                                            barcode.phone!.number.toString()
+                                      }
+                                    : barcode.type.name == 'email'
+                                        ? {
+                                            "address": barcode.email!.address
+                                                .toString()
+                                          }
+                                        // : barcode.type.name == 'sms'
+                                        //     ? {"sms": barcode.sms!.toString()}
+                                        : barcode.type.name == 'wifi'
+                                            ? {
+                                                "encryptionType": barcode
+                                                    .wifi!.encryptionType.name
+                                                    .toString(),
+                                                "ssid": barcode.wifi!.ssid
+                                                    .toString(),
+                                                "password": barcode
+                                                    .wifi!.password
+                                                    .toString(),
+                                              }
+                                            // : barcode.type.name ==
+                                            //         'contactInfo'
+                                            //     ? {
+                                            //         "addresses": barcode
+                                            //             .contactInfo!
+                                            //             .addresses
+                                            //             .toString(),
+                                            //         "emails": barcode
+                                            //             .contactInfo!.emails
+                                            //             .toString(),
+                                            //         "name": barcode
+                                            //             .contactInfo!.name
+                                            //             .toString(),
+                                            //         "organization": barcode
+                                            //             .contactInfo!
+                                            //             .organization
+                                            //             .toString(),
+                                            //         "phones": barcode
+                                            //             .contactInfo!.phones
+                                            //             .toString(),
+                                            //         "title": barcode
+                                            //             .contactInfo!.title
+                                            //             .toString(),
+                                            //         "urls": barcode
+                                            //             .contactInfo!.urls
+                                            //             .toString(),
+                                            //       }
+                                            : barcode.type.name ==
+                                                    'calendarEvent'
+                                                ? {
+                                                    "start": barcode
+                                                        .calendarEvent!.start
+                                                        .toString(),
+                                                    "end": barcode
+                                                        .calendarEvent!.end
+                                                        .toString(),
+                                                    "location": barcode
+                                                        .calendarEvent!.location
+                                                        .toString(),
+                                                    "organizer": barcode
+                                                        .calendarEvent!
+                                                        .organizer
+                                                        .toString(),
+                                                    "summary": barcode
+                                                        .calendarEvent!.summary
+                                                        .toString(),
+                                                  }
+                                                : barcode.type.name ==
+                                                        'geoPoint'
+                                                    ? {
+                                                        "latitude": barcode
+                                                            .geoPoint!.latitude
+                                                            .toString(),
+                                                        "longitude": barcode
+                                                            .geoPoint!.longitude
+                                                            .toString(),
+                                                      }
+                                                    // : barcode.type.name ==
+                                                    //         'driverLicense'
+                                                    //     ? {
+                                                    //         "addressCity": barcode
+                                                    //             .driverLicense!
+                                                    //             .addressCity
+                                                    //             .toString(),
+                                                    //         "addressState": barcode
+                                                    //             .driverLicense!
+                                                    //             .addressState
+                                                    //             .toString(),
+                                                    //         "addressStreet": barcode
+                                                    //             .driverLicense!
+                                                    //             .addressStreet
+                                                    //             .toString(),
+                                                    //         "addressZip": barcode
+                                                    //             .driverLicense!
+                                                    //             .addressZip
+                                                    //             .toString(),
+                                                    //         "birthDate": barcode
+                                                    //             .driverLicense!
+                                                    //             .birthDate
+                                                    //             .toString(),
+                                                    //         "documentType": barcode
+                                                    //             .driverLicense!
+                                                    //             .documentType
+                                                    //             .toString(),
+                                                    //         "expiryDate": barcode
+                                                    //             .driverLicense!
+                                                    //             .expiryDate
+                                                    //             .toString(),
+                                                    //         "firstName": barcode
+                                                    //             .driverLicense!
+                                                    //             .firstName
+                                                    //             .toString(),
+                                                    //         "gender": barcode
+                                                    //             .driverLicense!
+                                                    //             .gender
+                                                    //             .toString(),
+                                                    //         "issueDate": barcode
+                                                    //             .driverLicense!
+                                                    //             .issueDate
+                                                    //             .toString(),
+                                                    //         "issuingCountry": barcode
+                                                    //             .driverLicense!
+                                                    //             .issuingCountry
+                                                    //             .toString(),
+                                                    //         "lastName": barcode
+                                                    //             .driverLicense!
+                                                    //             .lastName
+                                                    //             .toString(),
+                                                    //         "licenseNumber": barcode
+                                                    //             .driverLicense!
+                                                    //             .licenseNumber
+                                                    //             .toString(),
+                                                    //         "middleName": barcode
+                                                    //             .driverLicense!
+                                                    //             .middleName
+                                                    //             .toString(),
+                                                    //       }
+                                                    : {
+                                                        "text": barcode.rawValue
+                                                            .toString()
+                                                      }
 
-        Widget buildCancelButton() {
-          return RateMyAppNoButton(rateMyApp, text: "CANCEL");
-        }
+                            // {
+                            //    barcode.type.name == 'url'?
+                            //   "url":barcode.type.name=='phone'?"number"
+                            //   :barcode.type.name=='email'?"address":
+                            //   barcode.type.name=='sms'?"message":
+                            //   barcode.type.name=='wifi'?{"encryptionType","ssid","password"}:
+                            //   :
+                            //    barcode.type.name == 'url'?
+                            //   barcode.url!.url.toString():
+                            //   barcode.type.name=='phone'?
+                            //   barcode.phone!.number.toString():
+                            //   barcode.type.name=='email'?
+                            //   barcode.email!.address.toString():
+                            //   barcode.type.name=='sms'?
+                            //   barcode.sms!.message.toString():
+                            //   },
 
-        if (rateMyApp.shouldOpenDialog) {
-          // rateMyApp.showRateDialog(context);
-          rateMyApp.showStarRateDialog(
-            context,
-            title: "Rate This App",
-            message: "Do you like this app?Please leave a rating",
-            starRatingOptions: StarRatingOptions(initialRating: 4),
-            actionsBuilder: (BuildContext context, double? stars) {
-              return stars == null
-                  ? [buildCancelButton()]
-                  : [buildOkButton(stars), buildCancelButton()];
-            },
-          );
-        }
-      },
-      builder: (context) => WillPopScope(
-        onWillPop: () => showExitPopup(context),
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: Builder(
-            builder: (context) {
-              return Stack(fit: StackFit.expand, children: [
-                MobileScanner(
-                  allowDuplicates: false,
-                  fit: BoxFit.cover,
-                  scanWindow: scanWindow,
-                  controller: controller,
-                  onDetect: (barcode, args) => isEnabled
-                      ? onDetect(barcode.rawValue.toString(), args,
-                          barcode.type.name.toString())
-                      : null,
-                ),
-                Padding(
-                  padding: EdgeInsets.zero, //widget.overlayMargin,
-                  child: Container(
-                    decoration: ShapeDecoration(
-                      shape: QrScannerOverlayShape(
-                        borderRadius: 0.r,
-                        borderColor: Constants.creamColor,
-                        borderLength: 15.w,
-                        borderWidth: 9.w,
-                        cutOutHeight: 0.7.sw,
-                        cutOutWidth: 0.7.sw,
+                            // : barcode.type.name == 'phone'
+                            //     ? barcode.phone!.number.toString()
+                            //     : barcode.type.name == 'sms'
+                            //         ? barcode.sms!.message.toString()
+                            //         : barcode.type.name == 'email'
+                            //             ? barcode.email!.address.toString()
+                            //             : barcode.rawValue.toString(),
+                            ,
+                            args,
+                            barcode.type.name.toString())
+                        : null,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.zero, //widget.overlayMargin,
+                    child: Container(
+                      decoration: ShapeDecoration(
+                        shape: QrScannerOverlayShape(
+                          borderRadius: 0.r,
+                          borderColor: Constants.creamColor,
+                          borderLength: 15.w,
+                          borderWidth: 9.w,
+                          cutOutHeight: 0.7.sw,
+                          cutOutWidth: 0.7.sw,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 0.1.sh,
-                    ),
-                    Text(
-                      "QRSCANNER",
-                      style: TextStyle(
-                        color: Constants.creamColor,
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 0.1.sh,
                       ),
-                    ),
-                    SizedBox(
-                      height: 0.1.sh,
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.w, vertical: 5.w),
-                          margin: EdgeInsets.symmetric(horizontal: 10.w),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Column(
-                            children: [
-                              IconButton(
-                                  color: Constants.creamColor,
-                                  icon: ValueListenableBuilder(
-                                    valueListenable: controller.torchState,
-                                    builder: (context, state, child) {
-                                      if (state == null) {
-                                        return Icon(
-                                          MdiIcons.flashlight,
-                                          color: Constants.creamColor,
-                                        );
-                                      }
-                                      switch (state as TorchState) {
-                                        case TorchState.off:
+                      Text(
+                        "QRSCANNER",
+                        style: TextStyle(
+                          color: Constants.creamColor,
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 0.1.sh,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 5.w),
+                            margin: EdgeInsets.symmetric(horizontal: 10.w),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Column(
+                              children: [
+                                IconButton(
+                                    color: Constants.creamColor,
+                                    icon: ValueListenableBuilder(
+                                      valueListenable: controller.torchState,
+                                      builder: (context, state, child) {
+                                        if (state == null) {
                                           return Icon(
                                             MdiIcons.flashlight,
                                             color: Constants.creamColor,
                                           );
-                                        case TorchState.on:
-                                          return Icon(
-                                            Icons.flashlight_on,
-                                            color: Colors.yellow,
-                                          );
-                                      }
-                                    },
-                                  ),
-                                  iconSize: 30.0,
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () async {
-                                    controller.toggleTorch();
-                                    isVibrate == true
-                                        ? Vibration.vibrate(duration: 100)
-                                        : null;
-                                  }),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.w, vertical: 5.w),
-                          margin: EdgeInsets.symmetric(horizontal: 10.w),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Column(
-                            children: [
-                              IconButton(
-                                color: Constants.creamColor,
-                                icon: const Icon(Icons.image),
-                                iconSize: 25.0,
-                                onPressed: () async {
-                                  isVibrate == true
-                                      ? Vibration.vibrate(duration: 100)
-                                      : null;
+                                        }
 
-                                  final ImagePicker picker = ImagePicker();
-                                  // Pick an image
-                                  final XFile? image = await picker.pickImage(
-                                    source: ImageSource.gallery,
-                                  );
-                                  if (image != null) {
-                                    if (await controller
-                                        .analyzeImage(image.path)) {
-                                      if (!mounted) return;
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          behavior: SnackBarBehavior.floating,
-                                          content: Text(
-                                            'Barcode found',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          backgroundColor:
-                                              Constants.primaryColor,
-                                        ),
-                                      );
-                                    } else {
-                                      if (!mounted) return;
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          behavior: SnackBarBehavior.floating,
-                                          content: Text(
-                                            'No barcode found!',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                },
-                              ),
-                            ],
+                                        switch (state as TorchState) {
+                                          case TorchState.off:
+                                            return Icon(
+                                              MdiIcons.flashlight,
+                                              color: Constants.creamColor,
+                                            );
+                                          case TorchState.on:
+                                            return Icon(
+                                              Icons.flashlight_on,
+                                              color: Colors.yellow,
+                                            );
+                                        }
+                                      },
+                                    ),
+                                    iconSize: 30.0,
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () async {
+                                      turnoff = true;
+                                      controller.toggleTorch();
+
+                                      // if (turnoff == true) {
+                                      //   setState(() {
+                                      //     controller.toggleTorch();
+                                      //     controller.torchState.dispose();
+                                      //   });
+                                      // }
+
+                                      // isVibrate == true
+                                      //     ? Vibration.vibrate(duration: 100)
+                                      //     : null;
+                                    }),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 0.1.sh,
-                    ),
-                  ],
-                ),
-              ]);
-            },
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 5.w),
+                            margin: EdgeInsets.symmetric(horizontal: 10.w),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Column(
+                              children: [
+                                IconButton(
+                                  color: Constants.creamColor,
+                                  icon: const Icon(Icons.image),
+                                  iconSize: 25.0,
+                                  onPressed: () async {
+                                    // isVibrate == true
+                                    //     ? Vibration.vibrate(duration: 100)
+                                    //     : null;
+
+                                    final ImagePicker picker = ImagePicker();
+                                    // Pick an image
+                                    final XFile? image = await picker.pickImage(
+                                      source: ImageSource.gallery,
+                                    );
+                                    if (image != null) {
+                                      if (await controller
+                                          .analyzeImage(image.path)) {
+                                        if (!mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(
+                                              'Barcode found',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                Constants.primaryColor,
+                                          ),
+                                        );
+                                      } else {
+                                        if (!mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(
+                                              'No barcode found!',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 0.1.sh,
+                      ),
+                    ],
+                  ),
+                ]);
+              },
+            ),
           ),
         ),
       ),

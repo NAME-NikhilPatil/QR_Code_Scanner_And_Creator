@@ -17,7 +17,7 @@ class HistoryAdapter extends TypeAdapter<History> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return History(
-      fields[0] as String,
+      fields[0] as Map<dynamic,dynamic> ,
       fields[1] as String,
     );
   }

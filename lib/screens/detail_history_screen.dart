@@ -3,26 +3,29 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
+import 'package:qr_code_scan/constants.dart';
+import 'package:qr_code_scan/screens/exit.dart';
+import 'package:qr_code_scan/screens/feedback_screen.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../constants.dart';
+import '../components/bottom_navigation.dart';
 import '../Provider/saved_setting.dart';
-import 'feedback_screen.dart';
 
-class HistoryScreenDetail extends StatefulWidget {
-  HistoryScreenDetail({Key? key, required this.barcode, this.formate})
+class HistoryScreenDetails extends StatefulWidget {
+  HistoryScreenDetails({Key? key, required this.barcode, this.formate})
       : super(key: key);
-  String? barcode;
+  Map<dynamic, dynamic> barcode;
   String? formate;
   @override
-  State<HistoryScreenDetail> createState() => _HistoryScreenDetailState();
+  State<HistoryScreenDetails> createState() => _HistoryScreenDetailsState();
 }
 
-class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
+class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
   bool click = false;
 
   @override
@@ -35,6 +38,12 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
     click == true ? updateButton() : null;
   }
 
+  TextStyle _style = TextStyle(
+    // decoration: TextDecoration.underline,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 21.sp,
+  );
   done() {
     Timer.periodic(const Duration(seconds: 7), (Timer t) {
       setState(() {
@@ -87,7 +96,7 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: Colors.white,
                   content: Text(
-                    "Thanks for your feedback",
+                    "Thanks for your feedback 😊",
                   ),
                   behavior: SnackBarBehavior.floating,
                 ));
@@ -105,8 +114,9 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
           // rateMyApp.showRateDialog(context);
           rateMyApp.showStarRateDialog(
             context,
-            title: "Rate This App",
-            message: "Do you like this app?Please leave a rating",
+            title: "Rate This App 😊",
+            message:
+                "Your feedback helps us to improve the app and provide a better experience for all of our users",
             starRatingOptions: StarRatingOptions(initialRating: 4),
             actionsBuilder: (BuildContext context, double? stars) {
               return stars == null
@@ -120,7 +130,7 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
-          centerTitle: true,
+
           // title: Text(
           //   "Result",
           //   style: TextStyle(
@@ -129,6 +139,7 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
           //   ),
           // ),
           backgroundColor: Colors.transparent,
+
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
@@ -153,7 +164,7 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.shade300,
-                        blurRadius: 30.r,
+                        blurRadius: 21.r,
                       ),
                     ],
                     color: Colors.white,
@@ -179,15 +190,130 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
                       SizedBox(
                         height: 21.h,
                       ),
-                      Text(
-                        widget.barcode.toString(),
+                      RichText(
+                        text: widget.formate == 'url'
+                            ? TextSpan(
+                                style: _style,
+                                text: widget.barcode['url'],
+                              )
+                            : widget.formate == 'phone'
+                                ? TextSpan(
+                                    style: _style,
+                                    text: widget.barcode['number'],
+                                  )
+                                : widget.formate == 'email'
+                                    ? TextSpan(
+                                        style: _style,
+                                        text: widget.barcode['address'],
+                                      )
+                                    : widget.formate == 'sms'
+                                        ? TextSpan(
+                                            style: _style,
+                                            text: widget.barcode['message'],
+                                          )
+                                        : widget.formate == 'wifi'
+                                            ? TextSpan(
+                                                style: _style,
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        "Network name(ssid): ${widget.barcode['ssid']}\n",
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                        "EncryptionType: ${widget.barcode['encryptionType']}\n",
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                        "Password: ${widget.barcode['password']}",
+                                                  ),
+                                                ],
+                                              )
+                                            :
+                                            // widget.formate == 'contactInfo'
+                                            //     ? TextSpan(
+                                            //         style: _style,
+                                            //         children: [
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Address: ${widget.barcode['addresses']}\n",
+                                            //           ),
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Email: ${widget.barcode['emails']}\n",
+                                            //           ),
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Name: ${widget.barcode['name']}\n",
+                                            //           ),
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Organization: ${widget.barcode['organization']}\n",
+                                            //           ),
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Phones: ${widget.barcode['phones']}\n",
+                                            //           ),
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Title: ${widget.barcode['name']}\n",
+                                            //           ),
+                                            //           TextSpan(
+                                            //             text:
+                                            //                 "Urls: ${widget.barcode['urls']}\n",
+                                            //           ),
+                                            //         ],
+                                            //       )
+                                            widget.formate == 'calendarEvent'
+                                                ? TextSpan(
+                                                    style: _style,
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            "Start: ${widget.barcode['start']}\n",
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            "End: ${widget.barcode['end']}\n",
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            "Location: ${widget.barcode['location'] ?? "No location"}",
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            "Description: ${widget.barcode['description'] ?? "No description"}",
+                                                      ),
+                                                    ],
+                                                  )
+                                                : widget.formate == 'geoPoint'
+                                                    ? TextSpan(
+                                                        style: _style,
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                "Latitude: ${widget.barcode['latitude']}\n",
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                "Longitude: ${widget.barcode['longitude']}\n",
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : TextSpan(
+                                                        style: _style,
+                                                        text: widget
+                                                            .barcode['text'],
+                                                      ),
+                        // widget.barcode['number'].toString():null,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          // decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 21.sp,
-                        ),
+
+                        // style: TextStyle(
+                        //   // decoration: TextDecoration.underline,
+                        //   fontWeight: FontWeight.w500,
+                        //   color: Colors.black,
+                        //   fontSize: 21.sp,
+                        // ),
                       ),
                       SizedBox(
                         height: 21.h,
@@ -292,12 +418,13 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
 
                                       if (widget.formate == "url") {
                                         // Utils.lauchURl(widget.barcode.toString());
-                                        Utils.lauchURl(widget.barcode!);
+                                        Utils.lauchURl(widget.barcode['url']!);
                                       }
                                     });
                                   },
                                   child: Icon(
-                                    widget.formate == "text"
+                                    widget.formate == "text" ||
+                                            widget.formate == "product"
                                         ? Icons.search
                                         : Icons.open_in_browser,
                                     color: Colors.black,
@@ -306,7 +433,8 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
                                 height: 5.h,
                               ),
                               Text(
-                                widget.formate == "text"
+                                widget.formate == "text" ||
+                                        widget.formate == "product"
                                     ? "Search"
                                     : "Open browser",
                                 style: TextStyle(
@@ -392,7 +520,7 @@ class _HistoryScreenDetailState extends State<HistoryScreenDetail> {
                       color: Colors.grey,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

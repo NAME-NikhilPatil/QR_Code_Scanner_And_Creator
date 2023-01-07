@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/Provider/scan_data.dart';
 import 'package:qr_code_scan/constants.dart';
@@ -17,8 +18,9 @@ import '../Provider/saved_setting.dart';
 
 class ScanResult extends StatefulWidget {
   ScanResult({Key? key, required this.barcode, this.formate}) : super(key: key);
-  String? barcode;
+  Map<String, String> barcode;
   String? formate;
+
   @override
   State<ScanResult> createState() => _ScanResultState();
 }
@@ -36,6 +38,12 @@ class _ScanResultState extends State<ScanResult> {
     click == true ? updateButton() : null;
   }
 
+  TextStyle _style = TextStyle(
+    // decoration: TextDecoration.underline,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 21.sp,
+  );
   done() {
     Timer.periodic(const Duration(seconds: 7), (Timer t) {
       setState(() {
@@ -88,7 +96,7 @@ class _ScanResultState extends State<ScanResult> {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   backgroundColor: Colors.white,
                   content: Text(
-                    "Thanks for your feedback",
+                    "Thanks for your feedback 😊",
                   ),
                   behavior: SnackBarBehavior.floating,
                 ));
@@ -183,15 +191,130 @@ class _ScanResultState extends State<ScanResult> {
                         SizedBox(
                           height: 21.h,
                         ),
-                        Text(
-                          widget.barcode.toString(),
+                        RichText(
+                          text: widget.formate == 'url'
+                              ? TextSpan(
+                                  style: _style,
+                                  text: widget.barcode['url'],
+                                )
+                              : widget.formate == 'phone'
+                                  ? TextSpan(
+                                      style: _style,
+                                      text: widget.barcode['number'],
+                                    )
+                                  : widget.formate == 'email'
+                                      ? TextSpan(
+                                          style: _style,
+                                          text: widget.barcode['address'],
+                                        )
+                                      // : widget.formate == 'sms'
+                                      //     ? TextSpan(
+                                      //         style: _style,
+                                      //         text: smsto,
+                                      //       )
+                                      : widget.formate == 'wifi'
+                                          ? TextSpan(
+                                              style: _style,
+                                              children: [
+                                                TextSpan(
+                                                  text:
+                                                      "Network name(ssid): ${widget.barcode['ssid']}\n",
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "EncryptionType: ${widget.barcode['encryptionType']}\n",
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      "Password: ${widget.barcode['password']}",
+                                                ),
+                                              ],
+                                            )
+                                          :
+                                          // widget.formate == 'contactInfo'
+                                          //     ? TextSpan(
+                                          //         style: _style,
+                                          //         children: [
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Address: ${widget.barcode['addresses']}\n",
+                                          //           ),
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Email: ${widget.barcode['emails']}\n",
+                                          //           ),
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Name: ${widget.barcode['name']}\n",
+                                          //           ),
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Organization: ${widget.barcode['organization']}\n",
+                                          //           ),
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Phones: ${widget.barcode['phones']}\n",
+                                          //           ),
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Title: ${widget.barcode['name']}\n",
+                                          //           ),
+                                          //           TextSpan(
+                                          //             text:
+                                          //                 "Urls: ${widget.barcode['urls']}\n",
+                                          //           ),
+                                          //         ],
+                                          //       )
+                                          widget.formate == 'calendarEvent'
+                                              ? TextSpan(
+                                                  style: _style,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          "Start: ${widget.barcode['start']}\n",
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "End: ${widget.barcode['end']}\n",
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "Location: ${widget.barcode['location'] ?? "No location"}",
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          "Description: ${widget.barcode['description'] ?? "No description"}",
+                                                    ),
+                                                  ],
+                                                )
+                                              : widget.formate == 'geoPoint'
+                                                  ? TextSpan(
+                                                      style: _style,
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Latitude: ${widget.barcode['latitude']}\n",
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              "Longitude: ${widget.barcode['longitude']}\n",
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : TextSpan(
+                                                      style: _style,
+                                                      text: widget
+                                                          .barcode['text'],
+                                                    ),
+                          // widget.barcode['number'].toString():null,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            // decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 21.sp,
-                          ),
+
+                          // style: TextStyle(
+                          //   // decoration: TextDecoration.underline,
+                          //   fontWeight: FontWeight.w500,
+                          //   color: Colors.black,
+                          //   fontSize: 21.sp,
+                          // ),
                         ),
                         SizedBox(
                           height: 21.h,
@@ -298,12 +421,14 @@ class _ScanResultState extends State<ScanResult> {
 
                                         if (widget.formate == "url") {
                                           // Utils.lauchURl(widget.barcode.toString());
-                                          Utils.lauchURl(widget.barcode!);
+                                          Utils.lauchURl(
+                                              widget.barcode['url']!);
                                         }
                                       });
                                     },
                                     child: Icon(
-                                      widget.formate == "text"
+                                      widget.formate == "text" ||
+                                              widget.formate == "product"
                                           ? Icons.search
                                           : Icons.open_in_browser,
                                       color: Colors.black,
@@ -312,7 +437,8 @@ class _ScanResultState extends State<ScanResult> {
                                   height: 5.h,
                                 ),
                                 Text(
-                                  widget.formate == "text"
+                                  widget.formate == "text" ||
+                                          widget.formate == "product"
                                       ? "Search"
                                       : "Open browser",
                                   style: TextStyle(

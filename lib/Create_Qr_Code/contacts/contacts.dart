@@ -28,7 +28,7 @@ class _ContactsState extends State<Contacts> {
 
   Future<void> deviceInfo() async {
     _dataString =
-        "Name:${controller.text},\nPhone no:${controller1.text},\nE-mail:${controller2.text}";
+        "Name:${controller.text}\nPhone no:${controller1.text}\nE-mail:${controller2.text}";
   }
 
   @override

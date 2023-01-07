@@ -5,7 +5,7 @@ class Constants {
   // static const
 
   static Color primaryColor = Color(0xff00ABFF);
-  static Color backgroundColor = Color(0xffF5F5F5);
+  static Color backgroundColor = Color(0xffF9F9F9);
   static Color creamColor = Color(0xffF7FBFF);
 
   static InputBorder border = OutlineInputBorder(
@@ -28,7 +28,7 @@ class Constants {
 
   static TextStyle settingText = TextStyle(
     color: Colors.black,
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w400,
   );
 
   static ButtonStyle buttonStyle(Color primaryColor) {
