@@ -95,7 +95,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
     try {
       await FlutterEmailSender.send(email);
-      platformResponse = 'Thank you for your feedback';
+      platformResponse = 'Thank you for your feedback 😊';
     } catch (error) {
       platformResponse = error.toString();
     }
@@ -134,7 +134,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       GestureDetector(
                         child: buildCheckItem(
@@ -194,8 +194,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       _formKey.currentState!.validate();
 
                       setState(() {
-                        primaryColor =
-                            val.isNotEmpty ? Colors.blue : Colors.grey;
+                        primaryColor = val.isNotEmpty
+                            ? Constants.primaryColor
+                            : Colors.grey;
                       });
                     },
                     validator: (value) {
@@ -208,7 +209,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     maxLines: null,
                     minLines: 10,
                     controller: _bodyController,
-                    autofocus: true,
                     decoration: InputDecoration(
                       hintText: "Enter your feedback",
                       hintStyle: TextStyle(
@@ -340,15 +340,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         children: [
           Icon(
             isSelected! ? Icons.check_circle : Icons.circle,
-            color: isSelected ? Colors.blue : Colors.grey.shade500,
+            color: isSelected ? Constants.primaryColor : Colors.grey.shade500,
           ),
           SizedBox(width: 10.0.w),
           Text(
             title!,
             style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.blue : Colors.grey.shade500),
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w500,
+              color: isSelected ? Constants.primaryColor : Colors.grey.shade500,
+            ),
           ),
         ],
       ),

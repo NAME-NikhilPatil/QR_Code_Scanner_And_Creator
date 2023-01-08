@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scan/components/bottom_navigation.dart';
 import 'package:qr_code_scan/providers/scan_data.dart';
 import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/model/history.dart';

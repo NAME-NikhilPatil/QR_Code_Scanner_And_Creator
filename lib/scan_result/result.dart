@@ -40,7 +40,7 @@ class _ScanResultState extends State<ScanResult> {
   final TextStyle _style = TextStyle(
     fontWeight: FontWeight.w500,
     color: Colors.black,
-    fontSize: 21.sp,
+    fontSize: 23.sp,
   );
   done() {
     Timer.periodic(const Duration(seconds: 7), (Timer t) {
@@ -140,7 +140,7 @@ class _ScanResultState extends State<ScanResult> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MyNavigationBar(),
+                  builder: (context) =>  MyNavigationBar(),
                 ),
               ),
             ),
@@ -289,18 +289,38 @@ class _ScanResultState extends State<ScanResult> {
                             ),
                           ),
                           onPressed: () {
-                            setState(
-                              () {
-                                Clipboard.setData(
-                                  ClipboardData(
-                                    text: widget.barcode.toString(),
-                                  ),
-                                );
-                                click = true;
-                                // Provider.of<ScanData>(context,listen: false).updateClick(true);
-                                done();
-                              },
-                            );
+                            setState(() {
+                              Clipboard.setData(
+                                ClipboardData(
+                                  text: widget.formate == 'url'
+                                      ? widget.barcode['url']
+                                      : widget.formate == 'phone'
+                                          ? widget.barcode['number']
+                                          : widget.formate == 'email'
+                                              ? widget.barcode['address']
+                                              : widget.formate == 'wifi'
+                                                  ? "Network name(ssid): ${widget.barcode['ssid']}\n"
+                                                      "EncryptionType: ${widget.barcode['encryptionType']}\n"
+                                                      "Password: ${widget.barcode['password']}"
+                                                  : widget.formate ==
+                                                          'calendarEvent'
+                                                      ? "Start: ${widget.barcode['start']}\n"
+                                                          "End: ${widget.barcode['end']}\n"
+                                                          "Location: ${widget.barcode['location'] ?? "No location"}"
+                                                          "Description: ${widget.barcode['description'] ?? "No description"}"
+                                                      : widget.formate ==
+                                                              'geoPoint'
+                                                          ? "Latitude: ${widget.barcode['latitude']}\n"
+                                                              "Longitude: ${widget.barcode['longitude']}\n"
+                                                          : widget
+                                                              .barcode['text'],
+                                ),
+                              );
+                            });
+
+                            click = true;
+                            // Provider.of<ScanData>(context,listen: false).updateClick(true);
+                            done();
                           },
                           child: Text(
                             click == false ? "Copy" : "Copied to clipboard",

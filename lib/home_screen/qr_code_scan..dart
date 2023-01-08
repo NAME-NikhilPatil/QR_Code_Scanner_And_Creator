@@ -37,6 +37,13 @@ class _QrScanScreenState extends State<QrScanScreen>
   bool isStarted = true;
   late bool isVibrate;
   late bool isgranted;
+
+  List<String> _texts = [
+    "Scan any QRcode or barcode",
+    "Align QRcode/barcode within the frame"
+  ];
+  int _index = 0;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +55,13 @@ class _QrScanScreenState extends State<QrScanScreen>
       torchEnabled: false,
     );
     isVibrate = SaveSetting.getVibrate() ?? false;
+    while (true) {
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          _index = (_index + 1) % _texts.length;
+        });
+      });
+    }
   }
 
   @override
@@ -62,7 +76,7 @@ class _QrScanScreenState extends State<QrScanScreen>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: ((context) => const MyNavigationBar()),
+          builder: ((context) =>const  MyNavigationBar()),
         ),
       );
     }
@@ -85,51 +99,55 @@ class _QrScanScreenState extends State<QrScanScreen>
     isEnabled = false;
     isVibrate == true ? Vibration.vibrate(duration: 100) : null;
 
-    setState(() {
-      var historyDb = Provider.of<ScanData>(context, listen: false);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ScanResult(
-            barcode: barcode,
-            formate: formate,
+    setState(
+      () {
+        var historyDb = Provider.of<ScanData>(context, listen: false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScanResult(
+              barcode: barcode,
+              formate: formate,
+            ),
           ),
-        ),
-      );
+        );
 
-      historyDb.addItem(
-        History(
-            formate == 'url'
-                ? {'url': barcode['url']}
-                : formate == 'phone'
-                    ? {'number': barcode['number']}
-                    : formate == 'email'
-                        ? {'address': barcode['address']}
-                        // : formate == 'sms'
-                        //     ? {'sms': barcode['message']!}
-                        : formate == 'wifi'
-                            ? {
-                                'encryptionType': barcode['encryptionType'],
-                                'ssid': barcode['ssid'],
-                                'password': barcode['password']
-                              }
-                            : formate == 'calendarEvent'
-                                ? {
-                                    'start': barcode["start"],
-                                    'end': barcode["end"],
-                                    'location': barcode["location"],
-                                    'organizer': barcode["organizer"],
-                                    'description': barcode["description"]!
-                                  }
-                                : formate == 'geoPoint'
-                                    ? {
-                                        'latitude': barcode["latitude"],
-                                        'longitude': barcode["longitude"],
-                                      }
-                                    : {'text': barcode["text"]},
-            formate),
-      );
-    });
+        historyDb.addItem(
+          History(
+              formate == 'url'
+                  ? {'url': barcode['url']}
+                  : formate == 'phone'
+                      ? {'number': barcode['number']}
+                      : formate == 'email'
+                          ? {'address': barcode['address']}
+                          // : formate == 'sms'
+                          //     ? {'sms': barcode['message']!}
+                          : formate == 'wifi'
+                              ? {
+                                  'encryptionType': barcode['encryptionType'],
+                                  'ssid': barcode['ssid'],
+                                  'password': barcode['password']
+                                }
+                              : formate == 'calendarEvent'
+                                  ? {
+                                      'start': barcode["start"],
+                                      'end': barcode["end"],
+                                      'location': barcode["location"],
+                                      'organizer': barcode["organizer"],
+                                      'description': barcode["description"]!
+                                    }
+                                  : formate == 'geoPoint'
+                                      ? {
+                                          'latitude': barcode["latitude"],
+                                          'longitude': barcode["longitude"],
+                                        }
+                                      : {
+                                          'text': barcode["text"],
+                                        },
+              formate),
+        );
+      },
+    );
   }
 
   String playStoreId = "com.example.qr_code_scanner";
@@ -175,12 +193,11 @@ class _QrScanScreenState extends State<QrScanScreen>
                     const SnackBar(
                       backgroundColor: Colors.white,
                       content: Text(
-                        "Thanks for your feedback🥰",
+                        "Thanks for your feedback 😊",
                       ),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
-
                   // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
@@ -320,6 +337,15 @@ class _QrScanScreenState extends State<QrScanScreen>
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Text(
+                        _texts[_index],
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -385,6 +411,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                                   icon: const Icon(Icons.image),
                                   iconSize: 25.0,
                                   onPressed: () async {
+                                    turnoff = false;
                                     final ImagePicker picker = ImagePicker();
                                     // Pick an image
                                     final XFile? image = await picker.pickImage(

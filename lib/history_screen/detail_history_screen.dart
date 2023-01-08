@@ -34,7 +34,7 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
   final TextStyle _style = TextStyle(
     fontWeight: FontWeight.w500,
     color: Colors.black,
-    fontSize: 21.sp,
+    fontSize: 23.sp,
   );
 
   done() {
@@ -191,70 +191,65 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                                         style: _style,
                                         text: widget.barcode['address'],
                                       )
-                                    : widget.formate == 'sms'
+                                    : widget.formate == 'wifi'
                                         ? TextSpan(
                                             style: _style,
-                                            text: widget.barcode['message'],
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    "Network name(ssid): ${widget.barcode['ssid']}\n",
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "EncryptionType: ${widget.barcode['encryptionType']}\n",
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    "Password: ${widget.barcode['password']}",
+                                              ),
+                                            ],
                                           )
-                                        : widget.formate == 'wifi'
+                                        : widget.formate == 'calendarEvent'
                                             ? TextSpan(
                                                 style: _style,
                                                 children: [
                                                   TextSpan(
                                                     text:
-                                                        "Network name(ssid): ${widget.barcode['ssid']}\n",
+                                                        "Start: ${widget.barcode['start']}\n",
                                                   ),
                                                   TextSpan(
                                                     text:
-                                                        "EncryptionType: ${widget.barcode['encryptionType']}\n",
+                                                        "End: ${widget.barcode['end']}\n",
                                                   ),
                                                   TextSpan(
                                                     text:
-                                                        "Password: ${widget.barcode['password']}",
+                                                        "Location: ${widget.barcode['location'] ?? "No location"}",
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                        "Description: ${widget.barcode['description'] ?? "No description"}",
                                                   ),
                                                 ],
                                               )
-                                            : widget.formate == 'calendarEvent'
+                                            : widget.formate == 'geoPoint'
                                                 ? TextSpan(
                                                     style: _style,
                                                     children: [
                                                       TextSpan(
                                                         text:
-                                                            "Start: ${widget.barcode['start']}\n",
+                                                            "Latitude: ${widget.barcode['latitude']}\n",
                                                       ),
                                                       TextSpan(
                                                         text:
-                                                            "End: ${widget.barcode['end']}\n",
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            "Location: ${widget.barcode['location'] ?? "No location"}",
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            "Description: ${widget.barcode['description'] ?? "No description"}",
+                                                            "Longitude: ${widget.barcode['longitude']}\n",
                                                       ),
                                                     ],
                                                   )
-                                                : widget.formate == 'geoPoint'
-                                                    ? TextSpan(
-                                                        style: _style,
-                                                        children: [
-                                                          TextSpan(
-                                                            text:
-                                                                "Latitude: ${widget.barcode['latitude']}\n",
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                "Longitude: ${widget.barcode['longitude']}\n",
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : TextSpan(
-                                                        style: _style,
-                                                        text: widget
-                                                            .barcode['text'],
-                                                      ),
+                                                : TextSpan(
+                                                    style: _style,
+                                                    text:
+                                                        widget.barcode['text'],
+                                                  ),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
@@ -285,7 +280,28 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                           setState(() {
                             Clipboard.setData(
                               ClipboardData(
-                                text: widget.barcode.toString(),
+                                text: widget.formate == 'url'
+                                    ? widget.barcode['url']
+                                    : widget.formate == 'phone'
+                                        ? widget.barcode['number']
+                                        : widget.formate == 'email'
+                                            ? widget.barcode['address']
+                                            : widget.formate == 'wifi'
+                                                ? "Network name(ssid): ${widget.barcode['ssid']}\n"
+                                                    "EncryptionType: ${widget.barcode['encryptionType']}\n"
+                                                    "Password: ${widget.barcode['password']}"
+                                                : widget.formate ==
+                                                        'calendarEvent'
+                                                    ? "Start: ${widget.barcode['start']}\n"
+                                                        "End: ${widget.barcode['end']}\n"
+                                                        "Location: ${widget.barcode['location'] ?? "No location"}"
+                                                        "Description: ${widget.barcode['description'] ?? "No description"}"
+                                                    : widget.formate ==
+                                                            'geoPoint'
+                                                        ? "Latitude: ${widget.barcode['latitude']}\n"
+                                                            "Longitude: ${widget.barcode['longitude']}\n"
+                                                        : widget
+                                                            .barcode['text'],
                               ),
                             );
                             click = true;

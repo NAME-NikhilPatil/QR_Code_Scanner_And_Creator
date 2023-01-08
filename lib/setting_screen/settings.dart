@@ -414,6 +414,7 @@ class _SettingsState extends State<Settings> {
                         );
                       },
                       enableFeedback: true,
+                      subtitle: const Text("Report bugs and tell us what to improve"),
                       leading: Container(
                         height: 30.h,
                         width: 30.h,
