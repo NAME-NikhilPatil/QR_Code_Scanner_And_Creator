@@ -104,7 +104,7 @@ class _WebsiteState extends State<Website> {
                         onPressed: () {
                           setState(
                             () {
-                              controller.text = controller.text + "https://";
+                              controller.text = "${controller.text}https://";
                               controller.selection = TextSelection.fromPosition(
                                   TextPosition(offset: controller.text.length));
                             },
@@ -133,7 +133,7 @@ class _WebsiteState extends State<Website> {
                         onPressed: () {
                           setState(
                             () {
-                              controller.text = controller.text + "www.";
+                              controller.text = "${controller.text}www.";
                               controller.selection = TextSelection.fromPosition(
                                   TextPosition(offset: controller.text.length));
                             },

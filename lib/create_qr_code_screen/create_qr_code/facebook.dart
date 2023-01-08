@@ -41,7 +41,7 @@ class _FacebookState extends State<Facebook> {
     if (ispress == true) {
       _dataString = "fb://profile/${controller.text}";
     } else {
-      _dataString = "${controller.text}";
+      _dataString = controller.text;
     }
   }
 

@@ -19,10 +19,11 @@ import '../providers/scan_data.dart';
 import '../scan_result/result.dart';
 
 class QrScanScreen extends StatefulWidget {
-  QrScanScreen({
+  const QrScanScreen({
     Key? key,
   }) : super(key: key);
   @override
+  // ignore: library_private_types_in_public_api
   _QrScanScreenState createState() => _QrScanScreenState();
 }
 

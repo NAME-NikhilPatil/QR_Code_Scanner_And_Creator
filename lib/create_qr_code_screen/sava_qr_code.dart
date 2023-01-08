@@ -43,7 +43,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       final tempDir = await getExternalStorageDirectory();
       final file =
-          await File('${tempDir!.path}/${DateTime.now().microsecond}${ref}.png')
+          await File('${tempDir!.path}/${DateTime.now().microsecond}$ref.png')
               .create(recursive: true);
       await file.writeAsBytes(pngBytes);
       GallerySaver.saveImage(file.path);

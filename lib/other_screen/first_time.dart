@@ -24,7 +24,7 @@ class _FirstTimeState extends State<FirstTime> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isgranted == true ? MyNavigationBar() :const SplashScreen(),
+      body: isgranted == true ?const  MyNavigationBar() :const SplashScreen(),
     );
   }
 }

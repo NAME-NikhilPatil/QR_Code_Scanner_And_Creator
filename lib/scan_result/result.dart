@@ -102,7 +102,7 @@ class _ScanResultState extends State<ScanResult> {
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
-              child: Text("OK"));
+              child: const Text("OK"));
         }
 
         Widget buildCancelButton() {
@@ -140,7 +140,7 @@ class _ScanResultState extends State<ScanResult> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  MyNavigationBar(),
+                  builder: (context) => const MyNavigationBar(),
                 ),
               ),
             ),

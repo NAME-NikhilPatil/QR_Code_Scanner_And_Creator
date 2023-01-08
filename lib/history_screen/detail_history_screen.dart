@@ -11,6 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../providers/saved_setting.dart';
 
+// ignore: must_be_immutable
 class HistoryScreenDetails extends StatefulWidget {
   HistoryScreenDetails({Key? key, required this.barcode, this.formate})
       : super(key: key);

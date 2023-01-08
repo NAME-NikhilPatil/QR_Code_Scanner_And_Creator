@@ -19,7 +19,6 @@ class ScanData with ChangeNotifier {
     var boxy = await Hive.openBox<CreateQr>('create');
 
     boxy.add(item);
-    print(item.qrCodeValue);
 
     notifyListeners();
   }

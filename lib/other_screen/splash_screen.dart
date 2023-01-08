@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyNavigationBar(),
+              builder: (context) => const MyNavigationBar(),
             ),
           );
         }
@@ -160,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyNavigationBar(),
+            builder: (context) => const MyNavigationBar(),
           ),
         );
         permissionServiceCall();
@@ -247,12 +247,14 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         nextStyle: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Constants.primaryColor),
-            enableFeedback: true,
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h))),
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Constants.primaryColor),
+          enableFeedback: true,
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+            EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
+          ),
+        ),
         done: Text(
           "Scan Now",
           style: TextStyle(

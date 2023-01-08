@@ -25,7 +25,7 @@ class _SmsState extends State<Sms> {
 
   Future<void> deviceInfo() async {
     _dataString = "smsto:${controller.text}";
-    ;
+    
   }
 
   @override

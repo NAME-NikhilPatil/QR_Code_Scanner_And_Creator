@@ -227,7 +227,7 @@ class _History_screenState extends State<History_screen>
         controller: _controller,
         children: [
           data != 0
-              ? ListviewHistory(context)
+              ? listviewHistory(context)
               : Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -262,7 +262,7 @@ class _History_screenState extends State<History_screen>
                   ),
                 ),
           tata != 0
-              ? ListviewCreateHistory(context)
+              ? listviewCreateHistory(context)
               : Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -305,7 +305,7 @@ class _History_screenState extends State<History_screen>
     );
   }
 
-  Widget ListviewHistory(context) {
+  Widget listviewHistory(context) {
     TextStyle style = TextStyle(
       color: Colors.black,
       fontSize: 21.sp,
@@ -580,7 +580,7 @@ class _History_screenState extends State<History_screen>
     );
   }
 
-  Widget ListviewCreateHistory(context) {
+  Widget listviewCreateHistory(context) {
     return ListView.builder(
       itemCount:
           Provider.of<ScanData>(context, listen: false).createList.length,
