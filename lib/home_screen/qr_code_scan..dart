@@ -19,7 +19,7 @@ import '../providers/scan_data.dart';
 import '../scan_result/result.dart';
 
 class QrScanScreen extends StatefulWidget {
-  const QrScanScreen({
+  QrScanScreen({
     Key? key,
   }) : super(key: key);
   @override
@@ -38,12 +38,6 @@ class _QrScanScreenState extends State<QrScanScreen>
   late bool isVibrate;
   late bool isgranted;
 
-  List<String> _texts = [
-    "Scan any QRcode or barcode",
-    "Align QRcode/barcode within the frame"
-  ];
-  int _index = 0;
-
   @override
   void initState() {
     super.initState();
@@ -55,13 +49,6 @@ class _QrScanScreenState extends State<QrScanScreen>
       torchEnabled: false,
     );
     isVibrate = SaveSetting.getVibrate() ?? false;
-    while (true) {
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          _index = (_index + 1) % _texts.length;
-        });
-      });
-    }
   }
 
   @override
@@ -76,7 +63,7 @@ class _QrScanScreenState extends State<QrScanScreen>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: ((context) =>const  MyNavigationBar()),
+          builder: ((context) => const MyNavigationBar()),
         ),
       );
     }
@@ -337,15 +324,6 @@ class _QrScanScreenState extends State<QrScanScreen>
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        _texts[_index],
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
