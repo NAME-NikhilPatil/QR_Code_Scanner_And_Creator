@@ -293,9 +293,9 @@ class _QrScanScreenState extends State<QrScanScreen>
                       decoration: ShapeDecoration(
                         shape: QrScannerOverlayShape(
                           borderRadius: 0.r,
-                          borderColor: Constants.creamColor,
-                          borderLength: 15.w,
-                          borderWidth: 9.w,
+                          borderColor: Colors.white,
+                          borderLength: 21.w,
+                          borderWidth: 12.w,
                           cutOutHeight: 0.7.sw,
                           cutOutWidth: 0.7.sw,
                         ),
@@ -312,7 +312,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                       Text(
                         "QRSCANNER",
                         style: TextStyle(
-                          color: Constants.creamColor,
+                          color: Colors.white,
                           fontSize: 32.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -339,7 +339,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                             child: Column(
                               children: [
                                 IconButton(
-                                  color: Constants.creamColor,
+                                  color: Colors.white,
                                   icon: ValueListenableBuilder(
                                     valueListenable: controller.torchState,
                                     builder: (context, state, child) {
@@ -386,7 +386,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                             child: Column(
                               children: [
                                 IconButton(
-                                  color: Constants.creamColor,
+                                  color: Colors.white,
                                   icon: const Icon(Icons.image),
                                   iconSize: 25.0,
                                   onPressed: () async {

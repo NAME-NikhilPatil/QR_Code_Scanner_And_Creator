@@ -11,6 +11,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:vibration/vibration.dart';
 
 import '../model/history.dart';
+import '../providers/saved_setting.dart';
 
 // ignore: camel_case_types
 class History_screen extends StatefulWidget {
@@ -23,6 +24,8 @@ class History_screen extends StatefulWidget {
 // ignore: camel_case_types
 class _History_screenState extends State<History_screen>
     with SingleTickerProviderStateMixin {
+  late bool isVibrate;
+
   @override
   void initState() {
     _controller = TabController(
@@ -31,6 +34,7 @@ class _History_screenState extends State<History_screen>
       vsync: this,
     );
     super.initState();
+    isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
   TabController? _controller;
@@ -84,7 +88,12 @@ class _History_screenState extends State<History_screen>
               if (_controller?.index == 0) {
                 setState(() {
                   if (data != 0) {
-                    Vibration.vibrate(duration: 100);
+                    isVibrate == true
+                        ? Vibration.vibrate(
+                            duration: 100,
+                          )
+                        : null;
+                    // Vibration.vibrate(duration: 100);
 
                     Alert(
                       padding: EdgeInsets.symmetric(
@@ -94,7 +103,7 @@ class _History_screenState extends State<History_screen>
                       type: AlertType.none,
                       title: "Clear history",
                       style: AlertStyle(
-                        backgroundColor: Constants.creamColor,
+                        backgroundColor: Colors.white,
                         titleStyle: TextStyle(
                           fontSize: 20.sp,
                         ),
@@ -123,6 +132,7 @@ class _History_screenState extends State<History_screen>
                             style: TextStyle(
                               color: Constants.primaryColor,
                               fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -139,6 +149,7 @@ class _History_screenState extends State<History_screen>
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         )
@@ -151,7 +162,12 @@ class _History_screenState extends State<History_screen>
                 setState(
                   () {
                     if (tata != 0) {
-                      Vibration.vibrate(duration: 100);
+                      // Vibration.vibrate(duration: 100);
+                      isVibrate == true
+                          ? Vibration.vibrate(
+                              duration: 100,
+                            )
+                          : null;
 
                       Alert(
                         padding: EdgeInsets.symmetric(
@@ -163,7 +179,7 @@ class _History_screenState extends State<History_screen>
                         type: AlertType.none,
                         title: "Clear history",
                         style: AlertStyle(
-                          backgroundColor: Constants.creamColor,
+                          backgroundColor: Colors.white,
                           titleStyle: TextStyle(
                             fontSize: 20.sp,
                           ),
@@ -192,6 +208,7 @@ class _History_screenState extends State<History_screen>
                               style: TextStyle(
                                 color: Constants.primaryColor,
                                 fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -206,7 +223,10 @@ class _History_screenState extends State<History_screen>
                             child: Text(
                               "Yes",
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 20.sp),
+                                color: Colors.white,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ],
@@ -457,76 +477,74 @@ class _History_screenState extends State<History_screen>
                                                     text: his
                                                         .qrCodeValue['address'],
                                                   )
-                                                : his.formate == 'sms'
+                                                // : his.formate == 'sms'
+                                                //     ? TextSpan(
+                                                //         style: style,
+                                                //         text: his.qrCodeValue[
+                                                //             'message'],
+                                                //       )
+                                                : his.formate == 'wifi'
                                                     ? TextSpan(
                                                         style: style,
-                                                        text: his.qrCodeValue[
-                                                            'message'],
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                "Network name(ssid): ${his.qrCodeValue['ssid']}\n",
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                "EncryptionType: ${his.qrCodeValue['encryptionType']}\n",
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                "Password: ${his.qrCodeValue['password']}",
+                                                          ),
+                                                        ],
                                                       )
-                                                    : his.formate == 'wifi'
+                                                    : his.formate ==
+                                                            'calendarEvent'
                                                         ? TextSpan(
                                                             style: style,
                                                             children: [
                                                               TextSpan(
                                                                 text:
-                                                                    "Network name(ssid): ${his.qrCodeValue['ssid']}\n",
+                                                                    "Start: ${his.qrCodeValue['start']}\n",
                                                               ),
                                                               TextSpan(
                                                                 text:
-                                                                    "EncryptionType: ${his.qrCodeValue['encryptionType']}\n",
+                                                                    "End: ${his.qrCodeValue['end']}\n",
                                                               ),
                                                               TextSpan(
                                                                 text:
-                                                                    "Password: ${his.qrCodeValue['password']}",
+                                                                    "Location: ${his.qrCodeValue['location'] ?? "No location"}",
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    "Description: ${his.qrCodeValue['description'] ?? "No description"}",
                                                               ),
                                                             ],
                                                           )
                                                         : his.formate ==
-                                                                'calendarEvent'
+                                                                'geoPoint'
                                                             ? TextSpan(
                                                                 style: style,
                                                                 children: [
                                                                   TextSpan(
                                                                     text:
-                                                                        "Start: ${his.qrCodeValue['start']}\n",
+                                                                        "Latitude: ${his.qrCodeValue['latitude']}\n",
                                                                   ),
                                                                   TextSpan(
                                                                     text:
-                                                                        "End: ${his.qrCodeValue['end']}\n",
-                                                                  ),
-                                                                  TextSpan(
-                                                                    text:
-                                                                        "Location: ${his.qrCodeValue['location'] ?? "No location"}",
-                                                                  ),
-                                                                  TextSpan(
-                                                                    text:
-                                                                        "Description: ${his.qrCodeValue['description'] ?? "No description"}",
+                                                                        "Longitude: ${his.qrCodeValue['longitude']}\n",
                                                                   ),
                                                                 ],
                                                               )
-                                                            : his.formate ==
-                                                                    'geoPoint'
-                                                                ? TextSpan(
-                                                                    style:
-                                                                        style,
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text:
-                                                                            "Latitude: ${his.qrCodeValue['latitude']}\n",
-                                                                      ),
-                                                                      TextSpan(
-                                                                        text:
-                                                                            "Longitude: ${his.qrCodeValue['longitude']}\n",
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                                : TextSpan(
-                                                                    style:
-                                                                        style,
-                                                                    text: his
-                                                                            .qrCodeValue[
+                                                            : TextSpan(
+                                                                style: style,
+                                                                text:
+                                                                    his.qrCodeValue[
                                                                         'text'],
-                                                                  ),
+                                                              ),
                                   ),
                                 ),
                               ),

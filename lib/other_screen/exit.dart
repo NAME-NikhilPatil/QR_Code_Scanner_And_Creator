@@ -8,7 +8,7 @@ import '../constants.dart';
 showExitPopup(context) async {
   return await Alert(
     padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-    closeIcon:const SizedBox(),
+    closeIcon: const SizedBox(),
 
     context: context,
     type: AlertType.none,
@@ -43,6 +43,7 @@ showExitPopup(context) async {
           style: TextStyle(
             color: Constants.primaryColor,
             fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
@@ -55,6 +56,7 @@ showExitPopup(context) async {
           "Yes",
           style: TextStyle(
             color: Colors.white,
+            fontWeight: FontWeight.w500,
             fontSize: 20.sp,
           ),
         ),

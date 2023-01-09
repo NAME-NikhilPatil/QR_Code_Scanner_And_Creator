@@ -51,9 +51,28 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
     setState(() {
       Clipboard.setData(
         ClipboardData(
-          text: widget.barcode.toString(),
+          text: widget.formate == 'url'
+              ? widget.barcode['url']
+              : widget.formate == 'phone'
+                  ? widget.barcode['number']
+                  : widget.formate == 'email'
+                      ? widget.barcode['address']
+                      : widget.formate == 'wifi'
+                          ? "Network name(ssid): ${widget.barcode['ssid']}\n"
+                              "EncryptionType: ${widget.barcode['encryptionType']}\n"
+                              "Password: ${widget.barcode['password']}"
+                          : widget.formate == 'calendarEvent'
+                              ? "Start: ${widget.barcode['start']}\n"
+                                  "End: ${widget.barcode['end']}\n"
+                                  "Location: ${widget.barcode['location'] ?? "No location"}"
+                                  "Description: ${widget.barcode['description'] ?? "No description"}"
+                              : widget.formate == 'geoPoint'
+                                  ? "Latitude: ${widget.barcode['latitude']}\n"
+                                      "Longitude: ${widget.barcode['longitude']}\n"
+                                  : widget.barcode['text'],
         ),
       );
+
       click = true;
       done();
     });

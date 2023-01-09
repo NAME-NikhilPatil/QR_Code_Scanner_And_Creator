@@ -53,7 +53,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         content: const Text(
           "Saved to Gallery",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
           ),
         ),
         behavior: SnackBarBehavior.floating,
@@ -198,10 +198,10 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         }
       },
       builder: (context) => Scaffold(
-        backgroundColor: Constants.primaryColor,
+        backgroundColor: Constants.creamColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: Colors.white,
+          foregroundColor: Colors.black,
           elevation: 0,
         ),
         body: SingleChildScrollView(

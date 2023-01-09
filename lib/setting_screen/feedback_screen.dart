@@ -104,6 +104,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(platformResponse),
+        backgroundColor: Constants.primaryColor,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -340,7 +342,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         children: [
           Icon(
             isSelected! ? Icons.check_circle : Icons.circle,
-            color: isSelected ? Constants.primaryColor : Colors.grey.shade500,
+            color: isSelected ? Constants.primaryColor : Colors.grey.shade300,
           ),
           SizedBox(width: 10.0.w),
           Text(

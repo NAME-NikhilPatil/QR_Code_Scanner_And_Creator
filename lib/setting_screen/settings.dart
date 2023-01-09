@@ -36,7 +36,7 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
 
-    isSwitched = SaveSetting.getSwitch() ?? false;
+    isSwitched = SaveSetting.getSwitch() ?? true;
     isVibrate = SaveSetting.getVibrate() ?? true;
     search = SaveSetting.getSearch() ?? "Google";
   }
@@ -202,6 +202,8 @@ class _SettingsState extends State<Settings> {
                       trailing: PopupMenuButton(
                         color: Colors.white,
                         enableFeedback: true,
+                        enabled: true,
+                        elevation: 3,
                         onSelected: (value) {
                           setState(
                             () {
@@ -414,7 +416,8 @@ class _SettingsState extends State<Settings> {
                         );
                       },
                       enableFeedback: true,
-                      subtitle: const Text("Report bugs and tell us what to improve"),
+                      subtitle:
+                          const Text("Report bugs and tell us what to improve"),
                       leading: Container(
                         height: 30.h,
                         width: 30.h,
