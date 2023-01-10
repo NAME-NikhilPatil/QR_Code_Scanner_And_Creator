@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scan/components/bottom_navigation.dart';
 import 'package:qr_code_scan/providers/scan_data.dart';
 import 'package:qr_code_scan/constants.dart';
 import 'package:qr_code_scan/model/create.dart';
@@ -34,7 +35,7 @@ class _History_screenState extends State<History_screen>
       vsync: this,
     );
     super.initState();
-    isVibrate = SaveSetting.getVibrate() ?? false;
+    isVibrate = SaveSetting.getVibrate() ?? true;
   }
 
   TabController? _controller;
@@ -47,133 +48,61 @@ class _History_screenState extends State<History_screen>
     context.watch<ScanData>().getItemC();
     int tata = Provider.of<ScanData>(context, listen: false).createList.length;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 1,
-        automaticallyImplyLeading: false,
+    return WillPopScope(
+      onWillPop: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const MyNavigationBar()))
+          as dynamic,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        bottom: TabBar(
-          controller: _controller,
-          indicatorColor: Constants.primaryColor,
-          indicatorWeight: 3.h,
-          labelColor: Constants.primaryColor,
-          unselectedLabelColor: Colors.grey,
-          enableFeedback: true,
-          labelStyle: TextStyle(
-            fontSize: 15.sp,
-            fontWeight: FontWeight.bold,
-          ),
-          automaticIndicatorColorAdjustment: true,
-          tabs: const [
-            Tab(
-              text: "SCAN",
+        appBar: AppBar(
+          elevation: 1,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          bottom: TabBar(
+            controller: _controller,
+            indicatorColor: Constants.primaryColor,
+            indicatorWeight: 3.h,
+            labelColor: Constants.primaryColor,
+            unselectedLabelColor: Colors.grey,
+            enableFeedback: true,
+            labelStyle: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.bold,
             ),
-            Tab(
-              text: "CREATE",
-            ),
-          ],
-        ),
-        title: Text(
-          'History',
-          style: TextStyle(
-            fontSize: 22.sp,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+            automaticIndicatorColorAdjustment: true,
+            tabs: const [
+              Tab(
+                text: "SCAN",
+              ),
+              Tab(
+                text: "CREATE",
+              ),
+            ],
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              if (_controller?.index == 0) {
-                setState(() {
-                  if (data != 0) {
-                    isVibrate == true
-                        ? Vibration.vibrate(
-                            duration: 100,
-                          )
-                        : null;
-                    // Vibration.vibrate(duration: 100);
-
-                    Alert(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 10.h, horizontal: 20.w),
-                      closeIcon: const SizedBox(),
-                      context: context,
-                      type: AlertType.none,
-                      title: "Clear history",
-                      style: AlertStyle(
-                        backgroundColor: Colors.white,
-                        titleStyle: TextStyle(
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      content: Column(
-                        children: [
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          SizedBox(
-                              child: Text(
-                            "Are you sure you want to delete?",
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 15.sp,
-                            ),
-                          )),
-                        ],
-                      ),
-                      buttons: [
-                        DialogButton(
-                          onPressed: () => Navigator.pop(context),
-                          color: Constants.creamColor,
-                          child: Text(
-                            "No",
-                            style: TextStyle(
-                              color: Constants.primaryColor,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        DialogButton(
-                          onPressed: () {
-                            Provider.of<ScanData>(context, listen: false)
-                                .deleteItem();
-
-                            Navigator.pop(context);
-                          },
-                          color: Constants.primaryColor,
-                          child: Text(
-                            "Yes",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        )
-                      ],
-                    ).show();
-                  }
-                });
-              }
-              if (_controller?.index == 1) {
-                setState(
-                  () {
-                    if (tata != 0) {
-                      // Vibration.vibrate(duration: 100);
+          title: Text(
+            'History',
+            style: TextStyle(
+              fontSize: 22.sp,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                if (_controller?.index == 0) {
+                  setState(() {
+                    if (data != 0) {
                       isVibrate == true
                           ? Vibration.vibrate(
                               duration: 100,
                             )
                           : null;
+                      // Vibration.vibrate(duration: 100);
 
                       Alert(
                         padding: EdgeInsets.symmetric(
-                          vertical: 10.h,
-                          horizontal: 20.w,
-                        ),
+                            vertical: 10.h, horizontal: 20.w),
                         closeIcon: const SizedBox(),
                         context: context,
                         type: AlertType.none,
@@ -186,8 +115,8 @@ class _History_screenState extends State<History_screen>
                         ),
                         content: Column(
                           children: [
-                            const SizedBox(
-                              height: 10,
+                            SizedBox(
+                              height: 10.h,
                             ),
                             SizedBox(
                                 child: Text(
@@ -215,7 +144,7 @@ class _History_screenState extends State<History_screen>
                           DialogButton(
                             onPressed: () {
                               Provider.of<ScanData>(context, listen: false)
-                                  .deleteItemC();
+                                  .deleteItem();
 
                               Navigator.pop(context);
                             },
@@ -228,99 +157,176 @@ class _History_screenState extends State<History_screen>
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
+                          )
                         ],
                       ).show();
                     }
-                  },
-                );
-              }
-            },
-            icon: const Icon(
-              Icons.delete_sweep,
-              color: Colors.black,
+                  });
+                }
+                if (_controller?.index == 1) {
+                  setState(
+                    () {
+                      if (tata != 0) {
+                        // Vibration.vibrate(duration: 100);
+                        isVibrate == true
+                            ? Vibration.vibrate(
+                                duration: 100,
+                              )
+                            : null;
+
+                        Alert(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.h,
+                            horizontal: 20.w,
+                          ),
+                          closeIcon: const SizedBox(),
+                          context: context,
+                          type: AlertType.none,
+                          title: "Clear history",
+                          style: AlertStyle(
+                            backgroundColor: Colors.white,
+                            titleStyle: TextStyle(
+                              fontSize: 20.sp,
+                            ),
+                          ),
+                          content: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                  child: Text(
+                                "Are you sure you want to delete?",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15.sp,
+                                ),
+                              )),
+                            ],
+                          ),
+                          buttons: [
+                            DialogButton(
+                              onPressed: () => Navigator.pop(context),
+                              color: Constants.creamColor,
+                              child: Text(
+                                "No",
+                                style: TextStyle(
+                                  color: Constants.primaryColor,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            DialogButton(
+                              onPressed: () {
+                                Provider.of<ScanData>(context, listen: false)
+                                    .deleteItemC();
+
+                                Navigator.pop(context);
+                              },
+                              color: Constants.primaryColor,
+                              child: Text(
+                                "Yes",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ).show();
+                      }
+                    },
+                  );
+                }
+              },
+              icon: const Icon(
+                Icons.delete_sweep,
+                color: Colors.black,
+              ),
             ),
-          ),
-        ],
-      ),
-      body: TabBarView(
-        controller: _controller,
-        children: [
-          data != 0
-              ? listviewHistory(context)
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 100.h,
-                        width: 100.h,
-                        decoration: BoxDecoration(
+          ],
+        ),
+        body: TabBarView(
+          controller: _controller,
+          children: [
+            data != 0
+                ? listviewHistory(context)
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 100.h,
+                          width: 100.h,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15.r)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/boxy.svg",
+                                fit: BoxFit.cover,
+                                color: Colors.grey,
+                                height: 100.h,
+                                width: 100.h,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "No history",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+            tata != 0
+                ? listviewCreateHistory(context)
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 100.h,
+                          width: 100.h,
+                          decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(15.r)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/boxy.svg",
-                              fit: BoxFit.cover,
-                              color: Colors.grey,
-                              height: 100.h,
-                              width: 100.h,
-                            ),
-                          ],
+                            borderRadius: BorderRadius.circular(15.r),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/boxy.svg",
+                                fit: BoxFit.cover,
+                                color: Colors.grey,
+                                height: 100.h,
+                                width: 100.h,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        "No history",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 18.sp,
+                        SizedBox(
+                          height: 10.h,
                         ),
-                      ),
-                    ],
+                        Text(
+                          "No history",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18.sp,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-          tata != 0
-              ? listviewCreateHistory(context)
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 100.h,
-                        width: 100.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15.r),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/boxy.svg",
-                              fit: BoxFit.cover,
-                              color: Colors.grey,
-                              height: 100.h,
-                              width: 100.h,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        "No history",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 18.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

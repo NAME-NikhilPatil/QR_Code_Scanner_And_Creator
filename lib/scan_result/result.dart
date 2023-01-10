@@ -18,8 +18,10 @@ import '../providers/saved_setting.dart';
 // ignore: must_be_immutable
 class ScanResult extends StatefulWidget {
   ScanResult({Key? key, required this.barcode, this.formate}) : super(key: key);
-  Map<String, String> barcode;
+  Map<dynamic, dynamic> barcode;
+
   String? formate;
+  // Widget? page = const MyNavigationBar();
 
   @override
   State<ScanResult> createState() => _ScanResultState();
@@ -86,6 +88,25 @@ class _ScanResultState extends State<ScanResult> {
   @override
   Widget build(BuildContext context) {
     String search = Provider.of<ScanData>(context, listen: false).search;
+    String? barcode = widget.formate == 'url'
+        ? widget.barcode['url']
+        : widget.formate == 'phone'
+            ? widget.barcode['number']
+            : widget.formate == 'email'
+                ? widget.barcode['address']
+                : widget.formate == 'wifi'
+                    ? "Network name(ssid): ${widget.barcode['ssid']}\n"
+                        "EncryptionType: ${widget.barcode['encryptionType']}\n"
+                        "Password: ${widget.barcode['password']}"
+                    : widget.formate == 'calendarEvent'
+                        ? "Start: ${widget.barcode['start']}\n"
+                            "End: ${widget.barcode['end']}\n"
+                            "Location: ${widget.barcode['location'] ?? "No location"}"
+                            "Description: ${widget.barcode['description'] ?? "No description"}"
+                        : widget.formate == 'geoPoint'
+                            ? "Latitude: ${widget.barcode['latitude']}\n"
+                                "Longitude: ${widget.barcode['longitude']}\n"
+                            : widget.barcode['text'].toString();
     return RateMyAppBuilder(
       rateMyApp: RateMyApp(
         googlePlayIdentifier: playStoreId,
@@ -310,28 +331,7 @@ class _ScanResultState extends State<ScanResult> {
                             setState(() {
                               Clipboard.setData(
                                 ClipboardData(
-                                  text: widget.formate == 'url'
-                                      ? widget.barcode['url']
-                                      : widget.formate == 'phone'
-                                          ? widget.barcode['number']
-                                          : widget.formate == 'email'
-                                              ? widget.barcode['address']
-                                              : widget.formate == 'wifi'
-                                                  ? "Network name(ssid): ${widget.barcode['ssid']}\n"
-                                                      "EncryptionType: ${widget.barcode['encryptionType']}\n"
-                                                      "Password: ${widget.barcode['password']}"
-                                                  : widget.formate ==
-                                                          'calendarEvent'
-                                                      ? "Start: ${widget.barcode['start']}\n"
-                                                          "End: ${widget.barcode['end']}\n"
-                                                          "Location: ${widget.barcode['location'] ?? "No location"}"
-                                                          "Description: ${widget.barcode['description'] ?? "No description"}"
-                                                      : widget.formate ==
-                                                              'geoPoint'
-                                                          ? "Latitude: ${widget.barcode['latitude']}\n"
-                                                              "Longitude: ${widget.barcode['longitude']}\n"
-                                                          : widget
-                                                              .barcode['text'],
+                                  text: barcode,
                                 ),
                               );
                             });
@@ -384,30 +384,35 @@ class _ScanResultState extends State<ScanResult> {
                                     setState(
                                       () {
                                         if (widget.formate == "text" ||
-                                            widget.formate == "product") {
+                                            widget.formate == "geoPoint" ||
+                                            widget.formate == "product" ||
+                                            widget.formate == "phone" ||
+                                            widget.formate == "email" ||
+                                            widget.formate == "wifi" ||
+                                            widget.formate == "calendarEvent") {
                                           if (search == 'Google') {
                                             Utils.lauchURl(
-                                              "https://www.google.com/search?q=${widget.barcode}",
+                                              "https://www.google.com/search?q=${barcode}",
                                             );
                                           }
                                           if (search == 'Bing') {
                                             Utils.lauchURl(
-                                              "https://www.bing.com/search?q=${widget.barcode}",
+                                              "https://www.bing.com/search?q=${barcode}",
                                             );
                                           }
                                           if (search == 'Yahoo') {
                                             Utils.lauchURl(
-                                              "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=${widget.barcode}&b=1",
+                                              "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=${barcode}&b=1",
                                             );
                                           }
                                           if (search == 'DuckDuckGo') {
                                             Utils.lauchURl(
-                                              "https://duckduckgo.com/?q=${widget.barcode}&t=h_&ia=definition",
+                                              "https://duckduckgo.com/?q=${barcode}&t=h_&ia=definition",
                                             );
                                           }
                                           if (search == 'Yandex') {
                                             Utils.lauchURl(
-                                              "https://yandex.com/search/?text=${widget.barcode}&lr=10558",
+                                              "https://yandex.com/search/?text=${barcode}&lr=10558",
                                             );
                                           }
                                         }
@@ -421,7 +426,12 @@ class _ScanResultState extends State<ScanResult> {
                                   },
                                   child: Icon(
                                     widget.formate == "text" ||
-                                            widget.formate == "product"
+                                            widget.formate == "geoPoint" ||
+                                            widget.formate == "product" ||
+                                            widget.formate == "phone" ||
+                                            widget.formate == "email" ||
+                                            widget.formate == "wifi" ||
+                                            widget.formate == "calendarEvent"
                                         ? Icons.search
                                         : Icons.open_in_browser,
                                     color: Colors.black,
@@ -432,7 +442,12 @@ class _ScanResultState extends State<ScanResult> {
                                 ),
                                 Text(
                                   widget.formate == "text" ||
-                                          widget.formate == "product"
+                                          widget.formate == "geoPoint" ||
+                                          widget.formate == "product" ||
+                                          widget.formate == "phone" ||
+                                          widget.formate == "email" ||
+                                          widget.formate == "wifi" ||
+                                          widget.formate == "calendarEvent"
                                       ? "Search"
                                       : "Open browser",
                                   style: TextStyle(
@@ -473,7 +488,7 @@ class _ScanResultState extends State<ScanResult> {
                                   onPressed: () {
                                     setState(
                                       () {
-                                        Share.share(widget.barcode.toString());
+                                        Share.share(barcode!);
                                       },
                                     );
                                   },

@@ -49,7 +49,7 @@ class _QrScanScreenState extends State<QrScanScreen>
     controller = MobileScannerController(
       torchEnabled: false,
     );
-    isVibrate = SaveSetting.getVibrate() ?? false;
+    isVibrate = SaveSetting.getVibrate() ?? true;
   }
 
   @override
@@ -160,7 +160,7 @@ class _QrScanScreenState extends State<QrScanScreen>
           googlePlayIdentifier: playStoreId,
           minDays: 0,
           minLaunches: 4,
-          remindLaunches: 4,
+          remindLaunches: 3,
           remindDays: 1,
         ),
         onInitialized: (context, rateMyApp) {
@@ -294,8 +294,8 @@ class _QrScanScreenState extends State<QrScanScreen>
                         shape: QrScannerOverlayShape(
                           borderRadius: 0.r,
                           borderColor: Colors.white,
-                          borderLength: 21.w,
-                          borderWidth: 12.w,
+                          borderLength: 18.w,
+                          borderWidth: 9.w,
                           cutOutHeight: 0.7.sw,
                           cutOutWidth: 0.7.sw,
                         ),

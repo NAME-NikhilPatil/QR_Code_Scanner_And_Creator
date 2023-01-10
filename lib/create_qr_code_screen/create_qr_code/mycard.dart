@@ -38,16 +38,18 @@ class _MyCardState extends State<MyCard> {
     String org = controller4.text;
     String note = controller5.text;
 
-    final vCard = 'BEGIN:VCARD\n'
-        'FN:$name\n'
-        'EMAIL;TYPE=INTERNET;TYPE=HOME:$email\n'
-        'TEL;TYPE=CELL:$phonenumber\n'
-        'ADR;TYPE=HOME:$address\n'
-        'BDAY:$birthdate\n'
-        'ORG:$org\n'
-        'NOTE:$note\n'
-        'END:VCARD';
-    _dataString = vCard;
+    // final vCard = 'BEGIN:VCARD\n'
+    //     'FN:$name\n'
+    //     'EMAIL;TYPE=INTERNET;TYPE=HOME:$email\n'
+    //     'TEL;TYPE=CELL:$phonenumber\n'
+    //     'ADR;TYPE=HOME:$address\n'
+    //     'BDAY:$birthdate\n'
+    //     'ORG:$org\n'
+    //     'NOTE:$note\n'
+    //     'END:VCARD';
+    // _dataString = vCard;
+    _dataString =
+        "$name,\n$phonenumber,\n$email,\n$address,\n$birthdate,\n$org,\n$note";
   }
 
   String? birthDateInString;
