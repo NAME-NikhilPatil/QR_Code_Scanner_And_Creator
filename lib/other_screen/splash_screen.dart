@@ -184,13 +184,13 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       bodyTextStyle: bodyStyle,
       bodyPadding: EdgeInsets.fromLTRB(16.0.w, 0.0, 16.0.h, 16.0.w),
-      pageColor: Constants.creamColor,
+      pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
     return Scaffold(
       body: IntroductionScreen(
         key: introKey,
-        globalBackgroundColor: Constants.creamColor,
+        globalBackgroundColor: Colors.white,
         autoScrollDuration: 7000,
         pages: [
           PageViewModel(
