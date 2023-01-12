@@ -64,8 +64,8 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         closeIcon: const SizedBox(),
         context: context,
-        style: AlertStyle(
-          backgroundColor: Constants.creamColor,
+        style: const AlertStyle(
+          backgroundColor: Colors.white,
         ),
         type: AlertType.none,
         content: SizedBox(
@@ -101,8 +101,8 @@ class _SaveQrCodeState extends State<SaveQrCode> {
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         closeIcon: const SizedBox(),
         context: context,
-        style: AlertStyle(
-          backgroundColor: Constants.creamColor,
+        style: const AlertStyle(
+          backgroundColor: Colors.white,
         ),
         type: AlertType.none,
         content: Center(

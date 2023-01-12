@@ -78,8 +78,8 @@ class _SplashScreenState extends State<SplashScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       closeIcon: const SizedBox(),
       context: context,
-      style: AlertStyle(
-        backgroundColor: Constants.creamColor,
+      style: const AlertStyle(
+        backgroundColor: Colors.white,
       ),
       type: AlertType.none,
       // title: "Permission",
@@ -118,8 +118,8 @@ class _SplashScreenState extends State<SplashScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       closeIcon: const SizedBox(),
       context: context,
-      style: AlertStyle(
-        backgroundColor: Constants.creamColor,
+      style: const AlertStyle(
+        backgroundColor: Colors.white,
       ),
       type: AlertType.none,
       content: Text(
