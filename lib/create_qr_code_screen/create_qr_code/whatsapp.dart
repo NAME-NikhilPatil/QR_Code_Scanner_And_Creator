@@ -24,6 +24,19 @@ class _WhatsappState extends State<Whatsapp> {
   Color primaryColor = Colors.grey.shade500;
   late FlCountryCodePicker countryCodePicker;
 
+  @override
+  void initState() {
+    final favoriteCountries = ['IN', 'US', 'AU', 'JP'];
+    countryCodePicker = FlCountryCodePicker(
+      favorites: favoriteCountries,
+      favoritesIcon: const Icon(
+        Icons.star,
+        color: Colors.yellow,
+      ),
+    );
+    super.initState();
+  }
+
   Future<void> deviceInfo() async {
     _dataString =
         "https://api.whatsapp.com/send/?phone=${countryCode?.dialCode}${controller.text}";
@@ -31,7 +44,7 @@ class _WhatsappState extends State<Whatsapp> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final countryPicker = const FlCountryCodePicker();
+  // final countryPicker = const FlCountryCodePicker();
   CountryCode? countryCode;
 
   @override
@@ -87,7 +100,7 @@ class _WhatsappState extends State<Whatsapp> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                final code = await countryPicker.showPicker(
+                                final code = await countryCodePicker.showPicker(
                                     context: context);
                                 setState(() {
                                   countryCode = code;

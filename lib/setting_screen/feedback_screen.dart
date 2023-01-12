@@ -306,6 +306,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       style: Constants.buttonText,
                     ),
                   ),
+                  SizedBox(
+                    height: 45.h,
+                  )
                 ],
               ),
             ),
