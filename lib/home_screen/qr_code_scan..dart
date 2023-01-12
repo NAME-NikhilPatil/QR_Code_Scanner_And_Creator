@@ -178,9 +178,9 @@ class _QrScanScreenState extends State<QrScanScreen>
                   }
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      backgroundColor: Colors.white,
-                      content: Text(
+                    SnackBar(
+                      backgroundColor: Constants.primaryColor,
+                      content: const Text(
                         "Thanks for your feedback 😊",
                       ),
                       behavior: SnackBarBehavior.floating,

@@ -9,7 +9,6 @@ showExitPopup(context) async {
   return await Alert(
     padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
     closeIcon: const SizedBox(),
-
     context: context,
     type: AlertType.none,
     // title: "Do you want to exit?",

@@ -162,11 +162,10 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                 if (launchAppStore) {
                   rateMyApp.launchStore();
                 }
-
                 // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.white,
-                  content: Text(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  backgroundColor: Constants.primaryColor,
+                  content: const Text(
                     "Thanks for your feedback 😊",
                   ),
                   behavior: SnackBarBehavior.floating,

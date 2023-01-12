@@ -31,8 +31,6 @@ class _CreateQrCodeState extends State<CreateQrCode> {
   final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, designSize: const Size(375, 667));
-
     return WillPopScope(
       onWillPop: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => const MyNavigationBar()))

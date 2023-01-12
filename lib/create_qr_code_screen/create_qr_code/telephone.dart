@@ -44,7 +44,6 @@ class _TelephoneState extends State<Telephone> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-
                 children: [
                   const Boxy(text: "Telephone", image: "telephone"),
                   SizedBox(
@@ -135,7 +134,6 @@ class _TelephoneState extends State<Telephone> {
                     height: 30.h,
                   ),
                 ],
-                // children: [_contentWidget()],
               ),
             ),
           ),

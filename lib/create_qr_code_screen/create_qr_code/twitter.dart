@@ -184,7 +184,6 @@ class _TwitterState extends State<Twitter> {
                     ),
                   ),
                 ],
-                // children: [_contentWidget()],
               ),
             ),
           ),

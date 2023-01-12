@@ -17,7 +17,6 @@ class _FirstTimeState extends State<FirstTime> {
   @override
   void initState() {
     super.initState();
-
     isgranted = SaveSetting.getgranted() ?? false;
   }
 

@@ -46,7 +46,6 @@ class _TextboxState extends State<Textbox> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-
                 children: [
                   const Boxy(text: "Text", image: "text"),
                   SizedBox(
@@ -116,7 +115,6 @@ class _TextboxState extends State<Textbox> {
                     height: 30.h,
                   ),
                 ],
-                // children: [_contentWidget()],
               ),
             ),
           ),

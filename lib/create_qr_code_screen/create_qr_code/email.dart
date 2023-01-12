@@ -73,7 +73,6 @@ class _EmailState extends State<Email> {
                   TextFormField(
                     onChanged: (val) {
                       _formKey.currentState!.validate();
-
                       setState(() {
                         primaryColor = val.isNotEmpty
                             ? Constants.primaryColor

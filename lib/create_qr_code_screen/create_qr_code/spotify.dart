@@ -186,7 +186,6 @@ class _SpotifyState extends State<Spotify> {
                     height: 30.h,
                   ),
                 ],
-                // children: [_contentWidget()],
               ),
             ),
           ),

@@ -22,12 +22,15 @@ void main() async {
   await Hive.openBox<CreateQr>('create');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
-  // runApp(DevicePreview(
+  // runApp(
+  //   DevicePreview(
   //     enabled: true,
   //     tools: [
   //       ...DevicePreview.defaultTools,
   //     ],
-  //     builder: (context) => MyApp()));
+  //     builder: (context) => MyApp(),
+  //   ),
+  // );
 }
 
 class MyApp extends StatelessWidget {

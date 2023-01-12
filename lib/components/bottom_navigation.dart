@@ -62,8 +62,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         enableFeedback: true,
         currentIndex: selectedIndex,
         unselectedItemColor: Colors.grey.shade500,
-        selectedItemColor: Constants.primaryColor,
-      
+        selectedItemColor: Constants.primaryColor,   
         backgroundColor: Colors.white,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

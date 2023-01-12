@@ -108,14 +108,12 @@ class _FacebookState extends State<Facebook> {
                                   ispress = true;
                                 }
                               });
-                            },
-                            // backgroundColor: color,
+                            },                          
                             pressElevation: 0,
                             side: BorderSide(
                               color: Colors.grey.shade200,
                               width: 0.9.h,
                             ),
-
                             elevation: 0,
                             padding: EdgeInsets.symmetric(horizontal: 23.w),
                           );

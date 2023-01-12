@@ -21,7 +21,6 @@ class ScanResult extends StatefulWidget {
   Map<dynamic, dynamic> barcode;
 
   String? formate;
-  // Widget? page = const MyNavigationBar();
 
   @override
   State<ScanResult> createState() => _ScanResultState();
@@ -128,16 +127,14 @@ class _ScanResultState extends State<ScanResult> {
                 if (launchAppStore) {
                   rateMyApp.launchStore();
                 }
-
                 // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  backgroundColor: Colors.white,
-                  content: Text(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  backgroundColor: Constants.primaryColor,
+                  content: const Text(
                     "Thanks for your feedback 😊",
                   ),
                   behavior: SnackBarBehavior.floating,
                 ));
-
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
@@ -149,11 +146,11 @@ class _ScanResultState extends State<ScanResult> {
         }
 
         if (rateMyApp.shouldOpenDialog) {
-          // rateMyApp.showRateDialog(context);
           rateMyApp.showStarRateDialog(
             context,
-            title: "Rate This App",
-            message: "Do you like this app?Please leave a rating",
+            title: "Rate This App 😊",
+            message:
+                "Your feedback helps us to improve the app and provide a better experience for all of our users",
             starRatingOptions: const StarRatingOptions(initialRating: 4),
             actionsBuilder: (BuildContext context, double? stars) {
               return stars == null

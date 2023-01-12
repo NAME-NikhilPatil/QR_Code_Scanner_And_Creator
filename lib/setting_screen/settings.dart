@@ -502,7 +502,7 @@ class _SettingsState extends State<Settings> {
               ),
               SizedBox(
                 height: 0.1.sh,
-              )
+              ),
             ],
           ),
         ),

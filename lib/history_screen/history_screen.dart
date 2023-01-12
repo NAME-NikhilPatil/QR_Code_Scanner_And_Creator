@@ -98,8 +98,6 @@ class _History_screenState extends State<History_screen>
                               duration: 100,
                             )
                           : null;
-                      // Vibration.vibrate(duration: 100);
-
                       Alert(
                         padding: EdgeInsets.symmetric(
                             vertical: 10.h, horizontal: 20.w),
