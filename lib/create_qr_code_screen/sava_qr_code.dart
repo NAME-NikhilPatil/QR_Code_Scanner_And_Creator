@@ -167,6 +167,10 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                   backgroundColor: Constants.primaryColor,
                   content: const Text(
                     "Thanks for your feedback 😊",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                   behavior: SnackBarBehavior.floating,
                 ));

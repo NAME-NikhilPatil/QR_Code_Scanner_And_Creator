@@ -182,6 +182,9 @@ class _QrScanScreenState extends State<QrScanScreen>
                       backgroundColor: Constants.primaryColor,
                       content: const Text(
                         "Thanks for your feedback 😊",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -344,9 +347,9 @@ class _QrScanScreenState extends State<QrScanScreen>
                                     valueListenable: controller.torchState,
                                     builder: (context, state, child) {
                                       if (state == null) {
-                                        return Icon(
+                                        return const Icon(
                                           MdiIcons.flashlight,
-                                          color: Constants.creamColor,
+                                          color: Colors.white,
                                         );
                                       }
                                       switch (state as TorchState) {
@@ -358,7 +361,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                                         case TorchState.on:
                                           return const Icon(
                                             Icons.flashlight_on,
-                                            color: Colors.yellow,
+                                            color: Colors.yellowAccent,
                                           );
                                       }
                                     },
@@ -367,6 +370,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                                   padding: EdgeInsets.zero,
                                   onPressed: () async {
                                     turnoff = true;
+
                                     controller.toggleTorch();
                                   },
                                 ),

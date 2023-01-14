@@ -103,7 +103,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(platformResponse),
+        content: Text(
+          platformResponse,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         backgroundColor: Constants.primaryColor,
         behavior: SnackBarBehavior.floating,
       ),
