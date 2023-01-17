@@ -138,7 +138,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
 
   int originalSize = 2000;
 
-  String playStoreId = "com.example.qr_code_scanner";
+  String playStoreId = "com.qr.qr_code_scanner";
   @override
   Widget build(BuildContext context) {
     return RateMyAppBuilder(

@@ -82,7 +82,7 @@ class _ScanResultState extends State<ScanResult> {
     });
   }
 
-  String playStoreId = "com.example.qr_code_scanner";
+  String playStoreId = "com.qr.qr_code_scanner";
 
   @override
   Widget build(BuildContext context) {

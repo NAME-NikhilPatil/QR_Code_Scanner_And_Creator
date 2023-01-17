@@ -22,7 +22,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   late bool isSwitched;
   RateMyApp? rateMyApp;
-  static const playStoreId = "com.example.qr_code_scanner";
+  static const playStoreId = "com.qr.qr_code_scanner";
   late bool isVibrate;
   List<String> searchEngine = [
     "Google",
