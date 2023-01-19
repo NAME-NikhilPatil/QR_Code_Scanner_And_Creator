@@ -38,7 +38,7 @@ class _SettingsState extends State<Settings> {
     super.initState();
 
     isSwitched = SaveSetting.getSwitch() ?? false;
-    isVibrate = SaveSetting.getVibrate() ?? true;
+    isVibrate = SaveSetting.getVibrate() ?? false;
     search = SaveSetting.getSearch() ?? "Google";
   }
 
