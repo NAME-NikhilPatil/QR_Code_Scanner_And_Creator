@@ -389,27 +389,27 @@ class _ScanResultState extends State<ScanResult> {
                                             widget.formate == "calendarEvent") {
                                           if (search == 'Google') {
                                             Utils.lauchURl(
-                                              "https://www.google.com/search?q=${barcode}",
+                                              "https://www.google.com/search?q=$barcode",
                                             );
                                           }
                                           if (search == 'Bing') {
                                             Utils.lauchURl(
-                                              "https://www.bing.com/search?q=${barcode}",
+                                              "https://www.bing.com/search?q=$barcode",
                                             );
                                           }
                                           if (search == 'Yahoo') {
                                             Utils.lauchURl(
-                                              "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=${barcode}&b=1",
+                                              "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=$barcode&b=1",
                                             );
                                           }
                                           if (search == 'DuckDuckGo') {
                                             Utils.lauchURl(
-                                              "https://duckduckgo.com/?q=${barcode}&t=h_&ia=definition",
+                                              "https://duckduckgo.com/?q=$barcode&t=h_&ia=definition",
                                             );
                                           }
                                           if (search == 'Yandex') {
                                             Utils.lauchURl(
-                                              "https://yandex.com/search/?text=${barcode}&lr=10558",
+                                              "https://yandex.com/search/?text=$barcode&lr=10558",
                                             );
                                           }
                                         }
