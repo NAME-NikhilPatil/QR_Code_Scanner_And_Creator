@@ -166,7 +166,7 @@ class _TwitterState extends State<Twitter> {
                         deviceInfo();
                         var createDb =
                             Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "facebook"));
+                        createDb.addItemC(CreateQr(_dataString, "twitter"));
                         Navigator.push(
                           context,
                           MaterialPageRoute(

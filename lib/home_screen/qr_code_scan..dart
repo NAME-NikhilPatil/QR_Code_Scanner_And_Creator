@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -11,6 +12,7 @@ import 'package:qr_code_scan/constants.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:vibration/vibration.dart';
+
 import '../components/bottom_navigation.dart';
 import '../model/history.dart';
 import '../other_screen/exit.dart';

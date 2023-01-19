@@ -489,7 +489,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         title: Text(
-                          "Version 1.0",
+                          "Version 1.0.7",
                           style: Constants.settingText,
                         ),
                       ),

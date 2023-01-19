@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scan/components/bottom_navigation.dart';
-import 'package:qr_code_scan/providers/scan_data.dart';
 import 'package:qr_code_scan/constants.dart';
-import 'package:qr_code_scan/model/create.dart';
 import 'package:qr_code_scan/create_qr_code_screen/sava_qr_code.dart';
 import 'package:qr_code_scan/history_screen/detail_history_screen.dart';
+import 'package:qr_code_scan/model/create.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:vibration/vibration.dart';
 
 import '../model/history.dart';
 import '../providers/saved_setting.dart';
+import '../providers/scan_data.dart';
 
 // ignore: camel_case_types
 class History_screen extends StatefulWidget {
