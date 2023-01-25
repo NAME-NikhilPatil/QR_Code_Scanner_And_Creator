@@ -73,13 +73,67 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Facebook(),
+                                  builder: (context) => const Textbox(),
                                 ),
                               );
                             }),
                             child: const CreateBox(
-                              text: 'Facebook',
-                              image: 'facebook',
+                              text: 'Text',
+                              // image: 'assets/text.png',
+                              image: 'text',
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Telephone(),
+                                ),
+                              );
+                            }),
+                            child: const CreateBox(
+                              text: 'Telephone',
+                              // image: 'assets/telephone.png',
+                              image: 'telephone',
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Website(),
+                                ),
+                              );
+                            }),
+                            child: const CreateBox(
+                              text: 'Website',
+                              image: 'website',
+                              // image: 'assets/website.png',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Wifi(),
+                                ),
+                              );
+                            }),
+                            child: const CreateBox(
+                              text: 'Wi-Fi',
+                              image: 'wifi',
+                              // image: 'assets/wifi.png',
                             ),
                           ),
                           GestureDetector(
@@ -125,6 +179,57 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
+                                  builder: (context) => const Youtube(),
+                                ),
+                              );
+                            }),
+                            child: const CreateBox(
+                              text: 'Youtube',
+                              image: 'youtube',
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Facebook(),
+                                ),
+                              );
+                            }),
+                            child: const CreateBox(
+                              text: 'Facebook',
+                              image: 'facebook',
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Clipboar(),
+                                ),
+                              );
+                            }),
+                            child: const CreateBox(
+                              text: 'Clipboard',
+                              image: 'clipboard',
+                              // image: 'assets/clipboard.png',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
                                   builder: (context) => const Twitter(),
                                 ),
                               );
@@ -140,13 +245,14 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Youtube(),
+                                  builder: (context) => const Email(),
                                 ),
                               );
                             }),
                             child: const CreateBox(
-                              text: 'Youtube',
-                              image: 'youtube',
+                              text: 'E-mail',
+                              // image: 'assets/email.png',
+                              image: 'email',
                             ),
                           ),
                           GestureDetector(
@@ -154,14 +260,14 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Website(),
+                                  builder: (context) => const Contacts(),
                                 ),
                               );
                             }),
                             child: const CreateBox(
-                              text: 'Website',
-                              image: 'website',
-                              // image: 'assets/website.png',
+                              text: 'Contacts',
+                              // image: 'assets/contacts.png',
+                              image: 'contacts',
                             ),
                           ),
                         ],
@@ -185,112 +291,6 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                               text: 'Spotify',
                               // image: 'assets/sms.png',
                               image: 'spotify',
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: (() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Clipboar(),
-                                ),
-                              );
-                            }),
-                            child: const CreateBox(
-                              text: 'Clipboard',
-                              image: 'clipboard',
-                              // image: 'assets/clipboard.png',
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: (() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Wifi(),
-                                ),
-                              );
-                            }),
-                            child: const CreateBox(
-                              text: 'Wi-Fi',
-                              image: 'wifi',
-                              // image: 'assets/wifi.png',
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 25.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: (() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Textbox(),
-                                ),
-                              );
-                            }),
-                            child: const CreateBox(
-                              text: 'Text',
-                              // image: 'assets/text.png',
-                              image: 'text',
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: (() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Contacts(),
-                                ),
-                              );
-                            }),
-                            child: const CreateBox(
-                              text: 'Contacts',
-                              // image: 'assets/contacts.png',
-                              image: 'contacts',
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: (() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Telephone(),
-                                ),
-                              );
-                            }),
-                            child: const CreateBox(
-                              text: 'Telephone',
-                              // image: 'assets/telephone.png',
-                              image: 'telephone',
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 25.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: (() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Email(),
-                                ),
-                              );
-                            }),
-                            child: const CreateBox(
-                              text: 'E-mail',
-                              // image: 'assets/email.png',
-                              image: 'email',
                             ),
                           ),
                           GestureDetector(

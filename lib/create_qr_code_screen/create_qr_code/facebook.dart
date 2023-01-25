@@ -92,7 +92,6 @@ class _FacebookState extends State<Facebook> {
                                     bottomLeft: Radius.circular(5.r),
                                     bottomRight: Radius.circular(5.r))),
                             selectedColor: Constants.primaryColor,
-
                             onSelected: (value) {
                               setState(() {
                                 defaultChoiceIndex =
@@ -108,7 +107,7 @@ class _FacebookState extends State<Facebook> {
                                   ispress = true;
                                 }
                               });
-                            },                          
+                            },
                             pressElevation: 0,
                             side: BorderSide(
                               color: Colors.grey.shade200,
@@ -171,6 +170,7 @@ class _FacebookState extends State<Facebook> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
+                              formate: 'facebook',
                             ),
                           ),
                         );

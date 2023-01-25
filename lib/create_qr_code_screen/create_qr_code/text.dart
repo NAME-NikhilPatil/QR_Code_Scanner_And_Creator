@@ -101,6 +101,7 @@ class _TextboxState extends State<Textbox> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
+                              formate: 'text',
                             ),
                           ),
                         );

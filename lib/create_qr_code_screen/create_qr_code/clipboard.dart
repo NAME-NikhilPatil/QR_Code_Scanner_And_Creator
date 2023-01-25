@@ -91,6 +91,7 @@ class _ClipboarState extends State<Clipboar> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
+                              formate: 'clipboard',
                             ),
                           ),
                         );

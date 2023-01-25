@@ -229,7 +229,7 @@ class _ContactsState extends State<Contacts> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
-                              formate: "ContactInfo",
+                              formate: "contacts",
                             ),
                           ),
                         );

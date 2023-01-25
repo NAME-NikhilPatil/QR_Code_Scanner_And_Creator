@@ -35,7 +35,7 @@ class _History_screenState extends State<History_screen>
       vsync: this,
     );
     super.initState();
-    isVibrate = SaveSetting.getVibrate() ?? true;
+    isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
   TabController? _controller;
@@ -44,7 +44,7 @@ class _History_screenState extends State<History_screen>
   Widget build(BuildContext context) {
     context.watch<ScanData>().getItem();
     int? data =
-        Provider.of<ScanData>(context, listen: false).historyList?.length;
+        Provider.of<ScanData>(context, listen: false).historyList!.length;
     context.watch<ScanData>().getItemC();
     int tata = Provider.of<ScanData>(context, listen: false).createList.length;
 
@@ -336,7 +336,7 @@ class _History_screenState extends State<History_screen>
     );
     return ListView.builder(
       itemCount:
-          Provider.of<ScanData>(context, listen: false).historyList?.length,
+          Provider.of<ScanData>(context, listen: false).historyList!.length,
       itemBuilder: (context, index) {
         History his =
             Provider.of<ScanData>(context, listen: false).historyList![index];
@@ -620,6 +620,7 @@ class _History_screenState extends State<History_screen>
                     MaterialPageRoute(
                       builder: (context) => SaveQrCode(
                         dataString: his.qrCodeValue,
+                        formate: his.formate,
                       ),
                     ),
                   );

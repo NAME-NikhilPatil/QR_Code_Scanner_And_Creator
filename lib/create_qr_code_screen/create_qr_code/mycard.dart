@@ -471,6 +471,7 @@ class _MyCardState extends State<MyCard> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
+                              formate: 'mycard',
                             ),
                           ),
                         );

@@ -379,7 +379,19 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                                           widget.formate == "phone" ||
                                           widget.formate == "email" ||
                                           widget.formate == "wifi" ||
-                                          widget.formate == "calendarEvent") {
+                                          widget.formate == "calendarEvent" ||
+                                          widget.formate == 'ean8' ||
+                                          widget.formate == 'code128' ||
+                                          widget.formate == 'code39' ||
+                                          widget.formate == 'code93' ||
+                                          widget.formate == 'codebar' ||
+                                          widget.formate == 'ean13' ||
+                                          widget.formate == 'dataMatrix' ||
+                                          widget.formate == 'itf' ||
+                                          widget.formate == 'upcA' ||
+                                          widget.formate == 'upcE' ||
+                                          widget.formate == 'pdf417' ||
+                                          widget.formate == 'aztec') {
                                         if (search == 'Google') {
                                           Utils.lauchURl(
                                             "https://www.google.com/search?q=$barcode",
@@ -419,7 +431,19 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                                           widget.formate == "phone" ||
                                           widget.formate == "email" ||
                                           widget.formate == "wifi" ||
-                                          widget.formate == "calendarEvent"
+                                          widget.formate == "calendarEvent" ||
+                                          widget.formate == 'ean8' ||
+                                          widget.formate == 'code128' ||
+                                          widget.formate == 'code39' ||
+                                          widget.formate == 'code93' ||
+                                          widget.formate == 'codebar' ||
+                                          widget.formate == 'ean13' ||
+                                          widget.formate == 'dataMatrix' ||
+                                          widget.formate == 'itf' ||
+                                          widget.formate == 'upcA' ||
+                                          widget.formate == 'upcE' ||
+                                          widget.formate == 'pdf417' ||
+                                          widget.formate == 'aztec'
                                       ? Icons.search
                                       : Icons.open_in_browser,
                                   color: Colors.black,
@@ -435,7 +459,19 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                                         widget.formate == "phone" ||
                                         widget.formate == "email" ||
                                         widget.formate == "wifi" ||
-                                        widget.formate == "calendarEvent"
+                                        widget.formate == "calendarEvent" ||
+                                        widget.formate == 'ean8' ||
+                                        widget.formate == 'code128' ||
+                                        widget.formate == 'code39' ||
+                                        widget.formate == 'code93' ||
+                                        widget.formate == 'codebar' ||
+                                        widget.formate == 'ean13' ||
+                                        widget.formate == 'dataMatrix' ||
+                                        widget.formate == 'itf' ||
+                                        widget.formate == 'upcA' ||
+                                        widget.formate == 'upcE' ||
+                                        widget.formate == 'pdf417' ||
+                                        widget.formate == 'aztec'
                                     ? "Search"
                                     : "Open browser",
                                 style: TextStyle(

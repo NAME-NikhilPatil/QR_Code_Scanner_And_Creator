@@ -5,7 +5,6 @@ import 'package:qr_code_scan/history_screen/history_screen.dart';
 import 'package:qr_code_scan/home_screen/qr_code_scan..dart';
 import 'package:qr_code_scan/setting_screen/settings.dart';
 import '../create_qr_code_screen/create_qr_code.dart';
-
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({
     Key? key,
@@ -32,7 +31,6 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
       const CreateQrCode(),
       const Settings(),
     ];
-    
 
     return Scaffold(
       body: Center(
@@ -62,7 +60,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         enableFeedback: true,
         currentIndex: selectedIndex,
         unselectedItemColor: Colors.grey.shade500,
-        selectedItemColor: Constants.primaryColor,   
+        selectedItemColor: Constants.primaryColor,
         backgroundColor: Colors.white,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

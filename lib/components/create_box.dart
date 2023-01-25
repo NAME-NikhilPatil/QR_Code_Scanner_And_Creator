@@ -29,8 +29,8 @@ class CreateBox extends StatelessWidget {
               SvgPicture.asset(
                 "assets/$image.svg",
                 fit: BoxFit.cover,
-                height: 35.h,
-                width: 35.h,
+                height: 32.h,
+                width: 32.h,
               ),
             ],
           ),

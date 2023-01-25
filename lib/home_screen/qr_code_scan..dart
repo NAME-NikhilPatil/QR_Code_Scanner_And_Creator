@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -51,7 +52,7 @@ class _QrScanScreenState extends State<QrScanScreen>
     controller = MobileScannerController(
       torchEnabled: false,
     );
-    isVibrate = SaveSetting.getVibrate() ?? true;
+    isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
   @override
@@ -144,11 +145,11 @@ class _QrScanScreenState extends State<QrScanScreen>
 
   @override
   Widget build(BuildContext context) {
-    final scanWindow = Rect.fromCenter(
-      center: MediaQuery.of(context).size.center(Offset.zero),
-      width: 250.h,
-      height: 250.h,
-    );
+    // final scanWindow = Rect.fromCenter(
+    //   center: MediaQuery.of(context).size.center(Offset.zero),
+    //   width: 250.h,
+    //   height: 250.h,
+    // );
 
     return UpgradeAlert(
       upgrader: Upgrader(
@@ -161,7 +162,7 @@ class _QrScanScreenState extends State<QrScanScreen>
         rateMyApp: RateMyApp(
           googlePlayIdentifier: playStoreId,
           minDays: 0,
-          minLaunches: 4,
+          minLaunches: 5,
           remindLaunches: 3,
           remindDays: 1,
         ),
@@ -226,7 +227,6 @@ class _QrScanScreenState extends State<QrScanScreen>
                   MobileScanner(
                     allowDuplicates: false,
                     fit: BoxFit.cover,
-                    scanWindow: scanWindow,
                     controller: controller,
                     onDetect: (barcode, args) => isEnabled
                         ? onDetect(
@@ -308,18 +308,53 @@ class _QrScanScreenState extends State<QrScanScreen>
                     ),
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 0.1.sh,
-                      ),
-                      Text(
-                        "QRSCANNER",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32.sp,
-                          fontWeight: FontWeight.bold,
+                        width: 250.w,
+                        child: DefaultTextStyle(
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          child: AnimatedTextKit(
+                            isRepeatingAnimation: true,
+                            repeatForever: true,
+                            animatedTexts: [
+                              FadeAnimatedText(
+                                'Do not get too close to QR code/barcode',
+                                duration: const Duration(
+                                  milliseconds: 5000,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              FadeAnimatedText(
+                                'Make sure the QR code/barcode is aligned within the frame',
+                                duration: const Duration(
+                                  milliseconds: 5000,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              FadeAnimatedText(
+                                'You can also create your own QR code within the app',
+                                duration: const Duration(
+                                  milliseconds: 5000,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              FadeAnimatedText(
+                                'Scan a product\'s barcode for price information and more',
+                                duration: const Duration(
+                                  milliseconds: 5000,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                            onTap: () {
+                              null;
+                            },
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -328,126 +363,220 @@ class _QrScanScreenState extends State<QrScanScreen>
                     ],
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.w, vertical: 5.w),
-                            margin: EdgeInsets.symmetric(horizontal: 10.w),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Column(
-                              children: [
-                                IconButton(
-                                  color: Colors.white,
-                                  icon: ValueListenableBuilder(
-                                    valueListenable: controller.torchState,
-                                    builder: (context, state, child) {
-                                      if (state == null) {
-                                        return const Icon(
-                                          MdiIcons.flashlight,
-                                          color: Colors.white,
-                                        );
-                                      }
-                                      switch (state as TorchState) {
-                                        case TorchState.off:
-                                          return Icon(
-                                            MdiIcons.flashlight,
-                                            color: Constants.creamColor,
-                                          );
-                                        case TorchState.on:
-                                          return const Icon(
-                                            Icons.flashlight_on,
-                                            color: Colors.yellowAccent,
-                                          );
-                                      }
-                                    },
-                                  ),
-                                  iconSize: 30.0,
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () async {
-                                    turnoff = true;
-
-                                    controller.toggleTorch();
-                                  },
-                                ),
-                              ],
-                            ),
+                          SizedBox(
+                            height: 0.1.sh,
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10.w,
-                              vertical: 5.w,
-                            ),
-                            margin: EdgeInsets.symmetric(horizontal: 10.w),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Column(
-                              children: [
-                                IconButton(
-                                  color: Colors.white,
-                                  icon: const Icon(Icons.image),
-                                  iconSize: 25.0,
-                                  onPressed: () async {
-                                    turnoff = false;
-                                    final ImagePicker picker = ImagePicker();
-                                    // Pick an image
-                                    final XFile? image = await picker.pickImage(
-                                      source: ImageSource.gallery,
-                                    );
-                                    if (image != null) {
-                                      if (await controller
-                                          .analyzeImage(image.path)) {
-                                        if (!mounted) return;
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            content: const Text(
-                                              'Barcode found',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            backgroundColor:
-                                                Constants.primaryColor,
-                                          ),
-                                        );
-                                      } else {
-                                        if (!mounted) return;
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Text(
-                                              'No barcode found!',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                decoration: BoxDecoration(
+                                  color: Constants.primaryColor,
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
-                              ],
-                            ),
+                                child: Column(
+                                  children: [
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.symmetric(
+                                          horizontal: 24.w,
+                                          vertical: 10.w,
+                                        )),
+                                      ),
+                                      // color: Colors.white,
+                                      child: Column(
+                                        children: [
+                                          const Icon(
+                                            Icons.image,
+                                            size: 25,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            height: 7.h,
+                                          ),
+                                          Text(
+                                            'Gallery',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13.sp,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      // iconSize: 25.0,
+                                      onPressed: () async {
+                                        turnoff = false;
+                                        final ImagePicker picker =
+                                            ImagePicker();
+                                        // Pick an image
+                                        final XFile? image =
+                                            await picker.pickImage(
+                                          source: ImageSource.gallery,
+                                        );
+                                        if (image != null) {
+                                          if (await controller
+                                              .analyzeImage(image.path)) {
+                                            if (!mounted) return;
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                content: const Text(
+                                                  'Barcode found',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                backgroundColor:
+                                                    Constants.primaryColor,
+                                              ),
+                                            );
+                                          } else {
+                                            if (!mounted) return;
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                content: Text(
+                                                  'No barcode found!',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                decoration: BoxDecoration(
+                                  // color: Colors.grey.withOpacity(0.1),
+                                  color: Constants.primaryColor,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                child: Column(
+                                  children: [
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.symmetric(
+                                          horizontal: 15.w,
+                                          vertical: 10.w,
+                                        )),
+                                      ),
+                                      // color: Colors.white,
+                                      child: ValueListenableBuilder(
+                                        valueListenable: controller.torchState,
+                                        builder: (context, state, child) {
+                                          if (state == null) {
+                                            return Column(
+                                              children: [
+                                                const Icon(
+                                                  MdiIcons.flashlight,
+                                                  color: Colors.white,
+                                                  size: 25,
+                                                ),
+                                                SizedBox(
+                                                  height: 7.h,
+                                                ),
+                                                Text(
+                                                  "Flashlight",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.sp,
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          }
+                                          switch (state as TorchState) {
+                                            case TorchState.off:
+                                              return Column(children: [
+                                                const Icon(
+                                                  MdiIcons.flashlight,
+                                                  color: Colors.white,
+                                                  size: 25,
+                                                ),
+                                                SizedBox(
+                                                  height: 7.h,
+                                                ),
+                                                Text(
+                                                  "Flashlight",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.sp,
+                                                  ),
+                                                )
+                                              ]);
+                                            case TorchState.on:
+                                              return Column(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.flashlight_on,
+                                                    color: Colors.yellowAccent,
+                                                    size: 25,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 7.h,
+                                                  ),
+                                                  Text(
+                                                    "Flashlight",
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.yellowAccent,
+                                                      fontSize: 13.sp,
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                          }
+                                        },
+                                      ),
+                                      // iconSize: 30.0,
+                                      // padding: EdgeInsets.zero,
+                                      onPressed: () async {
+                                        turnoff = true;
+                                        controller.toggleTorch();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // IconButton(
+                              //   color: Colors.white,
+                              //   icon: ValueListenableBuilder(
+                              //     valueListenable: controller.cameraFacingState,
+                              //     builder: (context, state, child) {
+                              //       switch (state as CameraFacing) {
+                              //         case CameraFacing.front:
+                              //           return const Icon(Icons.camera_front);
+                              //         case CameraFacing.back:
+                              //           return const Icon(Icons.camera_rear);
+                              //       }
+                              //     },
+                              //   ),
+                              //   iconSize: 32.0,
+                              //   onPressed: () => controller.switchCamera(),
+                              // ),
+                            ],
                           ),
                         ],
-                      ),
-                      SizedBox(
-                        height: 0.1.sh,
                       ),
                     ],
                   ),

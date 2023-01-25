@@ -25,7 +25,6 @@ class _SmsState extends State<Sms> {
 
   Future<void> deviceInfo() async {
     _dataString = "smsto:${controller.text}";
-    
   }
 
   @override
@@ -100,6 +99,7 @@ class _SmsState extends State<Sms> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
+                              formate: 'sms',
                             ),
                           ),
                         );

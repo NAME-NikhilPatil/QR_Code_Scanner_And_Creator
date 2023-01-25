@@ -174,6 +174,7 @@ class _SpotifyState extends State<Spotify> {
                             MaterialPageRoute(
                                 builder: (context) => SaveQrCode(
                                       dataString: _dataString,
+                                      formate: 'spotify',
                                     )));
                       }
                     },

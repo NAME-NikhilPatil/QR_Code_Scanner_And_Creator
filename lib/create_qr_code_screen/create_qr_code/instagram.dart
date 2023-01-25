@@ -173,6 +173,7 @@ class _InstagramState extends State<Instagram> {
                           MaterialPageRoute(
                             builder: (context) => SaveQrCode(
                               dataString: _dataString,
+                              formate: 'instagram',
                             ),
                           ),
                         );

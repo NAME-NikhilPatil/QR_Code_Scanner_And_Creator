@@ -6,6 +6,7 @@ import 'package:qr_code_scan/providers/scan_data.dart';
 import 'package:qr_code_scan/setting_screen/feedback_screen.dart';
 import 'package:qr_code_scan/setting_screen/privacy_policy.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../components/bottom_navigation.dart';
 import '../constants.dart';
@@ -389,6 +390,7 @@ class _SettingsState extends State<Settings> {
                               },
                             );
                           },
+                          // subtitle: const Text('Rate us 5 stars'),
                           enableFeedback: true,
                           leading: Container(
                               height: 30.h,
@@ -405,6 +407,35 @@ class _SettingsState extends State<Settings> {
                             "Rate us",
                             style: Constants.settingText,
                           ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Utils.lauchURl(
+                            "https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner",
+                          );
+                        },
+                        subtitle: const Text(
+                            "Update app for new features and improvements"),
+                        enableFeedback: true,
+                        leading: Container(
+                          height: 30.h,
+                          width: 30.h,
+                          decoration: BoxDecoration(
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(7.r)),
+                          child: Icon(
+                            Icons.system_update,
+                            color: Colors.white,
+                            size: 18.h,
+                          ),
+                        ),
+                        title: Text(
+                          "Update app",
+                          style: Constants.settingText,
                         ),
                       ),
                       SizedBox(
@@ -489,7 +520,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         title: Text(
-                          "Version 1.0.7",
+                          "Version 2.0.0",
                           style: Constants.settingText,
                         ),
                       ),
@@ -508,5 +539,16 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+}
+
+class Utils {
+  static Future<bool> lauchURl(String code) async {
+    if (await canLaunchUrlString(code)) {
+      await launchUrlString(code, mode: LaunchMode.externalApplication);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
