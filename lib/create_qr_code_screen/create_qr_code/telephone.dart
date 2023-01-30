@@ -109,20 +109,24 @@ class _TelephoneState extends State<Telephone> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "telephone"));
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: "telephone",
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "telephone"));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: "telephone",
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

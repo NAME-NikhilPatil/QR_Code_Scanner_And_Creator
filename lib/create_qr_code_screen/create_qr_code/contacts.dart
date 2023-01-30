@@ -219,20 +219,24 @@ class _ContactsState extends State<Contacts> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "contacts"));
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: "contacts",
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "contacts"));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: "contacts",
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

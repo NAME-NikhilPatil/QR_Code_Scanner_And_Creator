@@ -32,10 +32,14 @@ class _ScanResultState extends State<ScanResult> {
   @override
   void initState() {
     super.initState();
-    click = SaveSetting.getSwitch() ??
-        Provider.of<ScanData>(context, listen: false).click;
+    try {
+      click = SaveSetting.getSwitch() ??
+          Provider.of<ScanData>(context, listen: false).click;
 
-    click == true ? updateButton() : null;
+      click == true ? updateButton() : null;
+    } catch (e) {
+      print(e);
+    }
   }
 
   final TextStyle _style = TextStyle(
@@ -54,31 +58,35 @@ class _ScanResultState extends State<ScanResult> {
 
   updateButton() {
     setState(() {
-      Clipboard.setData(
-        ClipboardData(
-          text: widget.formate == 'url'
-              ? widget.barcode['url']
-              : widget.formate == 'phone'
-                  ? widget.barcode['number']
-                  : widget.formate == 'email'
-                      ? widget.barcode['address']
-                      : widget.formate == 'wifi'
-                          ? "Network name(ssid): ${widget.barcode['ssid']}\n"
-                              "EncryptionType: ${widget.barcode['encryptionType']}\n"
-                              "Password: ${widget.barcode['password']}"
-                          : widget.formate == 'calendarEvent'
-                              ? "Start: ${widget.barcode['start']}\n"
-                                  "End: ${widget.barcode['end']}\n"
-                                  "Location: ${widget.barcode['location'] ?? "No location"}"
-                                  "Description: ${widget.barcode['description'] ?? "No description"}"
-                              : widget.formate == 'geoPoint'
-                                  ? "Latitude: ${widget.barcode['latitude']}\n"
-                                      "Longitude: ${widget.barcode['longitude']}\n"
-                                  : widget.barcode['text'],
-        ),
-      );
-      click = true;
-      done();
+      try {
+        Clipboard.setData(
+          ClipboardData(
+            text: widget.formate == 'url'
+                ? widget.barcode['url']
+                : widget.formate == 'phone'
+                    ? widget.barcode['number']
+                    : widget.formate == 'email'
+                        ? widget.barcode['address']
+                        : widget.formate == 'wifi'
+                            ? "Network name(ssid): ${widget.barcode['ssid']}\n"
+                                "EncryptionType: ${widget.barcode['encryptionType']}\n"
+                                "Password: ${widget.barcode['password']}"
+                            : widget.formate == 'calendarEvent'
+                                ? "Start: ${widget.barcode['start']}\n"
+                                    "End: ${widget.barcode['end']}\n"
+                                    "Location: ${widget.barcode['location'] ?? "No location"}"
+                                    "Description: ${widget.barcode['description'] ?? "No description"}"
+                                : widget.formate == 'geoPoint'
+                                    ? "Latitude: ${widget.barcode['latitude']}\n"
+                                        "Longitude: ${widget.barcode['longitude']}\n"
+                                    : widget.barcode['text'],
+          ),
+        );
+        click = true;
+        done();
+      } catch (e) {
+        print(e);
+      }
     });
   }
 
@@ -106,11 +114,12 @@ class _ScanResultState extends State<ScanResult> {
                             ? "Latitude: ${widget.barcode['latitude']}\n"
                                 "Longitude: ${widget.barcode['longitude']}\n"
                             : widget.barcode['text'].toString();
+
     return RateMyAppBuilder(
       rateMyApp: RateMyApp(
         googlePlayIdentifier: playStoreId,
         minDays: 0,
-        minLaunches: 3,
+        minLaunches: 4,
         remindLaunches: 2,
         remindDays: 1,
       ),
@@ -121,22 +130,26 @@ class _ScanResultState extends State<ScanResult> {
         Widget buildOkButton(double star) {
           return TextButton(
               onPressed: () async {
-                const event = RateMyAppEventType.rateButtonPressed;
-                await rateMyApp.callEvent(event);
-                final launchAppStore = star >= 4;
-                if (launchAppStore) {
-                  rateMyApp.launchStore();
+                try {
+                  const event = RateMyAppEventType.rateButtonPressed;
+                  await rateMyApp.callEvent(event);
+                  final launchAppStore = star >= 4;
+                  if (launchAppStore) {
+                    rateMyApp.launchStore();
+                  }
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Constants.primaryColor,
+                    content: const Text(
+                      "Thanks for your feedback 😊",
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ));
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                } catch (e) {
+                  print(e);
                 }
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Constants.primaryColor,
-                  content: const Text(
-                    "Thanks for your feedback 😊",
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ));
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context);
               },
               child: const Text("OK"));
         }
@@ -189,7 +202,7 @@ class _ScanResultState extends State<ScanResult> {
                 children: [
                   Container(
                     margin:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                     decoration: BoxDecoration(
@@ -325,17 +338,21 @@ class _ScanResultState extends State<ScanResult> {
                             ),
                           ),
                           onPressed: () {
-                            setState(() {
-                              Clipboard.setData(
-                                ClipboardData(
-                                  text: barcode,
-                                ),
-                              );
-                            });
+                            try {
+                              setState(() {
+                                Clipboard.setData(
+                                  ClipboardData(
+                                    text: barcode,
+                                  ),
+                                );
+                              });
 
-                            click = true;
-                            // Provider.of<ScanData>(context,listen: false).updateClick(true);
-                            done();
+                              click = true;
+                              // Provider.of<ScanData>(context,listen: false).updateClick(true);
+                              done();
+                            } catch (e) {
+                              print(e);
+                            }
                           },
                           child: Text(
                             click == false ? "Copy" : "Copied to clipboard",
@@ -378,63 +395,69 @@ class _ScanResultState extends State<ScanResult> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    setState(
-                                      () {
-                                        if (widget.formate == "text" ||
-                                            widget.formate == "geoPoint" ||
-                                            widget.formate == "product" ||
-                                            widget.formate == "phone" ||
-                                            widget.formate == "email" ||
-                                            widget.formate == "wifi" ||
-                                            widget.formate == "calendarEvent" ||
-                                            widget.formate == 'ean8' ||
-                                            widget.formate == 'code128' ||
-                                            widget.formate == 'code39' ||
-                                            widget.formate == 'code93' ||
-                                            widget.formate == 'codebar' ||
-                                            widget.formate == 'ean13' ||
-                                            widget.formate == 'dataMatrix' ||
-                                            widget.formate == 'itf' ||
-                                            widget.formate == 'upcA' ||
-                                            widget.formate == 'upcE' ||
-                                            widget.formate == 'pdf417' ||
-                                            widget.formate == 'aztec') {
-                                          if (search == 'Google') {
-                                            Utils.lauchURl(
-                                              "https://www.google.com/search?q=$barcode",
-                                            );
+                                    try {
+                                      setState(
+                                        () {
+                                          if (widget.formate == "text" ||
+                                              widget.formate == "geoPoint" ||
+                                              widget.formate == "product" ||
+                                              widget.formate == "phone" ||
+                                              widget.formate == "email" ||
+                                              widget.formate == "wifi" ||
+                                              widget.formate =="calendarEvent" ||
+                                              widget.formate == 'ean8' ||
+                                              widget.formate == 'code128' ||
+                                              widget.formate == 'code39' ||
+                                              widget.formate == 'code93' ||
+                                              widget.formate == 'codebar' ||
+                                              widget.formate == 'ean13' ||
+                                              widget.formate == 'dataMatrix' ||
+                                              widget.formate == 'itf' ||
+                                              widget.formate == 'upcA' ||
+                                              widget.formate == 'upcE' ||
+                                              widget.formate == 'pdf417' ||
+                                              widget.formate == 'aztec' ||
+                                              widget.formate == 'isbn') {
+                                            if (search == 'Google') {
+                                              Utils.lauchURl(
+                                                "https://www.google.com/search?q=$barcode",
+                                              );
+                                            }
+                                            if (search == 'Bing') {
+                                              Utils.lauchURl(
+                                                "https://www.bing.com/search?q=$barcode",
+                                              );
+                                            }
+                                            if (search == 'Yahoo') {
+                                              Utils.lauchURl(
+                                                "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=$barcode&b=1",
+                                              );
+                                            }
+                                            if (search == 'DuckDuckGo') {
+                                              Utils.lauchURl(
+                                                "https://duckduckgo.com/?q=$barcode&t=h_&ia=definition",
+                                              );
+                                            }
+                                            if (search == 'Yandex') {
+                                              Utils.lauchURl(
+                                                "https://yandex.com/search/?text=$barcode&lr=10558",
+                                              );
+                                            }
                                           }
-                                          if (search == 'Bing') {
-                                            Utils.lauchURl(
-                                              "https://www.bing.com/search?q=$barcode",
-                                            );
-                                          }
-                                          if (search == 'Yahoo') {
-                                            Utils.lauchURl(
-                                              "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=$barcode&b=1",
-                                            );
-                                          }
-                                          if (search == 'DuckDuckGo') {
-                                            Utils.lauchURl(
-                                              "https://duckduckgo.com/?q=$barcode&t=h_&ia=definition",
-                                            );
-                                          }
-                                          if (search == 'Yandex') {
-                                            Utils.lauchURl(
-                                              "https://yandex.com/search/?text=$barcode&lr=10558",
-                                            );
-                                          }
-                                        }
 
-                                        if (widget.formate == "url") {
-                                          Utils.lauchURl(
-                                              widget.barcode['url']!);
-                                        }
-                                      },
-                                    );
+                                          if (widget.formate == "url") {
+                                            Utils.lauchURl(
+                                                widget.barcode['url']!);
+                                          }
+                                        },
+                                      );
+                                    } catch (e) {
+                                      print(e);
+                                    }
                                   },
                                   child: Icon(
                                     widget.formate == "text" ||
+                                            widget.formate == 'isbn' ||
                                             widget.formate == "geoPoint" ||
                                             widget.formate == "product" ||
                                             widget.formate == "phone" ||
@@ -463,6 +486,7 @@ class _ScanResultState extends State<ScanResult> {
                                 ),
                                 Text(
                                   widget.formate == "text" ||
+                                          widget.formate == 'isbn' ||
                                           widget.formate == "geoPoint" ||
                                           widget.formate == "product" ||
                                           widget.formate == "phone" ||
@@ -519,11 +543,15 @@ class _ScanResultState extends State<ScanResult> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    setState(
-                                      () {
-                                        Share.share(barcode!);
-                                      },
-                                    );
+                                    try {
+                                      setState(
+                                        () {
+                                          Share.share(barcode!);
+                                        },
+                                      );
+                                    } catch (e) {
+                                      print(e);
+                                    }
                                   },
                                   child: const Icon(
                                     Icons.share,

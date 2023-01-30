@@ -17,13 +17,17 @@ class _FirstTimeState extends State<FirstTime> {
   @override
   void initState() {
     super.initState();
-    isgranted = SaveSetting.getgranted() ?? false;
+    try {
+      isgranted = SaveSetting.getgranted() ?? false;
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isgranted == true ?const  MyNavigationBar() :const SplashScreen(),
+      body: isgranted == true ? const MyNavigationBar() : const SplashScreen(),
     );
   }
 }

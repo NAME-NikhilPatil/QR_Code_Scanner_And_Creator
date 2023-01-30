@@ -54,7 +54,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                         "QR Code Creator",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 20.sp,
+                          fontSize: 21.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

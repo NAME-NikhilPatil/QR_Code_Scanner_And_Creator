@@ -160,20 +160,24 @@ class _FacebookState extends State<Facebook> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "facebook"));
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: 'facebook',
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "facebook"));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: 'facebook',
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

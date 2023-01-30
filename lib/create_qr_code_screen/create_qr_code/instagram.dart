@@ -161,22 +161,26 @@ class _InstagramState extends State<Instagram> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
 
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "instagram"));
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "instagram"));
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: 'instagram',
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: 'instagram',
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

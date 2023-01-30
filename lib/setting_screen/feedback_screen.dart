@@ -1,4 +1,5 @@
 import 'dart:io';
+// ignore: depend_on_referenced_packages
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +40,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    try {
+      initPlatformState();
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> initPlatformState() async {
@@ -251,7 +256,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _openImagePicker();
+                            try {
+                              _openImagePicker();
+                            } catch (e) {
+                              print(e);
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -286,7 +295,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.remove_circle),
-                                onPressed: () => {_removeAttachment(i)},
+                                onPressed: () {
+                                  try {
+                                    _removeAttachment(i);
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
                               )
                             ],
                           ),
@@ -299,12 +314,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        setState(
-                          () {
-                            send();
-                          },
-                        );
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          setState(
+                            () {
+                              send();
+                            },
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

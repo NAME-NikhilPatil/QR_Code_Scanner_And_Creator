@@ -91,20 +91,24 @@ class _TextboxState extends State<Textbox> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "text"));
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: 'text',
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "text"));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: 'text',
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

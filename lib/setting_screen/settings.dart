@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -121,21 +123,26 @@ class _SettingsState extends State<Settings> {
                           // activeTrackColor: Colors.grey.shade300,
                           // inactiveTrackColor: Colors.grey.shade400,
                           onChanged: (value) {
-                            if (value == true) {
-                              Provider.of<ScanData>(context, listen: false)
-                                  .click = true;
-                              setState(() {
-                                isSwitched = true;
-                                SaveSetting.setSwitch(true);
-                              });
-                            } else {
-                              Provider.of<ScanData>(context, listen: false)
-                                  .click = false;
-                              setState(() {
-                                isSwitched = false;
-                                SaveSetting.setSwitch(false);
-                              });
+                            try {
+                              if (value == true) {
+                                Provider.of<ScanData>(context, listen: false)
+                                    .click = true;
+                                setState(() {
+                                  isSwitched = true;
+                                  SaveSetting.setSwitch(true);
+                                });
+                              } else {
+                                Provider.of<ScanData>(context, listen: false)
+                                    .click = false;
+                                setState(() {
+                                  isSwitched = false;
+                                  SaveSetting.setSwitch(false);
+                                });
+                              }
+                            } catch (e) {
+                              print(e);
                             }
+                            ;
                           },
                           value: isSwitched,
                         ),
@@ -163,23 +170,28 @@ class _SettingsState extends State<Settings> {
                         trailing: Switch(
                           activeColor: Constants.primaryColor,
                           onChanged: (value) {
-                            if (value == true) {
-                              Provider.of<ScanData>(context, listen: false)
-                                  .vibrate = true;
-                              setState(() {
-                                isVibrate = true;
-                                SaveSetting.setVibrate(true);
-                              });
-                            } else {
-                              Provider.of<ScanData>(context, listen: false)
-                                  .vibrate = false;
-                              setState(
-                                () {
-                                  isVibrate = false;
-                                  SaveSetting.setVibrate(false);
-                                },
-                              );
+                            try {
+                              if (value == true) {
+                                Provider.of<ScanData>(context, listen: false)
+                                    .vibrate = true;
+                                setState(() {
+                                  isVibrate = true;
+                                  SaveSetting.setVibrate(true);
+                                });
+                              } else {
+                                Provider.of<ScanData>(context, listen: false)
+                                    .vibrate = false;
+                                setState(
+                                  () {
+                                    isVibrate = false;
+                                    SaveSetting.setVibrate(false);
+                                  },
+                                );
+                              }
+                            } catch (e) {
+                              print(e);
                             }
+                            ;
                           },
                           value: isVibrate,
                         ),
@@ -211,14 +223,19 @@ class _SettingsState extends State<Settings> {
                           enabled: true,
                           elevation: 3,
                           onSelected: (value) {
-                            setState(
-                              () {
-                                Provider.of<ScanData>(context, listen: false)
-                                    .search = value as String;
-                                SaveSetting.setSearch(value);
-                                search = value;
-                              },
-                            );
+                            try {
+                              setState(
+                                () {
+                                  Provider.of<ScanData>(context, listen: false)
+                                      .search = value as String;
+                                  SaveSetting.setSearch(value);
+                                  search = value;
+                                },
+                              );
+                            } catch (e) {
+                              print(e);
+                            }
+                            ;
                           },
                           child: Padding(
                             padding: EdgeInsets.only(right: 8.w),
@@ -330,65 +347,72 @@ class _SettingsState extends State<Settings> {
                         },
                         builder: (context) => ListTile(
                           onTap: () {
-                            Widget buildOkButton(double star) {
-                              return TextButton(
-                                  onPressed: () async {
-                                    const event =
-                                        RateMyAppEventType.rateButtonPressed;
-                                    await rateMyApp!.callEvent(event);
-                                    final launchAppStore = star >= 4;
-                                    if (launchAppStore) {
-                                      rateMyApp!.launchStore();
-                                    }
-                                    // ignore: use_build_context_synchronously
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: Constants.primaryColor,
-                                        content: const Text(
-                                          "Thank you for your feedback 😊",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
+                            try {
+                              Widget buildOkButton(double star) {
+                                return TextButton(
+                                    onPressed: () async {
+                                      const event =
+                                          RateMyAppEventType.rateButtonPressed;
+                                      await rateMyApp!.callEvent(event);
+                                      final launchAppStore = star >= 4;
+                                      if (launchAppStore) {
+                                        rateMyApp!.launchStore();
+                                      }
+                                      // ignore: use_build_context_synchronously
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor:
+                                              Constants.primaryColor,
+                                          content: const Text(
+                                            "Thank you for your feedback 😊",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
+                                          behavior: SnackBarBehavior.floating,
                                         ),
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
-                                    );
+                                      );
 
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("OK"));
-                            }
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("OK"));
+                              }
 
-                            Widget buildCancelButton() {
-                              return RateMyAppNoButton(
-                                rateMyApp!,
-                                text: "CANCEL",
-                              );
-                            }
-
-                            setState(
-                              () {
-                                rateMyApp!.showStarRateDialog(
-                                  context,
-                                  title: "Rate This App 😊",
-                                  message:
-                                      "Your feedback helps us to improve the app and provide a better experience for all of our users",
-                                  starRatingOptions:
-                                      const StarRatingOptions(initialRating: 4),
-                                  actionsBuilder:
-                                      (BuildContext context, double? stars) {
-                                    return stars == null
-                                        ? [buildCancelButton()]
-                                        : [
-                                            buildOkButton(stars),
-                                            buildCancelButton()
-                                          ];
-                                  },
+                              Widget buildCancelButton() {
+                                return RateMyAppNoButton(
+                                  rateMyApp!,
+                                  text: "CANCEL",
                                 );
-                              },
-                            );
+                              }
+
+                              setState(
+                                () {
+                                  rateMyApp!.showStarRateDialog(
+                                    context,
+                                    title: "Rate This App 😊",
+                                    message:
+                                        "Your feedback helps us to improve the app and provide a better experience for all of our users",
+                                    starRatingOptions: const StarRatingOptions(
+                                        initialRating: 4),
+                                    actionsBuilder:
+                                        (BuildContext context, double? stars) {
+                                      return stars == null
+                                          ? [buildCancelButton()]
+                                          : [
+                                              buildOkButton(stars),
+                                              buildCancelButton()
+                                            ];
+                                    },
+                                  );
+                                },
+                              );
+                            } catch (e) {
+                              print(e);
+                            }
+                            ;
                           },
                           // subtitle: const Text('Rate us 5 stars'),
                           enableFeedback: true,
@@ -414,9 +438,13 @@ class _SettingsState extends State<Settings> {
                       ),
                       ListTile(
                         onTap: () {
-                          Utils.lauchURl(
-                            "https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner",
-                          );
+                          try {
+                            Utils.lauchURl(
+                              "https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner",
+                            );
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         subtitle: const Text(
                             "Update app for new features and improvements"),
@@ -520,7 +548,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         title: Text(
-                          "Version 2.0.0",
+                          "Version 2.0.7",
                           style: Constants.settingText,
                         ),
                       ),

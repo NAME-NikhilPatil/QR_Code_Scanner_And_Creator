@@ -29,13 +29,18 @@ class _History_screenState extends State<History_screen>
 
   @override
   void initState() {
-    _controller = TabController(
-      initialIndex: 0,
-      length: 2,
-      vsync: this,
-    );
+    try {
+      _controller = TabController(
+        initialIndex: 0,
+        length: 2,
+        vsync: this,
+      );
+
+      isVibrate = SaveSetting.getVibrate() ?? false;
+    } catch (e) {
+      print(e);
+    }
     super.initState();
-    isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
   TabController? _controller;
@@ -90,93 +95,18 @@ class _History_screenState extends State<History_screen>
           actions: [
             IconButton(
               onPressed: () {
-                if (_controller?.index == 0) {
-                  setState(() {
-                    if (data != 0) {
-                      isVibrate == true
-                          ? Vibration.vibrate(
-                              duration: 100,
-                            )
-                          : null;
-                      Alert(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.h, horizontal: 20.w),
-                        closeIcon: const SizedBox(),
-                        context: context,
-                        type: AlertType.none,
-                        title: "Clear history",
-                        style: AlertStyle(
-                          backgroundColor: Colors.white,
-                          titleStyle: TextStyle(
-                            fontSize: 20.sp,
-                          ),
-                        ),
-                        content: Column(
-                          children: [
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            SizedBox(
-                                child: Text(
-                              "Are you sure you want to delete?",
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15.sp,
-                              ),
-                            )),
-                          ],
-                        ),
-                        buttons: [
-                          DialogButton(
-                            onPressed: () => Navigator.pop(context),
-                            color: Constants.creamColor,
-                            child: Text(
-                              "No",
-                              style: TextStyle(
-                                color: Constants.primaryColor,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          DialogButton(
-                            onPressed: () {
-                              Provider.of<ScanData>(context, listen: false)
-                                  .deleteItem();
-
-                              Navigator.pop(context);
-                            },
-                            color: Constants.primaryColor,
-                            child: Text(
-                              "Yes",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        ],
-                      ).show();
-                    }
-                  });
-                }
-                if (_controller?.index == 1) {
-                  setState(
-                    () {
-                      if (tata != 0) {
-                        // Vibration.vibrate(duration: 100);
+                try {
+                  if (_controller?.index == 0) {
+                    setState(() {
+                      if (data != 0) {
                         isVibrate == true
                             ? Vibration.vibrate(
                                 duration: 100,
                               )
                             : null;
-
                         Alert(
                           padding: EdgeInsets.symmetric(
-                            vertical: 10.h,
-                            horizontal: 20.w,
-                          ),
+                              vertical: 10.h, horizontal: 20.w),
                           closeIcon: const SizedBox(),
                           context: context,
                           type: AlertType.none,
@@ -189,8 +119,8 @@ class _History_screenState extends State<History_screen>
                           ),
                           content: Column(
                             children: [
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height: 10.h,
                               ),
                               SizedBox(
                                   child: Text(
@@ -218,7 +148,7 @@ class _History_screenState extends State<History_screen>
                             DialogButton(
                               onPressed: () {
                                 Provider.of<ScanData>(context, listen: false)
-                                    .deleteItemC();
+                                    .deleteItem();
 
                                 Navigator.pop(context);
                               },
@@ -231,12 +161,91 @@ class _History_screenState extends State<History_screen>
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
+                            )
                           ],
                         ).show();
                       }
-                    },
-                  );
+                    });
+                  }
+                  if (_controller?.index == 1) {
+                    setState(
+                      () {
+                        if (tata != 0) {
+                          // Vibration.vibrate(duration: 100);
+                          isVibrate == true
+                              ? Vibration.vibrate(
+                                  duration: 100,
+                                )
+                              : null;
+
+                          Alert(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.h,
+                              horizontal: 20.w,
+                            ),
+                            closeIcon: const SizedBox(),
+                            context: context,
+                            type: AlertType.none,
+                            title: "Clear history",
+                            style: AlertStyle(
+                              backgroundColor: Colors.white,
+                              titleStyle: TextStyle(
+                                fontSize: 20.sp,
+                              ),
+                            ),
+                            content: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                    child: Text(
+                                  "Are you sure you want to delete?",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15.sp,
+                                  ),
+                                )),
+                              ],
+                            ),
+                            buttons: [
+                              DialogButton(
+                                onPressed: () => Navigator.pop(context),
+                                color: Constants.creamColor,
+                                child: Text(
+                                  "No",
+                                  style: TextStyle(
+                                    color: Constants.primaryColor,
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              DialogButton(
+                                onPressed: () {
+                                  Provider.of<ScanData>(context, listen: false)
+                                      .deleteItemC();
+
+                                  Navigator.pop(context);
+                                },
+                                color: Constants.primaryColor,
+                                child: Text(
+                                  "Yes",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ).show();
+                        }
+                      },
+                    );
+                  }
+                } catch (e) {
+                  print(e);
                 }
               },
               icon: const Icon(
@@ -340,6 +349,7 @@ class _History_screenState extends State<History_screen>
       itemBuilder: (context, index) {
         History his =
             Provider.of<ScanData>(context, listen: false).historyList![index];
+
         return Container(
           margin: EdgeInsets.only(bottom: 5.h),
           child: Column(

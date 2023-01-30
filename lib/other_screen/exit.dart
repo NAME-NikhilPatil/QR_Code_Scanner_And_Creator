@@ -48,7 +48,11 @@ showExitPopup(context) async {
       ),
       DialogButton(
         onPressed: () {
-          exit(0);
+          try {
+            exit(0);
+          } catch (e) {
+            print(e);
+          }
         },
         color: Constants.primaryColor,
         child: Text(

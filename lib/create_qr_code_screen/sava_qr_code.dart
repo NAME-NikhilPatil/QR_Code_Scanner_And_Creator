@@ -12,6 +12,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
+// import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 
 import '../constants.dart';
 
@@ -32,107 +33,111 @@ class _SaveQrCodeState extends State<SaveQrCode> {
   takeScreenShot(ref) async {
     PermissionStatus res;
     res = await Permission.storage.request();
+    try {
+      if (res.isGranted) {
+        // ignore: use_build_context_synchronously
+        RenderRepaintBoundary? boundary = globalKey.currentContext!
+            .findRenderObject() as RenderRepaintBoundary?;
+        ui.Image image = await boundary!.toImage(pixelRatio: 5.0);
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
+        Uint8List pngBytes = byteData!.buffer.asUint8List();
+        final tempDir = await getExternalStorageDirectory();
+        final file =
+            await File('${tempDir!.path}/${DateTime.now().microsecond}$ref.png')
+                .create(recursive: true);
+        await file.writeAsBytes(pngBytes);
+        GallerySaver.saveImage(file.path);
 
-    if (res.isGranted) {
-      // ignore: use_build_context_synchronously
-      RenderRepaintBoundary? boundary = globalKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary?;
-      ui.Image image = await boundary!.toImage(pixelRatio: 5.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-      final tempDir = await getExternalStorageDirectory();
-      final file =
-          await File('${tempDir!.path}/${DateTime.now().microsecond}$ref.png')
-              .create(recursive: true);
-      await file.writeAsBytes(pngBytes);
-      GallerySaver.saveImage(file.path);
-
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text(
-          "Saved to Gallery",
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Constants.primaryColor,
-      ));
-    } else if (res.isDenied) {
-      Alert(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-        closeIcon: const SizedBox(),
-        context: context,
-        style: const AlertStyle(
-          backgroundColor: Colors.white,
-        ),
-        type: AlertType.none,
-        content: SizedBox(
-            child: Text(
-          "We need storage permission for storing Qrcode",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-            fontSize: 15.sp,
-          ),
-        )),
-        buttons: [
-          DialogButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: Constants.primaryColor,
-            child: Text(
-              "Ok",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.sp,
-              ),
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text(
+            "Saved to Gallery",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
             ),
-          )
-        ],
-      ).show();
-    } else if (res.isPermanentlyDenied) {
-      permission = false;
-      Alert(
-        // onWillPopActive: true,
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-        closeIcon: const SizedBox(),
-        context: context,
-        style: const AlertStyle(
-          backgroundColor: Colors.white,
-        ),
-        type: AlertType.none,
-        content: Center(
-          child: Text(
-            "Please open app info and enable storage permission",
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Constants.primaryColor,
+        ));
+      } else if (res.isDenied) {
+        // ignore: use_build_context_synchronously
+        Alert(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+          closeIcon: const SizedBox(),
+          context: context,
+          style: const AlertStyle(
+            backgroundColor: Colors.white,
+          ),
+          type: AlertType.none,
+          content: SizedBox(
+              child: Text(
+            "We need storage permission for storing Qrcode",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.grey,
               fontSize: 15.sp,
             ),
+          )),
+          buttons: [
+            DialogButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              color: Constants.primaryColor,
+              child: Text(
+                "Ok",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.sp,
+                ),
+              ),
+            )
+          ],
+        ).show();
+      } else if (res.isPermanentlyDenied) {
+        permission = false;
+        Alert(
+          // onWillPopActive: true,
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+          closeIcon: const SizedBox(),
+          context: context,
+          style: const AlertStyle(
+            backgroundColor: Colors.white,
           ),
-        ),
-        buttons: [
-          DialogButton(
-            onPressed: () {
-              openAppSettings();
-              Navigator.pop(context);
-            },
-            color: Constants.primaryColor,
+          type: AlertType.none,
+          content: Center(
             child: Text(
-              "Ok",
+              "Please open app info and enable storage permission",
+              textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+                fontSize: 15.sp,
               ),
             ),
-          )
-        ],
-      ).show();
+          ),
+          buttons: [
+            DialogButton(
+              onPressed: () {
+                openAppSettings();
+                Navigator.pop(context);
+              },
+              color: Constants.primaryColor,
+              child: Text(
+                "Ok",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.sp,
+                ),
+              ),
+            )
+          ],
+        ).show();
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -215,7 +220,7 @@ class _SaveQrCodeState extends State<SaveQrCode> {
               children: [
                 Container(
                   margin:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   padding:
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                   decoration: BoxDecoration(
@@ -343,13 +348,18 @@ class _SaveQrCodeState extends State<SaveQrCode> {
                               ),
                             ),
                             onPressed: () async {
-                              ShareFilesAndScreenshotWidgets().shareScreenshot(
-                                globalKey,
-                                originalSize,
-                                "Title",
-                                "Name.png",
-                                "image/png",
-                              );
+                              try {
+                                ShareFilesAndScreenshotWidgets()
+                                    .shareScreenshot(
+                                  globalKey,
+                                  originalSize,
+                                  "Title",
+                                  "Name.png",
+                                  "image/png",
+                                );
+                              } catch (e) {
+                                print(e);
+                              }
                             },
                             child: Text(
                               'Share',

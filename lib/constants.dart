@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Constants {
- 
-
   static Color primaryColor = const Color(0xff00ABFF);
   static Color backgroundColor = const Color(0xffF9F9F9);
   static Color creamColor = const Color(0xffF7FBFF);

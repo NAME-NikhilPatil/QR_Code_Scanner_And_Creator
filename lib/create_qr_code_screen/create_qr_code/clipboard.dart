@@ -29,10 +29,14 @@ class _ClipboarState extends State<Clipboar> {
   }
 
   void _getClipboardText() async {
-    final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
-    setState(() {
-      controller = TextEditingController(text: clipboardData?.text);
-    });
+    try {
+      final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+      setState(() {
+        controller = TextEditingController(text: clipboardData?.text);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -81,20 +85,24 @@ class _ClipboarState extends State<Clipboar> {
                   ElevatedButton(
                     style: Constants.buttonStyle(Constants.primaryColor),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "clipboard"));
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: 'clipboard',
+                      try {
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "clipboard"));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: 'clipboard',
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

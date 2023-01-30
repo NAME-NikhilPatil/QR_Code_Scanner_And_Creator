@@ -31,10 +31,14 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
   @override
   void initState() {
     super.initState();
-    click = SaveSetting.getSwitch() ??
-        Provider.of<ScanData>(context, listen: false).click;
+    try {
+      click = SaveSetting.getSwitch() ??
+          Provider.of<ScanData>(context, listen: false).click;
 
-    click == true ? updateButton() : null;
+      click == true ? updateButton() : null;
+    } catch (e) {
+      print(e);
+    }
   }
 
   final TextStyle _style = TextStyle(
@@ -120,27 +124,31 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
         Widget buildOkButton(double star) {
           return TextButton(
               onPressed: () async {
-                const event = RateMyAppEventType.rateButtonPressed;
-                await rateMyApp.callEvent(event);
-                final launchAppStore = star >= 4;
-                if (launchAppStore) {
-                  rateMyApp.launchStore();
-                }
+                try {
+                  const event = RateMyAppEventType.rateButtonPressed;
+                  await rateMyApp.callEvent(event);
+                  final launchAppStore = star >= 4;
+                  if (launchAppStore) {
+                    rateMyApp.launchStore();
+                  }
 
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Constants.primaryColor,
-                  content: const Text(
-                    "Thanks for your feedback 😊",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Constants.primaryColor,
+                    content: const Text(
+                      "Thanks for your feedback 😊",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ));
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context);
+                    behavior: SnackBarBehavior.floating,
+                  ));
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                } catch (e) {
+                  print(e);
+                }
               },
               child: const Text("OK"));
         }
@@ -186,7 +194,7 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
               children: [
                 Container(
                   margin:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   padding:
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                   decoration: BoxDecoration(
@@ -322,15 +330,19 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                           ),
                         ),
                         onPressed: () {
-                          setState(() {
-                            Clipboard.setData(
-                              ClipboardData(
-                                text: barcode,
-                              ),
-                            );
-                          });
-                          click = true;
-                          done();
+                          try {
+                            setState(() {
+                              Clipboard.setData(
+                                ClipboardData(
+                                  text: barcode,
+                                ),
+                              );
+                            });
+                            click = true;
+                            done();
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         child: Text(
                           click == false ? "Copy" : "Copied to clipboard",
@@ -371,61 +383,68 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  setState(
-                                    () {
-                                      if (widget.formate == "text" ||
-                                          widget.formate == "geoPoint" ||
-                                          widget.formate == "product" ||
-                                          widget.formate == "phone" ||
-                                          widget.formate == "email" ||
-                                          widget.formate == "wifi" ||
-                                          widget.formate == "calendarEvent" ||
-                                          widget.formate == 'ean8' ||
-                                          widget.formate == 'code128' ||
-                                          widget.formate == 'code39' ||
-                                          widget.formate == 'code93' ||
-                                          widget.formate == 'codebar' ||
-                                          widget.formate == 'ean13' ||
-                                          widget.formate == 'dataMatrix' ||
-                                          widget.formate == 'itf' ||
-                                          widget.formate == 'upcA' ||
-                                          widget.formate == 'upcE' ||
-                                          widget.formate == 'pdf417' ||
-                                          widget.formate == 'aztec') {
-                                        if (search == 'Google') {
-                                          Utils.lauchURl(
-                                            "https://www.google.com/search?q=$barcode",
-                                          );
+                                  try {
+                                    setState(
+                                      () {
+                                        if (widget.formate == "text" ||
+                                            widget.formate == "geoPoint" ||
+                                            widget.formate == "product" ||
+                                            widget.formate == "phone" ||
+                                            widget.formate == "email" ||
+                                            widget.formate == "wifi" ||
+                                            widget.formate == "calendarEvent" ||
+                                            widget.formate == 'ean8' ||
+                                            widget.formate == 'code128' ||
+                                            widget.formate == 'code39' ||
+                                            widget.formate == 'code93' ||
+                                            widget.formate == 'codebar' ||
+                                            widget.formate == 'ean13' ||
+                                            widget.formate == 'dataMatrix' ||
+                                            widget.formate == 'itf' ||
+                                            widget.formate == 'upcA' ||
+                                            widget.formate == 'upcE' ||
+                                            widget.formate == 'pdf417' ||
+                                            widget.formate == 'aztec' ||
+                                            widget.formate == 'isbn') {
+                                          if (search == 'Google') {
+                                            Utils.lauchURl(
+                                              "https://www.google.com/search?q=$barcode",
+                                            );
+                                          }
+                                          if (search == 'Bing') {
+                                            Utils.lauchURl(
+                                              "https://www.bing.com/search?q=$barcode",
+                                            );
+                                          }
+                                          if (search == 'Yahoo') {
+                                            Utils.lauchURl(
+                                              "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=$barcode&b=1",
+                                            );
+                                          }
+                                          if (search == 'DuckDuckGo') {
+                                            Utils.lauchURl(
+                                              "https://duckduckgo.com/?q=$barcode&t=h_&ia=definition",
+                                            );
+                                          }
+                                          if (search == 'Yandex') {
+                                            Utils.lauchURl(
+                                              "https://yandex.com/search/?text=$barcode&lr=10558",
+                                            );
+                                          }
                                         }
-                                        if (search == 'Bing') {
+                                        if (widget.formate == "url") {
                                           Utils.lauchURl(
-                                            "https://www.bing.com/search?q=$barcode",
-                                          );
+                                              widget.barcode['url']!);
                                         }
-                                        if (search == 'Yahoo') {
-                                          Utils.lauchURl(
-                                            "https://search.yahoo.com/search;_ylt=A0oG7l7PeB5P3G0AKASl87UF?p=$barcode&b=1",
-                                          );
-                                        }
-                                        if (search == 'DuckDuckGo') {
-                                          Utils.lauchURl(
-                                            "https://duckduckgo.com/?q=$barcode&t=h_&ia=definition",
-                                          );
-                                        }
-                                        if (search == 'Yandex') {
-                                          Utils.lauchURl(
-                                            "https://yandex.com/search/?text=$barcode&lr=10558",
-                                          );
-                                        }
-                                      }
-                                      if (widget.formate == "url") {
-                                        Utils.lauchURl(widget.barcode['url']!);
-                                      }
-                                    },
-                                  );
+                                      },
+                                    );
+                                  } catch (e) {
+                                    print(e);
+                                  }
                                 },
                                 child: Icon(
                                   widget.formate == "text" ||
+                                          widget.formate == 'isbn' ||
                                           widget.formate == "geoPoint" ||
                                           widget.formate == "product" ||
                                           widget.formate == "phone" ||
@@ -454,6 +473,7 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                               ),
                               Text(
                                 widget.formate == "text" ||
+                                        widget.formate == 'isbn' ||
                                         widget.formate == "geoPoint" ||
                                         widget.formate == "product" ||
                                         widget.formate == "phone" ||
@@ -509,11 +529,15 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  setState(
-                                    () {
-                                      Share.share(barcode!);
-                                    },
-                                  );
+                                  try {
+                                    setState(
+                                      () {
+                                        Share.share(barcode!);
+                                      },
+                                    );
+                                  } catch (e) {
+                                    print(e);
+                                  }
                                 },
                                 child: const Icon(
                                   Icons.share,

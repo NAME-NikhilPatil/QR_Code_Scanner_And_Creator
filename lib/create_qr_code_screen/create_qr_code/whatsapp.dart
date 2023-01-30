@@ -26,14 +26,18 @@ class _WhatsappState extends State<Whatsapp> {
 
   @override
   void initState() {
-    final favoriteCountries = ['IN', 'US', 'AU', 'JP'];
-    countryCodePicker = FlCountryCodePicker(
-      favorites: favoriteCountries,
-      favoritesIcon: const Icon(
-        Icons.star,
-        color: Colors.yellow,
-      ),
-    );
+    try {
+      final favoriteCountries = ['IN', 'US', 'AU', 'JP'];
+      countryCodePicker = FlCountryCodePicker(
+        favorites: favoriteCountries,
+        favoritesIcon: const Icon(
+          Icons.star,
+          color: Colors.yellow,
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
     super.initState();
   }
 
@@ -154,36 +158,40 @@ class _WhatsappState extends State<Whatsapp> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
-                      if (countryCode != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SaveQrCode(
-                              dataString: _dataString,
-                              formate: "whatsapp",
-                            ),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text(
-                              "Please select the country code",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                      try {
+                        if (countryCode != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SaveQrCode(
+                                dataString: _dataString,
+                                formate: "whatsapp",
                               ),
                             ),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Constants.primaryColor,
-                          ),
-                        );
-                      }
-                      if (_formKey.currentState!.validate()) {
-                        deviceInfo();
-                        var createDb =
-                            Provider.of<ScanData>(context, listen: false);
-                        createDb.addItemC(CreateQr(_dataString, "whatsapp"));
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text(
+                                "Please select the country code",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Constants.primaryColor,
+                            ),
+                          );
+                        }
+                        if (_formKey.currentState!.validate()) {
+                          deviceInfo();
+                          var createDb =
+                              Provider.of<ScanData>(context, listen: false);
+                          createDb.addItemC(CreateQr(_dataString, "whatsapp"));
+                        }
+                      } catch (e) {
+                        print(e);
                       }
                     },
                     child: Text(

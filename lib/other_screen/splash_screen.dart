@@ -52,7 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(
         () async {
           Provider.of<ScanData>(context, listen: false).isgranted = false;
-
           SaveSetting.granted(false);
           await alertx(context);
         },
@@ -63,7 +62,6 @@ class _SplashScreenState extends State<SplashScreen> {
           () {
             alertt(context);
             Provider.of<ScanData>(context, listen: false).isgranted = false;
-
             SaveSetting.granted(false);
           },
         );

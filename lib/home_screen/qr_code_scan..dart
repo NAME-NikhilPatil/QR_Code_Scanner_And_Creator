@@ -46,6 +46,7 @@ class _QrScanScreenState extends State<QrScanScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+      // isgranted = SaveSetting.getgranted() ?? false;
 
     isgranted = SaveSetting.getgranted() ?? false;
     historyBox = Hive.box('history');
@@ -76,6 +77,7 @@ class _QrScanScreenState extends State<QrScanScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    controller.start();
     super.dispose();
   }
 
@@ -298,8 +300,8 @@ class _QrScanScreenState extends State<QrScanScreen>
                       decoration: ShapeDecoration(
                         shape: QrScannerOverlayShape(
                           borderRadius: 0.r,
-                          borderColor: Colors.white,
-                          borderLength: 18.w,
+                          borderColor: Constants.primaryColor,
+                          borderLength: 21.w,
                           borderWidth: 9.w,
                           cutOutHeight: 0.7.sw,
                           cutOutWidth: 0.7.sw,
@@ -317,6 +319,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
+                            // color: Constants.primaryColor,
                           ),
                           child: AnimatedTextKit(
                             isRepeatingAnimation: true,
@@ -363,220 +366,219 @@ class _QrScanScreenState extends State<QrScanScreen>
                     ],
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            height: 0.1.sh,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                decoration: BoxDecoration(
-                                  color: Constants.primaryColor,
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                                child: Column(
-                                  children: [
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.symmetric(
-                                          horizontal: 24.w,
-                                          vertical: 10.w,
-                                        )),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10.w),
+                            decoration: BoxDecoration(
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Column(
+                              children: [
+                                TextButton(
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.symmetric(
+                                      horizontal: 24.w,
+                                      vertical: 10.w,
+                                    )),
+                                  ),
+                                  // color: Colors.white,
+                                  child: Column(
+                                    children: [
+                                      const Icon(
+                                        Icons.image,
+                                        size: 25,
+                                        color: Colors.white,
                                       ),
-                                      // color: Colors.white,
-                                      child: Column(
-                                        children: [
-                                          const Icon(
-                                            Icons.image,
-                                            size: 25,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 7.h,
-                                          ),
-                                          Text(
-                                            'Gallery',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13.sp,
+                                      SizedBox(
+                                        height: 7.h,
+                                      ),
+                                      Text(
+                                        'Gallery',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13.sp,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  // iconSize: 25.0,
+                                  onPressed: () async {
+                                    turnoff = false;
+                                    final ImagePicker picker = ImagePicker();
+                                    // Pick an image
+                                    final XFile? image = await picker.pickImage(
+                                      source: ImageSource.gallery,
+                                    );
+
+                                    if (image != null) {
+                                      if (await controller
+                                          .analyzeImage(image.path)) {
+                                        if (!mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            content: const Text(
+                                              'Barcode found',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                      // iconSize: 25.0,
-                                      onPressed: () async {
-                                        turnoff = false;
-                                        final ImagePicker picker =
-                                            ImagePicker();
-                                        // Pick an image
-                                        final XFile? image =
-                                            await picker.pickImage(
-                                          source: ImageSource.gallery,
+                                            backgroundColor:
+                                                Constants.primaryColor,
+                                          ),
                                         );
-                                        if (image != null) {
-                                          if (await controller
-                                              .analyzeImage(image.path)) {
-                                            if (!mounted) return;
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                content: const Text(
-                                                  'Barcode found',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    Constants.primaryColor,
+                                      } else {
+                                        if (!mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(
+                                              'No barcode found!',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
                                               ),
-                                            );
-                                          } else {
-                                            if (!mounted) return;
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                content: Text(
-                                                  'No barcode found!',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                            ),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                decoration: BoxDecoration(
-                                  // color: Colors.grey.withOpacity(0.1),
-                                  color: Constants.primaryColor,
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                                child: Column(
-                                  children: [
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.symmetric(
-                                          horizontal: 15.w,
-                                          vertical: 10.w,
-                                        )),
-                                      ),
-                                      // color: Colors.white,
-                                      child: ValueListenableBuilder(
-                                        valueListenable: controller.torchState,
-                                        builder: (context, state, child) {
-                                          if (state == null) {
-                                            return Column(
-                                              children: [
-                                                const Icon(
-                                                  MdiIcons.flashlight,
-                                                  color: Colors.white,
-                                                  size: 25,
-                                                ),
-                                                SizedBox(
-                                                  height: 7.h,
-                                                ),
-                                                Text(
-                                                  "Flashlight",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 13.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            );
-                                          }
-                                          switch (state as TorchState) {
-                                            case TorchState.off:
-                                              return Column(children: [
-                                                const Icon(
-                                                  MdiIcons.flashlight,
-                                                  color: Colors.white,
-                                                  size: 25,
-                                                ),
-                                                SizedBox(
-                                                  height: 7.h,
-                                                ),
-                                                Text(
-                                                  "Flashlight",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 13.sp,
-                                                  ),
-                                                )
-                                              ]);
-                                            case TorchState.on:
-                                              return Column(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.flashlight_on,
-                                                    color: Colors.yellowAccent,
-                                                    size: 25,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 7.h,
-                                                  ),
-                                                  Text(
-                                                    "Flashlight",
-                                                    style: TextStyle(
-                                                      color:
-                                                          Colors.yellowAccent,
-                                                      fontSize: 13.sp,
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                          }
-                                        },
-                                      ),
-                                      // iconSize: 30.0,
-                                      // padding: EdgeInsets.zero,
-                                      onPressed: () async {
-                                        turnoff = true;
-                                        controller.toggleTorch();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // IconButton(
-                              //   color: Colors.white,
-                              //   icon: ValueListenableBuilder(
-                              //     valueListenable: controller.cameraFacingState,
-                              //     builder: (context, state, child) {
-                              //       switch (state as CameraFacing) {
-                              //         case CameraFacing.front:
-                              //           return const Icon(Icons.camera_front);
-                              //         case CameraFacing.back:
-                              //           return const Icon(Icons.camera_rear);
-                              //       }
-                              //     },
-                              //   ),
-                              //   iconSize: 32.0,
-                              //   onPressed: () => controller.switchCamera(),
-                              // ),
-                            ],
+                              ],
+                            ),
                           ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10.w),
+                            decoration: BoxDecoration(
+                              // color: Colors.grey.withOpacity(0.1),
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Column(
+                              children: [
+                                TextButton(
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.symmetric(
+                                      horizontal: 15.w,
+                                      vertical: 10.w,
+                                    )),
+                                  ),
+                                  // color: Colors.white,
+                                  child: ValueListenableBuilder(
+                                    valueListenable: controller.torchState,
+                                    builder: (context, state, child) {
+                                      if (state == null) {
+                                        return Column(
+                                          children: [
+                                            const Icon(
+                                              MdiIcons.flashlight,
+                                              color: Colors.white,
+                                              size: 25,
+                                            ),
+                                            SizedBox(
+                                              height: 7.h,
+                                            ),
+                                            Text(
+                                              "Flashlight",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13.sp,
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                      }
+                                      switch (state as TorchState) {
+                                        case TorchState.off:
+                                          return Column(children: [
+                                            const Icon(
+                                              MdiIcons.flashlight,
+                                              color: Colors.white,
+                                              size: 25,
+                                            ),
+                                            SizedBox(
+                                              height: 7.h,
+                                            ),
+                                            Text(
+                                              "Flashlight",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13.sp,
+                                              ),
+                                            )
+                                          ]);
+                                        case TorchState.on:
+                                          return Column(
+                                            children: [
+                                              const Icon(
+                                                Icons.flashlight_on,
+                                                color: Colors.yellowAccent,
+                                                size: 25,
+                                              ),
+                                              SizedBox(
+                                                height: 7.h,
+                                              ),
+                                              Text(
+                                                "Flashlight",
+                                                style: TextStyle(
+                                                  color: Colors.yellowAccent,
+                                                  fontSize: 13.sp,
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                      }
+                                    },
+                                  ),
+                                  // iconSize: 30.0,
+                                  // padding: EdgeInsets.zero,
+                                  onPressed: () async {
+                                    try {
+                                      turnoff = true;
+                                      controller.toggleTorch();
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          // IconButton(
+                          //   color: Colors.white,
+                          //   icon: ValueListenableBuilder(
+                          //     valueListenable: controller.cameraFacingState,
+                          //     builder: (context, state, child) {
+                          //       switch (state as CameraFacing) {
+                          //         case CameraFacing.front:
+                          //           return const Icon(Icons.camera_front);
+                          //         case CameraFacing.back:
+                          //           return const Icon(Icons.camera_rear);
+                          //       }
+                          //     },
+                          //   ),
+                          //   iconSize: 32.0,
+                          //   onPressed: () => controller.switchCamera(),
+                          // ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 0.7.sw,
+                      ),
+                      SizedBox(
+                        height: 0.2.sh,
                       ),
                     ],
                   ),
