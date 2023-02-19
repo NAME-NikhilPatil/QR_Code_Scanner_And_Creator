@@ -738,7 +738,7 @@ class _History_screenState extends State<History_screen>
                             size: 25.h,
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),

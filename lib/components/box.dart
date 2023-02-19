@@ -19,8 +19,8 @@ class Boxy extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 74.h,
-          width: 74.h,
+          height: 75.h,
+          width: 75.h,
           decoration: BoxDecoration(
             color: Constants.creamColor,
             borderRadius: BorderRadius.circular(10.r),

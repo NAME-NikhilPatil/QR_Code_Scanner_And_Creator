@@ -9,17 +9,13 @@ import 'package:rate_my_app/rate_my_app.dart';
 class ScanData with ChangeNotifier {
   addItem(History? item) async {
     var box = await Hive.openBox<History>('history');
-
     box.add(item!);
-
     notifyListeners();
   }
 
   addItemC(CreateQr item) async {
     var boxy = await Hive.openBox<CreateQr>('create');
-
     boxy.add(item);
-
     notifyListeners();
   }
 
@@ -70,9 +66,7 @@ class ScanData with ChangeNotifier {
 
   deleteItemC() {
     final box = Hive.box<CreateQr>('create');
-
     box.clear();
-
     notifyListeners();
   }
 }

@@ -5,6 +5,7 @@ import 'package:qr_code_scan/history_screen/history_screen.dart';
 import 'package:qr_code_scan/home_screen/qr_code_scan..dart';
 import 'package:qr_code_scan/setting_screen/settings.dart';
 import '../create_qr_code_screen/create_qr_code.dart';
+
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({
     Key? key,

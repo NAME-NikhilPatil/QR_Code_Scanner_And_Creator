@@ -32,14 +32,11 @@ class _ScanResultState extends State<ScanResult> {
   @override
   void initState() {
     super.initState();
-    try {
-      click = SaveSetting.getSwitch() ??
-          Provider.of<ScanData>(context, listen: false).click;
 
-      click == true ? updateButton() : null;
-    } catch (e) {
-      print(e);
-    }
+    click = SaveSetting.getSwitch() ??
+        Provider.of<ScanData>(context, listen: false).click;
+
+    click == true ? updateButton() : null;
   }
 
   final TextStyle _style = TextStyle(
@@ -404,7 +401,8 @@ class _ScanResultState extends State<ScanResult> {
                                               widget.formate == "phone" ||
                                               widget.formate == "email" ||
                                               widget.formate == "wifi" ||
-                                              widget.formate =="calendarEvent" ||
+                                              widget.formate ==
+                                                  "calendarEvent" ||
                                               widget.formate == 'ean8' ||
                                               widget.formate == 'code128' ||
                                               widget.formate == 'code39' ||

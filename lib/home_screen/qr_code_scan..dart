@@ -32,7 +32,9 @@ class QrScanScreen extends StatefulWidget {
 
 class _QrScanScreenState extends State<QrScanScreen>
     with WidgetsBindingObserver {
-  late MobileScannerController controller;
+  MobileScannerController controller = MobileScannerController(
+    torchEnabled: false,
+  );
   RateMyApp? rateMyApp;
 
   String? barcode;
@@ -45,14 +47,18 @@ class _QrScanScreenState extends State<QrScanScreen>
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addObserver(this);
-      // isgranted = SaveSetting.getgranted() ?? false;
+
+    controller.isStarting == false
+        ? {
+            controller.stop(),
+            controller.start(),
+          }
+        : controller.start();
 
     isgranted = SaveSetting.getgranted() ?? false;
     historyBox = Hive.box('history');
-    controller = MobileScannerController(
-      torchEnabled: false,
-    );
     isVibrate = SaveSetting.getVibrate() ?? false;
   }
 
@@ -77,19 +83,23 @@ class _QrScanScreenState extends State<QrScanScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    controller.start();
+    controller.dispose();
     super.dispose();
   }
 
   bool isEnabled = true;
   bool turnoff = false;
+  MobileScannerArguments? args;
+  double _zoomFactor = 0.0;
 
   onDetect(
       Map<String, String> barcode, MobileScannerArguments? _, String formate) {
+    controller.dispose();
+
     if (turnoff == true) {
       controller.toggleTorch();
     }
-    isEnabled = false;
+    // isEnabled = false;
     isVibrate == true ? Vibration.vibrate(duration: 100) : null;
 
     setState(
@@ -144,14 +154,15 @@ class _QrScanScreenState extends State<QrScanScreen>
   }
 
   String playStoreId = "com.qr.qr_code_scanner";
+  MobileScannerArguments? capture;
 
   @override
   Widget build(BuildContext context) {
-    // final scanWindow = Rect.fromCenter(
-    //   center: MediaQuery.of(context).size.center(Offset.zero),
-    //   width: 250.h,
-    //   height: 250.h,
-    // );
+    final scanWindow = Rect.fromCenter(
+      center: MediaQuery.of(context).size.center(Offset.zero),
+      width: 250.h,
+      height: 250.h,
+    );
 
     return UpgradeAlert(
       upgrader: Upgrader(
@@ -227,73 +238,83 @@ class _QrScanScreenState extends State<QrScanScreen>
               builder: (context) {
                 return Stack(fit: StackFit.expand, children: [
                   MobileScanner(
-                    allowDuplicates: false,
-                    fit: BoxFit.cover,
-                    controller: controller,
-                    onDetect: (barcode, args) => isEnabled
-                        ? onDetect(
-                            barcode.type.name == 'url'
-                                ? {"url": barcode.url!.url.toString()}
-                                : barcode.type.name == 'phone'
-                                    ? {
-                                        "number":
-                                            barcode.phone!.number.toString()
-                                      }
-                                    : barcode.type.name == 'email'
-                                        ? {
-                                            "address": barcode.email!.address
-                                                .toString()
-                                          }
-                                        : barcode.type.name == 'wifi'
-                                            ? {
-                                                "encryptionType": barcode
-                                                    .wifi!.encryptionType.name
-                                                    .toString(),
-                                                "ssid": barcode.wifi!.ssid
-                                                    .toString(),
-                                                "password": barcode
-                                                    .wifi!.password
-                                                    .toString(),
-                                              }
-                                            : barcode.type.name ==
-                                                    'calendarEvent'
-                                                ? {
-                                                    "start": barcode
-                                                        .calendarEvent!.start
-                                                        .toString(),
-                                                    "end": barcode
-                                                        .calendarEvent!.end
-                                                        .toString(),
-                                                    "location": barcode
-                                                        .calendarEvent!.location
-                                                        .toString(),
-                                                    "organizer": barcode
-                                                        .calendarEvent!
-                                                        .organizer
-                                                        .toString(),
-                                                    "description": barcode
-                                                        .calendarEvent!
-                                                        .description
-                                                        .toString(),
-                                                  }
-                                                : barcode.type.name ==
-                                                        'geoPoint'
-                                                    ? {
-                                                        "latitude": barcode
-                                                            .geoPoint!.latitude
-                                                            .toString(),
-                                                        "longitude": barcode
-                                                            .geoPoint!.longitude
-                                                            .toString(),
-                                                      }
-                                                    : {
-                                                        "text": barcode.rawValue
-                                                            .toString()
-                                                      },
-                            args,
-                            barcode.type.name.toString())
-                        : null,
-                  ),
+                      scanWindow: scanWindow,
+                      fit: BoxFit.cover,
+                      controller: controller,
+                      onDetect: (capture) {
+                        final List<Barcode> barcodes = capture.barcodes;
+                        for (final barcode in barcodes) {
+                          onDetect(
+                              barcode.type.name == 'url'
+                                  ? {"url": barcode.url!.url.toString()}
+                                  : barcode.type.name == 'phone'
+                                      ? {
+                                          "number":
+                                              barcode.phone!.number.toString()
+                                        }
+                                      : barcode.type.name == 'email'
+                                          ? {
+                                              "address": barcode.email!.address
+                                                  .toString()
+                                            }
+                                          : barcode.type.name == 'wifi'
+                                              ? {
+                                                  "encryptionType": barcode
+                                                      .wifi!.encryptionType.name
+                                                      .toString(),
+                                                  "ssid": barcode.wifi!.ssid
+                                                      .toString(),
+                                                  "password": barcode
+                                                      .wifi!.password
+                                                      .toString(),
+                                                }
+                                              : barcode.type.name ==
+                                                      'calendarEvent'
+                                                  ? {
+                                                      "start": barcode
+                                                          .calendarEvent!.start
+                                                          .toString(),
+                                                      "end": barcode
+                                                          .calendarEvent!.end
+                                                          .toString(),
+                                                      "location": barcode
+                                                          .calendarEvent!
+                                                          .location
+                                                          .toString(),
+                                                      "organizer": barcode
+                                                          .calendarEvent!
+                                                          .organizer
+                                                          .toString(),
+                                                      "description": barcode
+                                                          .calendarEvent!
+                                                          .description
+                                                          .toString(),
+                                                    }
+                                                  : barcode.type.name ==
+                                                          'geoPoint'
+                                                      ? {
+                                                          "latitude": barcode
+                                                              .geoPoint!
+                                                              .latitude
+                                                              .toString(),
+                                                          "longitude": barcode
+                                                              .geoPoint!
+                                                              .longitude
+                                                              .toString(),
+                                                        }
+                                                      : {
+                                                          "text": barcode
+                                                              .rawValue
+                                                              .toString()
+                                                        },
+                              args,
+                              barcode.type.name.toString());
+                        }
+
+                        //     args,
+                        //     barcode.type.name.toString())
+                        // : null,
+                      }),
                   Padding(
                     padding: EdgeInsets.zero,
                     child: Container(
@@ -314,7 +335,7 @@ class _QrScanScreenState extends State<QrScanScreen>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 250.w,
+                        width: 0.7.sw,
                         child: DefaultTextStyle(
                           style: TextStyle(
                             fontSize: 18.sp,
@@ -361,7 +382,31 @@ class _QrScanScreenState extends State<QrScanScreen>
                         ),
                       ),
                       SizedBox(
-                        height: 0.1.sh,
+                        height: 0.05.sh,
+                      ),
+                      Container(
+                        height: 0.08.sh,
+                        width: 0.8.sw,
+                        margin: EdgeInsets.symmetric(horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.1),
+                          // color: Constants.primaryColor,
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Slider(
+                          activeColor: Constants.primaryColor,
+                          // inactiveColor: Constants.,
+                          value: _zoomFactor,
+                          onChanged: (value) {
+                            setState(() {
+                              _zoomFactor = value;
+                              controller.setZoomScale(value);
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 0.03.sh,
                       ),
                     ],
                   ),
@@ -556,29 +601,80 @@ class _QrScanScreenState extends State<QrScanScreen>
                               ],
                             ),
                           ),
-                          // IconButton(
-                          //   color: Colors.white,
-                          //   icon: ValueListenableBuilder(
-                          //     valueListenable: controller.cameraFacingState,
-                          //     builder: (context, state, child) {
-                          //       switch (state as CameraFacing) {
-                          //         case CameraFacing.front:
-                          //           return const Icon(Icons.camera_front);
-                          //         case CameraFacing.back:
-                          //           return const Icon(Icons.camera_rear);
-                          //       }
-                          //     },
-                          //   ),
-                          //   iconSize: 32.0,
-                          //   onPressed: () => controller.switchCamera(),
-                          // ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 10.w,
+                            ),
+                            decoration: BoxDecoration(
+                              // color: Colors.grey.withOpacity(0.1),
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 13.w, vertical: 3.h),
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                    child: ValueListenableBuilder(
+                                      valueListenable:
+                                          controller.cameraFacingState,
+                                      builder: (context, state, child) {
+                                        switch (state as CameraFacing) {
+                                          case CameraFacing.front:
+                                            return Column(
+                                              children: [
+                                                const Icon(
+                                                  Icons.camera_front,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  height: 7.h,
+                                                ),
+                                                Text(
+                                                  "Switch",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          case CameraFacing.back:
+                                            return Column(
+                                              children: [
+                                                const Icon(
+                                                  Icons.camera_rear,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  height: 7.h,
+                                                ),
+                                                Text(
+                                                  "Switch",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                        }
+                                      },
+                                    ),
+                                    onPressed: () => controller.switchCamera(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
                         height: 0.7.sw,
                       ),
                       SizedBox(
-                        height: 0.2.sh,
+                        height: 0.23.sh,
                       ),
                     ],
                   ),

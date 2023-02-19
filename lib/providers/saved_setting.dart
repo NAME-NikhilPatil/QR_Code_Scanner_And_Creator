@@ -4,6 +4,7 @@ class SaveSetting {
   static SharedPreferences? _preferences;
 
   static String switchCopy = "Autocopy";
+
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
   static Future setSwitch(bool switchName) async =>
