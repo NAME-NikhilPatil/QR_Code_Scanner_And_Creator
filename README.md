@@ -1,5 +1,4 @@
-# qr_code_scanner
-
+# Complete Qr code creater and scanner
 A new Flutter project.
 
 ## Getting Started
