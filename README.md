@@ -1,15 +1,18 @@
-# Complete Qr code creater and scanner
-A new Flutter project.
+# QR Code Creator and Scanner App
 
-## Getting Started
+## Introduction
 
-This project is a starting point for a Flutter application.
+The QR Code Creator and Scanner App is a simple yet powerful tool that allows users to generate QR codes and scan existing ones. Whether you need to share text, URLs, contact information, or Wi-Fi credentials, this app makes it easy and convenient. It also includes a QR code scanner, making it useful for various applications, from marketing to personal use.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **QR Code Generation:** Create QR codes for text, URLs, phone numbers, email addresses, Wi-Fi networks, and more.
+- **QR Code Scanning:** Scan QR codes using your device's camera.
+- **Save and Share:** Save generated QR codes to your device and easily share them with others.
+- **History:** Keep a history of generated QR codes for quick access.
+- **Customization:** Customize the appearance and size of QR codes.
+- **Cross-Platform:** Available for Android and iOS.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## PlayStore Link 
+https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner
+
