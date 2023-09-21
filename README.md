@@ -1,4 +1,6 @@
+
 # QR Code Creator and Scanner App
+![Group 19](https://github.com/NAME-NikhilPatil/QR-Code-Scanner-And-Creator/assets/74563500/2fb1a678-36e3-458e-a7ef-54e02e292ce6)
 
 ## PlayStore Link 
 https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner
