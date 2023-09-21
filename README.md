@@ -3,6 +3,9 @@
 ## PlayStore Link 
 https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner
 
+## Figma Link
+https://www.figma.com/file/dP26uVxTzr50hmaiiYlqQF/Qr-Code-Scanner?type=design&node-id=0%3A1&mode=design&t=BXJ9W42UZEbx8I4Z-1
+
 ## Introduction
 
 The QR Code Creator and Scanner App is a simple yet powerful tool that allows users to generate QR codes and scan existing ones. Whether you need to share text, URLs, contact information, or Wi-Fi credentials, this app makes it easy and convenient. It also includes a QR code scanner, making it useful for various applications, from marketing to personal use.
