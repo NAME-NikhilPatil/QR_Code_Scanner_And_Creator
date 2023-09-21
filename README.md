@@ -1,5 +1,8 @@
 # QR Code Creator and Scanner App
 
+## PlayStore Link 
+https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner
+
 ## Introduction
 
 The QR Code Creator and Scanner App is a simple yet powerful tool that allows users to generate QR codes and scan existing ones. Whether you need to share text, URLs, contact information, or Wi-Fi credentials, this app makes it easy and convenient. It also includes a QR code scanner, making it useful for various applications, from marketing to personal use.
@@ -13,6 +16,5 @@ The QR Code Creator and Scanner App is a simple yet powerful tool that allows us
 - **Customization:** Customize the appearance and size of QR codes.
 - **Cross-Platform:** Available for Android and iOS.
 
-## PlayStore Link 
-https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner
+
 
