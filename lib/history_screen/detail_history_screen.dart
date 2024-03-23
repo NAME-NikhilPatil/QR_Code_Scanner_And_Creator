@@ -335,7 +335,7 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                             setState(() {
                               Clipboard.setData(
                                 ClipboardData(
-                                  text: barcode,
+                                  text: barcode!,
                                 ),
                               );
                             });

@@ -339,7 +339,7 @@ class _ScanResultState extends State<ScanResult> {
                               setState(() {
                                 Clipboard.setData(
                                   ClipboardData(
-                                    text: barcode,
+                                    text: barcode!,
                                   ),
                                 );
                               });
