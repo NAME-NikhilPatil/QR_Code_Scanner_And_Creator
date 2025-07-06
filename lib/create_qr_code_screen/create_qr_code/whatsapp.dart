@@ -158,6 +158,12 @@ class _WhatsappState extends State<Whatsapp> {
                   ElevatedButton(
                     style: Constants.buttonStyle(primaryColor),
                     onPressed: () {
+                      deviceInfo();
+                      if (_formKey.currentState!.validate()) {
+                        var createDb =
+                            Provider.of<ScanData>(context, listen: false);
+                        createDb.addItemC(CreateQr(_dataString, "whatsapp"));
+                      }
                       try {
                         if (countryCode != null) {
                           Navigator.push(
@@ -183,12 +189,6 @@ class _WhatsappState extends State<Whatsapp> {
                               backgroundColor: Constants.primaryColor,
                             ),
                           );
-                        }
-                        if (_formKey.currentState!.validate()) {
-                          deviceInfo();
-                          var createDb =
-                              Provider.of<ScanData>(context, listen: false);
-                          createDb.addItemC(CreateQr(_dataString, "whatsapp"));
                         }
                       } catch (e) {
                         print(e);

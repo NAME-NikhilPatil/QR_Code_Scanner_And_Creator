@@ -24,9 +24,10 @@ class Constants {
   static TextStyle buttonText =
       TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold);
 
-  static TextStyle settingText = const TextStyle(
+  static TextStyle settingText = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w400,
+    fontSize: 17.sp,
   );
 
   static ButtonStyle buttonStyle(Color primaryColor) {

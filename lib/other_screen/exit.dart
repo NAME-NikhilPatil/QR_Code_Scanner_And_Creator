@@ -42,7 +42,7 @@ showExitPopup(context) async {
           style: TextStyle(
             color: Constants.primaryColor,
             fontSize: 20.sp,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

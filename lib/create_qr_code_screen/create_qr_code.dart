@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scan/create_qr_code_screen/create_qr_code/clipboard.dart';
@@ -50,14 +51,29 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "QR Code Creator",
+                      DefaultTextStyle(
                         style: TextStyle(
-                          color: Colors.black,
                           fontSize: 21.sp,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
+                        child: AnimatedTextKit(
+                          animatedTexts: [
+                            TypewriterAnimatedText('QR Code Creator'),
+                            TypewriterAnimatedText('QR Code Creator'),
+                            TypewriterAnimatedText('QR Code Creator'),
+                          ],
+                          onTap: () {},
+                        ),
                       ),
+                      // Text(
+                      //   "QR Code Creator",
+                      //   style: TextStyle(
+                      //     color: Colors.black,
+                      //     fontSize: 21.sp,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(

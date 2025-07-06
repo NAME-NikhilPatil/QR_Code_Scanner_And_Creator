@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,14 @@ class _SettingsState extends State<Settings> {
     isVibrate = SaveSetting.getVibrate() ?? false;
     search = SaveSetting.getSearch() ?? "Google";
   }
+
+  var colorizeColors = [
+    Constants.primaryColor,
+    Colors.blue,
+    Colors.purple,
+    Colors.yellow,
+    Colors.red,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -427,9 +436,29 @@ class _SettingsState extends State<Settings> {
                                 color: Colors.white,
                                 size: 18.h,
                               )),
-                          title: Text(
-                            "Rate us",
-                            style: Constants.settingText,
+                          title: AnimatedTextKit(
+                            animatedTexts: [
+                              ColorizeAnimatedText(
+                                'Rate us',
+                                textStyle: Constants.settingText,
+                                colors: colorizeColors,
+                                speed: const Duration(milliseconds: 300),
+                              ),
+                              ColorizeAnimatedText(
+                                'Rate us',
+                                textStyle: Constants.settingText,
+                                colors: colorizeColors,
+                                speed: const Duration(milliseconds: 300),
+                              ),
+                              ColorizeAnimatedText(
+                                'Rate us',
+                                textStyle: Constants.settingText,
+                                colors: colorizeColors,
+                                speed: const Duration(milliseconds: 300),
+                              ),
+                            ],
+                            isRepeatingAnimation: true,
+                            onTap: () {},
                           ),
                         ),
                       ),
@@ -548,7 +577,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         title: Text(
-                          "Version 2.0.7",
+                          "Version 3.0.7",
                           style: Constants.settingText,
                         ),
                       ),

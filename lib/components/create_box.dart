@@ -17,8 +17,8 @@ class CreateBox extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 70.w,
-          width: 70.w,
+          height: 75.w,
+          width: 75.w,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),

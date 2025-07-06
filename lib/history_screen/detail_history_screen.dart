@@ -123,34 +123,35 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
         });
         Widget buildOkButton(double star) {
           return TextButton(
-              onPressed: () async {
-                try {
-                  const event = RateMyAppEventType.rateButtonPressed;
-                  await rateMyApp.callEvent(event);
-                  final launchAppStore = star >= 4;
-                  if (launchAppStore) {
-                    rateMyApp.launchStore();
-                  }
-
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Constants.primaryColor,
-                    content: const Text(
-                      "Thanks for your feedback 😊",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                  ));
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
-                } catch (e) {
-                  print(e);
+            onPressed: () async {
+              try {
+                const event = RateMyAppEventType.rateButtonPressed;
+                await rateMyApp.callEvent(event);
+                final launchAppStore = star >= 4;
+                if (launchAppStore) {
+                  rateMyApp.launchStore();
                 }
-              },
-              child: const Text("OK"));
+
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  backgroundColor: Constants.primaryColor,
+                  content: const Text(
+                    "Thanks for your feedback 😊",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                ));
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+              } catch (e) {
+                print(e);
+              }
+            },
+            child: const Text("OK"),
+          );
         }
 
         Widget buildCancelButton() {
@@ -334,7 +335,7 @@ class _HistoryScreenDetailsState extends State<HistoryScreenDetails> {
                             setState(() {
                               Clipboard.setData(
                                 ClipboardData(
-                                  text: barcode,
+                                  text: barcode!,
                                 ),
                               );
                             });
