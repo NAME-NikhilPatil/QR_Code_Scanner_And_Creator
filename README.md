@@ -2,7 +2,7 @@
 # QR Code Creator and Scanner App
 
 
-## PlayStore Link 
+## PlayStore Link (Not availabe on playstore for now)
 https://play.google.com/store/apps/details?id=com.qr.qr_code_scanner
 
 ## Figma Link
